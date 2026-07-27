@@ -1120,10 +1120,19 @@
   .od3-details .fr:last-of-type{border-bottom:none;}
   .od3-details .fr .l{font-size:14px;line-height:20px;color:#272626;}
   .od3-details .fr .v{font-family:var(--font-mono);font-size:13px;font-weight:600;color:#272626;white-space:nowrap;}
-  .od3-note{display:flex;align-items:center;gap:8px;margin-top:24px;font-size:12px;line-height:16px;color:#5C5A5A;}
+  .od3-note{display:flex;align-items:center;gap:0;margin-top:24px;font-size:12px;line-height:16px;color:#5C5A5A;}
   .od3-note b{color:#272626;font-weight:700;}
   .od3-note .mono{font-family:var(--font-mono);font-size:13px;font-weight:600;color:#272626;}
-  .od3-note .msr{font-size:16px;color:#5C5A5A;}
+  .od3-note{position:relative;}
+  .od3-note .msr{font-size:16px;color:#5C5A5A;cursor:pointer;margin-left:8px;}
+  .od3-note .msr:hover{color:#272626;}
+  .od3-tip{
+    position:absolute;top:calc(100% + 8px);left:0;z-index:120;display:none;
+    background:#1F1E1E;color:#fff;font-size:13px;line-height:20px;
+    padding:12px 16px;border-radius:8px;max-width:420px;
+    box-shadow:0 4px 16px rgba(0,0,0,0.2);
+  }
+  .od3-tip.show{display:block;}
   .od3-co{display:flex;flex-direction:column;gap:16px;margin-top:16px;}
   .od3-co-row{display:flex;align-items:center;gap:8px;font-size:12px;line-height:16px;font-weight:600;color:#272626;}
   .od3-co-row .od3-tag{width:50px;padding:0;flex:0 0 auto;}
@@ -1749,7 +1758,7 @@
                 <div class="fr"><span class="l">Counterpart amount</span><span class="v" id="od-counterpart">$80,000,000.00</span></div>
                 <div class="fr"><span class="l">Co-Financing</span><span class="v" id="od-cofin">$0.00</span></div>
               </div>
-              <div class="od3-note">Retroactive financing:&nbsp;<b>Yes</b>&nbsp;<span class="mono">30%</span><span class="msr">info</span></div>
+              <div class="od3-note">Retroactive financing:&nbsp;<b>Yes</b>&nbsp;<span class="mono">30%</span><span class="msr" id="od-fin-info" role="button" tabindex="0" aria-label="About retroactive financing">info</span><div class="od3-tip" id="od-fin-tip">Retroactive financing may cover expenses incurred up to 18 months before project approval. The PP approval date sets the eligibility start date; if no PP is required, the Official Start Date in Convergence applies.</div></div>
             </div>
 
             <div class="od3-card">
@@ -1908,6 +1917,7 @@
       item.classList.add('active');
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('visible'));
       document.getElementById('screen-' + item.dataset.screen).classList.add('visible');
+      setHash('#/' + item.dataset.screen);
     });
   });
 
@@ -2714,11 +2724,14 @@
     wsScreen.classList.add('open');
     document.body.classList.add('no-scroll');
     document.querySelector('.ws-main').scrollTop = 0;
+    setHash('#/op/' + code + '/dashboard');
   }
 
   // workspace inner views (Dashboard / Operation Data)
   let wsRow = null, wsPhase = 'implementation';
   function setWsView(view) {
+    if (wsScreen.classList.contains('open') && wsScreen.dataset.code)
+      setHash('#/op/' + wsScreen.dataset.code + '/' + (view === 'opdata' ? 'data' : 'dashboard'));
     document.getElementById('ws-view-dashboard').style.display = view === 'dashboard' ? '' : 'none';
     document.getElementById('ws-view-opdata').style.display = view === 'opdata' ? '' : 'none';
     document.querySelectorAll('.ws-item[data-wsview]').forEach(i => i.classList.toggle('active', i.dataset.wsview === view));
@@ -2758,6 +2771,7 @@
       String.fromCodePoint(...[...iso].map(ch => 0x1F1E6 + ch.charCodeAt(0) - 65));
     // objective: reset to truncated state
     renderObjective(false);
+    document.getElementById('od-fin-tip').classList.remove('show');
     // key facts
     const pair = isImpl ? (row[10] || 'INV \u2022 ESP') : 'INV \u2022 ESP';
     document.getElementById('od-product').textContent = (isImpl ? row[9] : 'LON') + ' / ' + pair.replace(' \u2022 ', ' / ');
@@ -2839,6 +2853,8 @@
   document.getElementById('ws-back').addEventListener('click', () => {
     wsScreen.classList.remove('open');
     document.body.classList.remove('no-scroll');
+    const active = document.querySelector('.nav-item.active');
+    setHash('#/' + (active ? active.dataset.screen : 'home'));
   });
   document.getElementById('ws-pin').addEventListener('click', () => {
     const code = wsScreen.dataset.code;
@@ -2848,6 +2864,53 @@
   // stages strip scroll
   document.getElementById('ws-st-prev').addEventListener('click', () => document.getElementById('ws-stages').scrollBy({left: -240, behavior: 'smooth'}));
   document.getElementById('ws-st-next').addEventListener('click', () => document.getElementById('ws-stages').scrollBy({left: 240, behavior: 'smooth'}));
+
+  // ===== Financial info tooltip =====
+  document.getElementById('od-fin-info').addEventListener('click', e => {
+    e.stopPropagation();
+    document.getElementById('od-fin-tip').classList.toggle('show');
+  });
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.od3-note')) document.getElementById('od-fin-tip').classList.remove('show');
+  });
+
+  // ===== Hash router (deep links: #/screen and #/op/CODE/view) =====
+  let routing = false;
+  function setHash(h) {
+    if (routing || location.hash === h) return;
+    try { location.hash = h; } catch (err) { /* sandboxed previews block URL changes */ }
+  }
+  function applyRoute() {
+    routing = true;
+    try {
+      const parts = (location.hash || '#/home').replace(/^#\/?/, '').split('/').filter(Boolean);
+      if (parts[0] === 'op' && parts[1]) {
+        const code = parts[1].toUpperCase();
+        let phase = 'implementation';
+        let row = OPO.impCards.find(r => r[0] === code);
+        if (!row) { const p = OPO.cards.find(r => r[0] === code); if (p) { row = p; phase = 'preparation'; } }
+        if (!row) {
+          const cc = code.slice(0, 2);
+          const dept = Object.keys(OPO.countriesByDept).find(d => OPO.countriesByDept[d].some(c => c[0] === cc)) || 'CSC';
+          row = [code, 'A', '2026', 'Disbursing', 'INE', dept, cc, 'James Carter',
+                 ['5385/OC-' + cc + '-1'], 'LON', 'INV \u2022 ESP', '$320,000,000', 'INE \u2022 WSA', '05 Jul 2030', OP_TITLE];
+        }
+        openWorkspace(phase, row);
+        setWsView(parts[2] === 'data' ? 'opdata' : 'dashboard');
+      } else {
+        if (wsScreen.classList.contains('open')) {
+          wsScreen.classList.remove('open');
+          document.body.classList.remove('no-scroll');
+        }
+        const screen = parts[0] || 'home';
+        const item = document.querySelector(`.nav-item[data-screen="${screen}"]`);
+        if (item && !item.classList.contains('active')) item.click();
+      }
+    } finally { routing = false; }
+  }
+  window.addEventListener('hashchange', applyRoute);
+  if (location.hash && location.hash !== '#/' && location.hash !== '#/home') applyRoute();
+  else try { history.replaceState(null, '', '#/home'); } catch (err) { /* sandboxed previews block replaceState */ }
 
   // ===== Avatar dropdown =====
   const avMenu = document.getElementById('av-menu');
