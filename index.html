@@ -236,6 +236,34 @@
   }
   .avatar img{width:100%;height:100%;object-fit:cover;display:block;}
 
+  /* ============ Breadcrumb phase dropdown ============ */
+  .ws-crumb .ph{cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+  .ws-crumb .ph .chev{
+    background:transparent;border-radius:4px;
+    width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;
+    transition:background 0.15s ease;
+  }
+  .ws-crumb .ph:hover .chev{background:rgba(255,255,255,0.22);}
+  .crumb-menu{
+    position:fixed;z-index:5000;width:236px;display:none;
+    background:#fff;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.18);padding:8px;
+  }
+  .crumb-menu.open{display:block;}
+  .crumb-item{
+    display:flex;align-items:center;gap:12px;width:100%;padding:12px;
+    border:0;background:none;border-radius:8px;cursor:pointer;
+    font-family:var(--font-ui);font-size:14px;line-height:20px;font-weight:600;color:#272626;text-align:left;
+  }
+  .crumb-item:hover{background:#F7F7F8;}
+  .crumb-item .nav-ic{width:24px;height:24px;display:inline-flex;flex:0 0 auto;}
+  .crumb-item .nav-ic span{display:inline-flex;}
+  .crumb-item .nav-ic svg{width:24px;height:24px;display:block;color:var(--icon-default);}
+  .crumb-item .nav-ic .ic-filled{display:none !important;}
+  .crumb-item.active{background:#EDF5FA;color:var(--link-default);}
+  .crumb-item.active .nav-ic .ic-outline{display:none !important;}
+  .crumb-item.active .nav-ic .ic-filled{display:inline-flex !important;}
+  .crumb-item.active .nav-ic svg{color:var(--link-default);}
+
   /* ============ Avatar dropdown ============ */
   .av-menu{
     position:fixed;z-index:5000;width:264px;display:none;
@@ -1066,25 +1094,43 @@
   .ws-mini .icons{display:flex;align-items:center;gap:12px;}
   .ws-page{padding:32px;}
   .ws-page h1{font-size:24px;line-height:32px;font-weight:700;color:#272626;}
+  .od-titlerow{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  .od-updated{display:inline-flex;align-items:center;gap:6px;font-size:12px;line-height:16px;color:#5C5A5A;}
+  .od-updated .msr{font-size:16px;color:var(--icon-default);}
+  .od-updated b{font-weight:600;color:#272626;}
 
 
   /* ============ Operation Data — dossier layout ============ */
   .od-reform{
-    margin-top:24px;display:flex;gap:12px;align-items:flex-start;
-    background:var(--color-surface-cont-low);border:1px solid var(--link-default);
-    border-radius:8px;padding:14px 20px;
+    display:flex;align-items:center;gap:12px;
+    background:#F1F4F7;border:1px solid #DBE5EC;border-radius:8px;
+    padding:16px 24px;margin-top:24px;
   }
-  .od-reform .msr{font-size:20px;color:var(--link-default);flex:0 0 auto;}
-  .od-reform .rt{font-size:13px;line-height:20px;color:#272626;}
+  .od-reform > .msr{font-size:20px;color:#1F4D6D;flex:0 0 auto;}
+  .od-reform .rt{flex:1;font-size:14px;line-height:20px;color:#1F4D6D;}
   .od-reform .rt b{font-weight:700;}
-  .od-reform .rt .link{color:var(--link-default);font-weight:600;cursor:pointer;}
+  .reform-link{
+    display:inline-flex;align-items:center;gap:6px;border:0;background:none;padding:0;cursor:pointer;
+    font-family:var(--font-ui);font-size:14px;line-height:20px;font-weight:700;color:#1F4D6D;flex:0 0 auto;
+  }
+  .reform-link .msr{font-size:18px;color:#1F4D6D;}
+  .reform-link:hover{text-decoration:underline;}
 
   .od3{display:grid;grid-template-columns:minmax(0,1fr) 457px;gap:32px;margin-top:24px;align-items:start;}
   .od3-left,.od3-right{display:flex;flex-direction:column;gap:32px;min-width:0;}
   .od3-card{background:#fff;border:1px solid var(--border-default);border-radius:8px;padding:24px;}
   .od3-h3{font-size:14px;line-height:20px;font-weight:700;color:#272626;margin:0;}
   .od3-cardhead{display:flex;align-items:center;justify-content:space-between;gap:16px;}
-  .od3-kf{font-size:14px;line-height:20px;font-weight:700;color:#272626;margin:0 0 -8px;}
+  .od3-kfhead{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:-8px;}
+  .od3-kf{font-size:14px;line-height:20px;font-weight:700;color:#272626;margin:0;}
+  .od-tabs{display:flex;gap:32px;border-bottom:1px solid var(--border-default);margin:24px 0 32px;}
+  .od-tab{
+    border:0;background:none;padding:0 4px 12px;cursor:pointer;
+    font-family:var(--font-ui);font-size:14px;line-height:20px;font-weight:600;color:#5C5A5A;
+    border-bottom:2px solid transparent;margin-bottom:-1px;
+  }
+  .od-tab:hover{color:#272626;}
+  .od-tab.active{color:var(--link-default);border-bottom-color:var(--link-default);}
   .od3-obj{padding:0 0 12px;margin-top:24px;}
   .od3-objtext{font-size:14px;line-height:20px;color:#272626;}
   .od3-more{font-size:14px;line-height:20px;font-weight:600;color:var(--link-default);text-decoration:underline;cursor:pointer;}
@@ -1137,8 +1183,7 @@
   .od3-co-row{display:flex;align-items:center;gap:8px;font-size:12px;line-height:16px;font-weight:600;color:#272626;}
   .od3-co-row .od3-tag{width:50px;padding:0;flex:0 0 auto;}
   .od3-co-row .flag{font-size:15px;line-height:1;}
-  .od3-teamsec{margin-top:32px;padding-top:16px;}
-  .od3-teamsec h2{font-size:14px;line-height:20px;font-weight:700;color:#272626;margin:0 0 16px;}
+  .od3-teamsec{margin-top:0;padding-top:0;}
   .od3-teams{display:flex;gap:32px;align-items:stretch;}
   .od3-teamcard{flex:1;min-width:0;}
   .od3-teamhead{display:flex;align-items:center;gap:12px;font-size:14px;line-height:20px;font-weight:700;color:#272626;margin-bottom:32px;}
@@ -1538,7 +1583,7 @@
 </defs>
 </svg></div>
     <div class="ws-crumb">
-      <span class="ph" id="ws-crumb-phase">Implementation <span class="msr" style="font-size:16px;">expand_more</span></span>
+      <span class="ph" id="ws-crumb-phase" role="button" tabindex="0">Implementation <span class="msr chev" style="font-size:16px;">expand_more</span></span>
       <span class="sep">/</span>
       <span class="op" id="ws-crumb-code">BR-L1587</span>
     </div>
@@ -1695,26 +1740,33 @@
         </div>
       </div>
       <div class="ws-page">
-        <h1>Operation Data</h1>
-
-        <div class="od-reform">
-          <span class="msr">check_circle</span>
-          <div class="rt">
-            <b>Reformulation.</b> This operation has been <b>reformulated</b>. Reformulation approval date: <b>14 Mar 2026</b>.
-            The objectives of this operation <b>were</b> reformulated. <span class="link">Check Objectives</span>
-          </div>
+        <div class="od-titlerow">
+          <h1>Operation Data</h1>
+          <span class="od-updated" title="Operation data is refreshed daily from the data warehouse"><span class="msr">schedule</span>Last updated: <b id="od-updated-at">28 Jul 2026, 6:00 AM</b></span>
         </div>
 
+        <div class="od-reform">
+          <span class="msr">info</span>
+          <div class="rt">This operation and its <b>objectives were reformulated</b> on <b>14 Mar 2026.</b></div>
+          <button class="reform-link">Check Objectives <span class="msr">open_in_new</span></button>
+        </div>
+
+        <div class="od-tabs">
+          <button class="od-tab active" data-odtab="gi">General Information</button>
+          <button class="od-tab" data-odtab="team">Operation Team</button>
+        </div>
+
+        <div id="od-tab-gi">
         <div class="od3">
           <div class="od3-left">
 
             <div class="od3-card">
-              <div class="od3-cardhead"><h3 class="od3-h3">General Information</h3><span class="od3-tag" id="od-pmr-row">PMR Required</span></div>
+              <h3 class="od3-h3">Objective</h3>
               <div class="od3-obj" id="od-obj-wrap">
                 <p class="od3-objtext" id="od-objective">The general objective of the program is to contribute to making the administrative and technical management of public investment processes more effective, reducing the loss of social benefits caused by delays in the implementation of road, water access, and school infrastructure projects. The specific objectives are: (i) to strengthen the institutional capacity of the executing agencies responsible for planning, procurement, and supervision of public works; (ii) to expand sustainable access to drinking water and basic sanitation services for rural and dispersed communities, prioritizing territories with the highest levels of unmet basic needs; and (iii) to improve the quality and climate resilience of the social infrastructure financed under the program. The program is expected to directly benefit approximately 145,000 people, including indigenous and rural populations, and to consolidate a results based management model that can be replicated in future operations of the sector.</p>
               </div>
               <div class="od3-bottom">
-                <h4 class="od3-kf">Key Facts</h4>
+                <div class="od3-kfhead"><h4 class="od3-kf">Key Facts</h4><span class="od3-tag" id="od-pmr-row">PMR Required</span></div>
                 <div class="od3-cols">
                   <div class="od3-col">
                     <div class="od3-kv"><span class="l" id="od-approval-label">Est. Approval Date</span><span class="v" id="od-approval">10 Jun 2025</span></div>
@@ -1769,8 +1821,10 @@
           </div>
         </div>
 
+        </div>
+
+        <div id="od-tab-team" style="display:none">
         <div class="od3-teamsec">
-          <h2>Operation Team</h2>
           <div class="od3-teams">
             <div class="od3-card od3-teamcard">
               <div class="od3-teamhead"><span class="ic"><span class="msr">groups_2</span></span>IDB Operation Team</div>
@@ -1798,10 +1852,13 @@
             </div>
           </div>
         </div>
+        </div>
       </div>
     </div>
   </main>
 </div>
+
+<div class="crumb-menu" id="crumb-menu"></div>
 
 <div class="av-menu" id="av-menu">
   <div class="av-user">
@@ -1981,31 +2038,31 @@
     },
     // 15 sample operations from the live prototype (code, cat, year, status, sector, dept, countryCode, teamLead)
     cards: [
-      ['AR-L9064','A','2026','Approved','KLD','CSC','AR','Juan Alvarez','10 Jun 2025'],
-      ['CH-L6958','A','2026','PP Distributed','IFD','CSC','CH','Carla Smith','28 May 2025'],
-      ['PE-L3245','A','2026','Negotiation','PTI','CAN','PE','Laura Bennett','03 Mar 2026'],
-      ['ES-L2750','B','2026','Started','SCL','CID','ES','Daniel Reyes','18 Sep 2025'],
-      ['HA-L8846','B','2026','DLP Approved','PTI','CID','HA','Ana Gomez','30 Jan 2026'],
-      ['AR-L6964','B','2026','PP Approved','SCL','CSC','AR','Michael Torres','25 Apr 2026'],
-      ['CH-L2451','A','2026','Approved','PTI','CSC','CH','David Kim','08 Dec 2025'],
-      ['PN-L6355','A','2026','Approved','INE','CID','PN','Sofia Herrera','05 May 2026'],
-      ['JA-L7010','A','2026','PP Distributed','PTI','CCB','JA','James Carter','12 Jul 2025'],
-      ['PR-L4807','B','2027','POD Approved','PTI','CSC','PR','Maria Ortiz','14 Jan 2027'],
-      ['BR-L9380','B','2026','Approved','INE','CSC','BR','Juan Alvarez','22 Nov 2025'],
-      ['UY-L6908','A','2026','POD Approved','INE','CSC','UY','Carla Smith','09 Sep 2026'],
-      ['PE-L9332','B','2027','DLP Approved','CSD','CAN','PE','Sofia Herrera','19 Feb 2027'],
-      ['ES-L2023','B','2027','PP Approved','SCL','CID','ES','Michael Torres','15 Oct 2025'],
-      ['AR-L5258','B','2026','PP Approved','ESG','CSC','AR','Laura Bennett','27 Aug 2025']
-      ,['GU-L1210','A','2026','Started','IFD','CID','GU','James Carter','21 Jun 2026'],
-      ['CR-L3320','B','2026','Negotiation','CSD','CID','CR','Laura Bennett','02 Apr 2026'],
-      ['DR-L2140','A','2027','PP Distributed','SCL','CID','DR','David Kim','23 Jul 2026'],
-      ['BO-L1930','B','2026','Approved','INE','CAN','BO','Ana Gomez','16 Mar 2026'],
-      ['EC-L2751','A','2026','PP Approved','PTI','CAN','EC','Maria Ortiz','29 Dec 2026'],
-      ['SU-L1050','B','2027','Started','CSD','CCB','SU','Daniel Reyes','07 Aug 2026'],
-      ['TT-L2260','A','2026','POD Approved','IFD','CCB','TT','Sofia Herrera','11 Nov 2026'],
-      ['GY-L1440','B','2026','DLP Approved','INE','CCB','GY','Michael Torres','26 Jun 2025'],
-      ['MX-L2020','A','2027','Negotiation','KLD','CID','MX','Carla Smith','13 Feb 2026'],
-      ['NI-L1180','B','2026','PP Distributed','ESG','CID','NI','Juan Alvarez','31 May 2026']
+      ['AR-L9064','A','2026','Approved','KLD','CSC','AR','Juan Alvarez','10 Jun 2025','Program to Support the National Early Childhood Plan and Care Policy'],
+      ['CH-L6958','A','2026','PP Distributed','IFD','CSC','CH','Carla Smith','28 May 2025','Public Financial Management Modernization Program'],
+      ['PE-L3810','A','2026','Negotiation','PTI','CAN','PE','Laura Bennett','03 Mar 2026','Rural Roads Connectivity and Maintenance Program'],
+      ['ES-L2915','B','2026','Started','SCL','CID','ES','Daniel Reyes','18 Sep 2025','Youth Employment and Skills Development Program'],
+      ['HA-L8120','B','2026','DLP Approved','PTI','CID','HA','Ana Gomez','30 Jan 2026','Community Water Access and Resilience Program'],
+      ['AR-L7402','B','2026','PP Approved','SCL','CSC','AR','Michael Torres','25 Apr 2026','School Infrastructure Improvement Program for Vulnerable Areas'],
+      ['CH-L2760','A','2026','Approved','PTI','CSC','CH','David Kim','08 Dec 2025','Digital Government Services Expansion Program'],
+      ['PN-L6520','A','2026','Approved','INE','CID','PN','Sofia Herrera','05 May 2026','Sustainable Urban Mobility Program of Panama City'],
+      ['JA-L7255','A','2026','PP Distributed','PTI','CCB','JA','James Carter','12 Jul 2025','Coastal Resilience and Disaster Risk Management Program'],
+      ['PR-L4633','B','2027','POD Approved','PTI','CSC','PR','Maria Ortiz','14 Jan 2027','Agricultural Productivity and Rural Development Program'],
+      ['BR-L9515','B','2026','Approved','INE','CSC','BR','Juan Alvarez','22 Nov 2025','Basic Sanitation Expansion Program for Metropolitan Regions'],
+      ['UY-L6908','A','2026','POD Approved','INE','CSC','UY','Carla Smith','09 Sep 2026','Energy Efficiency and Renewable Integration Program'],
+      ['PE-L9332','B','2027','DLP Approved','CSD','CAN','PE','Sofia Herrera','19 Feb 2027','Climate Resilient Housing and Urban Upgrading Program'],
+      ['ES-L2023','B','2027','PP Approved','SCL','CID','ES','Michael Torres','15 Oct 2025','Primary Health Care Networks Strengthening Program'],
+      ['AR-L5258','B','2026','PP Approved','ESG','CSC','AR','Laura Bennett','27 Aug 2025','Environmental Management and Biodiversity Program']
+      ,['GU-L1210','A','2026','Started','IFD','CID','GU','James Carter','21 Jun 2026','Tax Administration and Fiscal Transparency Program'],
+      ['CR-L3320','B','2026','Negotiation','CSD','CID','CR','Laura Bennett','02 Apr 2026','Sustainable Cities and Urban Climate Program'],
+      ['DR-L2140','A','2027','PP Distributed','SCL','CID','DR','David Kim','23 Jul 2026','Social Protection System Modernization Program'],
+      ['BO-L1930','B','2026','Approved','INE','CAN','BO','Ana Gomez','16 Mar 2026','Rural Electrification and Clean Energy Program'],
+      ['EC-L2751','A','2026','PP Approved','PTI','CAN','EC','Maria Ortiz','29 Dec 2026','Trade Facilitation and Export Diversification Program'],
+      ['SU-L1050','B','2027','Started','CSD','CCB','SU','Daniel Reyes','07 Aug 2026','Institutional Strengthening for Public Investment Program'],
+      ['TT-L2260','A','2026','POD Approved','IFD','CCB','TT','Sofia Herrera','11 Nov 2026','Financial Sector Deepening and Inclusion Program'],
+      ['GY-L1440','B','2026','DLP Approved','INE','CCB','GY','Michael Torres','26 Jun 2025','Water Supply Infrastructure Program for Hinterland Communities'],
+      ['MX-L2020','A','2027','Negotiation','KLD','CID','MX','Carla Smith','13 Feb 2026','Knowledge and Innovation Ecosystems Program'],
+      ['NI-L1180','B','2026','PP Distributed','ESG','CID','NI','Juan Alvarez','31 May 2026','Environmental and Social Safeguards Strengthening Program']
     ]
   };
   const OP_TITLE = 'Program to Support the National Early Childhood Plan and the Policy for ....';
@@ -2114,7 +2171,7 @@
       <div class="op-row-top">
         <button class="pin${pinnedOps.has(code) ? ' pinned' : ''}" aria-label="Pin operation"><span class="msr">push_pin</span></button>
         <span class="code">${code}</span>
-        <span class="name">${OP_TITLE}</span>
+        <span class="name">${c[9] || OP_TITLE}</span>
         <button class="btn-open">Open</button>
       </div>
       <div class="op-row-meta">
@@ -2701,7 +2758,7 @@
     document.getElementById('ws-crumb-phase').firstChild.textContent = PHASE_LABEL[phase] + ' ';
     document.getElementById('ws-crumb-code').textContent = code;
     document.getElementById('ws-code').textContent = code;
-    document.getElementById('ws-title').textContent = isImpl ? row[14] : OP_TITLE;
+    document.getElementById('ws-title').textContent = isImpl ? row[14] : (row[9] || OP_TITLE);
     document.getElementById('ws-status').textContent = isImpl ? row[3] : PHASE_LABEL[phase];
     const PHASE_ICON_SVG = {
       implementation: "<svg class=\"chip-ic\" viewBox=\"98.0 182.0 24 24\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M104.544 194.22C104.968 193.206 105.465 192.234 106.036 191.306C106.608 190.377 107.245 189.495 107.948 188.66L106.602 188.378C106.303 188.318 106.013 188.332 105.73 188.418C105.448 188.505 105.201 188.654 104.989 188.866L102.047 191.808C101.824 192.031 101.74 192.299 101.795 192.615C101.85 192.93 102.026 193.147 102.325 193.267L104.544 194.22ZM118.041 185.001C116.404 184.976 114.854 185.315 113.39 186.018C111.927 186.721 110.617 187.65 109.46 188.807C108.717 189.549 108.062 190.355 107.494 191.223C106.926 192.091 106.425 193.002 105.991 193.957C105.909 194.153 105.868 194.353 105.868 194.556C105.868 194.761 105.944 194.939 106.096 195.091L108.918 197.904C109.071 198.056 109.247 198.134 109.448 198.137C109.649 198.14 109.847 198.101 110.043 198.018C110.998 197.591 111.909 197.09 112.777 196.516C113.645 195.941 114.451 195.283 115.193 194.54C116.35 193.384 117.279 192.073 117.982 190.61C118.685 189.146 119.024 187.596 118.999 185.959C118.999 185.839 118.972 185.723 118.919 185.61C118.865 185.497 118.792 185.394 118.699 185.301C118.607 185.208 118.504 185.135 118.39 185.081C118.277 185.028 118.161 185.001 118.041 185.001ZM111.672 190.596C111.672 190.113 111.839 189.703 112.175 189.368C112.51 189.032 112.92 188.864 113.404 188.864C113.887 188.864 114.297 189.032 114.633 189.368C114.968 189.703 115.136 190.113 115.136 190.596C115.136 191.08 114.968 191.49 114.633 191.825C114.297 192.161 113.887 192.329 113.404 192.329C112.92 192.329 112.51 192.161 112.175 191.825C111.839 191.49 111.672 191.08 111.672 190.596ZM109.77 199.456L110.724 201.675C110.843 201.974 111.061 202.153 111.376 202.213C111.691 202.272 111.96 202.191 112.182 201.969L115.124 199.027C115.337 198.814 115.486 198.563 115.572 198.272C115.659 197.982 115.672 197.688 115.612 197.389L115.346 196.052C114.5 196.755 113.616 197.392 112.693 197.964C111.769 198.535 110.795 199.032 109.77 199.456ZM102.621 197.877C103.104 197.394 103.69 197.151 104.38 197.15C105.069 197.148 105.655 197.388 106.138 197.871C106.621 198.354 106.863 198.94 106.863 199.63C106.863 200.32 106.621 200.906 106.138 201.389C105.466 202.061 104.673 202.47 103.759 202.616C102.845 202.761 101.925 202.889 101 203C101.111 202.068 101.243 201.147 101.397 200.236C101.55 199.326 101.958 198.539 102.621 197.877Z\"/><path d=\"M104.544 194.22C104.968 193.206 105.465 192.234 106.036 191.306C106.608 190.377 107.245 189.495 107.948 188.66L106.602 188.378C106.303 188.318 106.013 188.332 105.73 188.418C105.448 188.505 105.201 188.654 104.989 188.866L102.047 191.808C101.824 192.031 101.74 192.299 101.795 192.615C101.85 192.93 102.026 193.147 102.325 193.267L104.544 194.22ZM118.041 185.001C116.404 184.976 114.854 185.315 113.39 186.018C111.927 186.721 110.617 187.65 109.46 188.807C108.717 189.549 108.062 190.355 107.494 191.223C106.926 192.091 106.425 193.002 105.991 193.957C105.909 194.153 105.868 194.353 105.868 194.556C105.868 194.761 105.944 194.939 106.096 195.091L108.918 197.904C109.071 198.056 109.247 198.134 109.448 198.137C109.649 198.14 109.847 198.101 110.043 198.018C110.998 197.591 111.909 197.09 112.777 196.516C113.645 195.941 114.451 195.283 115.193 194.54C116.35 193.384 117.279 192.073 117.982 190.61C118.685 189.146 119.024 187.596 118.999 185.959C118.999 185.839 118.972 185.723 118.919 185.61C118.865 185.497 118.792 185.394 118.699 185.301C118.607 185.208 118.504 185.135 118.39 185.081C118.277 185.028 118.161 185.001 118.041 185.001ZM111.672 190.596C111.672 190.113 111.839 189.703 112.175 189.368C112.51 189.032 112.92 188.864 113.404 188.864C113.887 188.864 114.297 189.032 114.633 189.368C114.968 189.703 115.136 190.113 115.136 190.596C115.136 191.08 114.968 191.49 114.633 191.825C114.297 192.161 113.887 192.329 113.404 192.329C112.92 192.329 112.51 192.161 112.175 191.825C111.839 191.49 111.672 191.08 111.672 190.596ZM109.77 199.456L110.724 201.675C110.843 201.974 111.061 202.153 111.376 202.213C111.691 202.272 111.96 202.191 112.182 201.969L115.124 199.027C115.337 198.814 115.486 198.563 115.572 198.272C115.659 197.982 115.672 197.688 115.612 197.389L115.346 196.052C114.5 196.755 113.616 197.392 112.693 197.964C111.769 198.535 110.795 199.032 109.77 199.456ZM102.621 197.877C103.104 197.394 103.69 197.151 104.38 197.15C105.069 197.148 105.655 197.388 106.138 197.871C106.621 198.354 106.863 198.94 106.863 199.63C106.863 200.32 106.621 200.906 106.138 201.389C105.466 202.061 104.673 202.47 103.759 202.616C102.845 202.761 101.925 202.889 101 203C101.111 202.068 101.243 201.147 101.397 200.236C101.55 199.326 101.958 198.539 102.621 197.877Z\"/></svg>",
@@ -2737,7 +2794,7 @@
     document.querySelectorAll('.ws-item[data-wsview]').forEach(i => i.classList.toggle('active', i.dataset.wsview === view));
     if (view === 'opdata' && wsRow) {
       const row = wsRow, isImpl = wsPhase === 'implementation';
-      const title = isImpl ? row[14] : OP_TITLE;
+      const title = isImpl ? row[14] : (row[9] || OP_TITLE);
       document.getElementById('ws-mini-code').textContent = row[0];
       document.getElementById('ws-mini-name').textContent = title.length > 30 ? title.slice(0, 27) + '...' : title;
       document.getElementById('ws-mini-status').textContent = document.getElementById('ws-status').textContent;
@@ -2771,6 +2828,7 @@
       String.fromCodePoint(...[...iso].map(ch => 0x1F1E6 + ch.charCodeAt(0) - 65));
     // objective: reset to truncated state
     renderObjective(false);
+    setOdTab('gi');
     document.getElementById('od-fin-tip').classList.remove('show');
     // key facts
     const pair = isImpl ? (row[10] || 'INV \u2022 ESP') : 'INV \u2022 ESP';
@@ -2840,6 +2898,14 @@
     const t = e.target.closest('.od3-more');
     if (t) renderObjective(t.dataset.obj === 'more');
   });
+  function setOdTab(tab) {
+    document.getElementById('od-tab-gi').style.display = tab === 'gi' ? '' : 'none';
+    document.getElementById('od-tab-team').style.display = tab === 'team' ? '' : 'none';
+    document.querySelectorAll('.od-tab').forEach(b => b.classList.toggle('active', b.dataset.odtab === tab));
+    if (wsScreen.classList.contains('open') && wsScreen.dataset.code)
+      setHash('#/op/' + wsScreen.dataset.code + '/data' + (tab === 'team' ? '/team' : ''));
+  }
+  document.querySelectorAll('.od-tab').forEach(b => b.addEventListener('click', () => setOdTab(b.dataset.odtab)));
   document.querySelectorAll('.ws-item[data-wsview]').forEach(item => {
     item.addEventListener('click', () => setWsView(item.dataset.wsview));
   });
@@ -2865,6 +2931,16 @@
   document.getElementById('ws-st-prev').addEventListener('click', () => document.getElementById('ws-stages').scrollBy({left: -240, behavior: 'smooth'}));
   document.getElementById('ws-st-next').addEventListener('click', () => document.getElementById('ws-stages').scrollBy({left: 240, behavior: 'smooth'}));
 
+  // ===== Operation Data freshness indicator (daily warehouse refresh at 6:00 AM) =====
+  (function () {
+    const now = new Date();
+    const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const d = new Date(now);
+    if (now.getHours() < 6) d.setDate(d.getDate() - 1); // before today's refresh, show yesterday's
+    document.getElementById('od-updated-at').textContent =
+      `${String(d.getDate()).padStart(2, '0')} ${MONTHS[d.getMonth()]} ${d.getFullYear()}, 6:00 AM`;
+  })();
+
   // ===== Financial info tooltip =====
   document.getElementById('od-fin-info').addEventListener('click', e => {
     e.stopPropagation();
@@ -2875,9 +2951,10 @@
   });
 
   // ===== Hash router (deep links: #/screen and #/op/CODE/view) =====
-  let routing = false;
+  let routing = false, internalHash = null;
   function setHash(h) {
     if (routing || location.hash === h) return;
+    internalHash = h;
     try { location.hash = h; } catch (err) { /* sandboxed previews block URL changes */ }
   }
   function applyRoute() {
@@ -2897,6 +2974,7 @@
         }
         openWorkspace(phase, row);
         setWsView(parts[2] === 'data' ? 'opdata' : 'dashboard');
+        if (parts[2] === 'data') setOdTab(parts[3] === 'team' ? 'team' : 'gi');
       } else {
         if (wsScreen.classList.contains('open')) {
           wsScreen.classList.remove('open');
@@ -2908,9 +2986,47 @@
       }
     } finally { routing = false; }
   }
-  window.addEventListener('hashchange', applyRoute);
+  window.addEventListener('hashchange', () => {
+    if (location.hash === internalHash) { internalHash = null; return; } // our own write, state already applied
+    applyRoute();
+  });
   if (location.hash && location.hash !== '#/' && location.hash !== '#/home') applyRoute();
   else try { history.replaceState(null, '', '#/home'); } catch (err) { /* sandboxed previews block replaceState */ }
+
+  // ===== Breadcrumb phase dropdown =====
+  const crumbMenu = document.getElementById('crumb-menu');
+  document.querySelectorAll('.nav-item[data-screen]').forEach(item => {
+    const btn = document.createElement('button');
+    btn.className = 'crumb-item';
+    btn.dataset.screen = item.dataset.screen;
+    const ic = item.querySelector('.nav-ic');
+    if (ic) btn.appendChild(ic.cloneNode(true));
+    btn.appendChild(document.createTextNode(item.textContent.trim()));
+    btn.addEventListener('click', () => {
+      crumbMenu.classList.remove('open');
+      wsScreen.classList.remove('open');
+      document.body.classList.remove('no-scroll');
+      item.click();
+    });
+    crumbMenu.appendChild(btn);
+  });
+  document.getElementById('ws-crumb-phase').addEventListener('click', e => {
+    e.stopPropagation();
+    if (crumbMenu.classList.contains('open')) { crumbMenu.classList.remove('open'); return; }
+    const label = PHASE_LABEL[wsPhase] || '';
+    crumbMenu.querySelectorAll('.crumb-item').forEach(b =>
+      b.classList.toggle('active', b.textContent.trim() === label));
+    const r = e.currentTarget.getBoundingClientRect();
+    crumbMenu.style.top = (r.bottom + 8) + 'px';
+    crumbMenu.style.left = r.left + 'px';
+    crumbMenu.classList.add('open');
+  });
+  document.addEventListener('click', e => {
+    if (!crumbMenu.classList.contains('open')) return;
+    if (e.target.closest('.crumb-menu') || e.target.closest('#ws-crumb-phase')) return;
+    crumbMenu.classList.remove('open');
+  }, true);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') crumbMenu.classList.remove('open'); });
 
   // ===== Avatar dropdown =====
   const avMenu = document.getElementById('av-menu');
