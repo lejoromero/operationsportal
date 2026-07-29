@@ -243,6 +243,90 @@
   .avatar:hover{box-shadow:0 0 0 6px rgba(255,255,255,0.22);}
   .avatar img{width:100%;height:100%;object-fit:cover;display:block;}
 
+  /* ============ Country Strategies ============ */
+  .prep-hero.cs-hero{flex-direction:row;align-items:center;justify-content:space-between;gap:24px;}
+  .cs-hero .btn-filled{height:36px;padding:0 20px;font-size:13px;background:#008CCB;}
+  .cs-hero .btn-filled:hover{background:#0077AD;}
+  .cs-body{padding:40px 40px 48px;display:flex;flex-direction:column;min-width:0;background:var(--color-surface);border-top-right-radius:16px;flex:1;}
+  .cs-filtercard{background:#fff;border:1px solid var(--border-default);border-radius:8px;padding:16px;display:flex;gap:12px;flex-wrap:wrap;}
+  .cs-filter{
+    height:32px;border:1px solid var(--color-outline-variant);border-radius:8px;background:#fff;
+    display:inline-flex;align-items:center;gap:8px;padding:0 8px 0 14px;cursor:pointer;
+    font-family:var(--font-ui);font-size:12px;font-weight:600;color:#272626;
+  }
+  .cs-filter:hover{background:var(--color-surface-cont-lowest);}
+  .cs-fwrap{position:relative;}
+  .cs-fwrap .menu{max-height:340px;overflow-y:auto;}
+  .cs-filter .cnt0{min-width:18px;height:18px;border-radius:999px;background:#F0F0F0;display:inline-flex;align-items:center;justify-content:center;font-size:11px;color:#5C5A5A;padding:0 5px;}
+  .cs-filter .msr{font-size:18px;color:var(--icon-default);}
+  .cs-legend{background:#fff;border:1px solid var(--border-default);border-radius:8px;padding:20px 24px;display:flex;gap:24px;align-items:center;margin-top:32px;flex-wrap:wrap;}
+  .cs-legend .lread .cap{font-family:'Open Sans';font-weight:600;font-size:10px;color:#67676A;}
+  .cs-legend .lread .b{font-size:12px;line-height:17px;font-weight:700;color:#232222;max-width:300px;margin-top:2px;}
+  .cs-legend .ldiv{width:1px;align-self:stretch;background:var(--border-default);}
+  .cs-legend .lmid{display:flex;align-items:flex-start;gap:10px;flex:1;min-width:320px;}
+  .cs-legend .lseg{display:flex;flex-direction:column;gap:6px;align-items:center;}
+  .cs-legend .lbar{height:24px;border-radius:4px;background:#00854D;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-family:'Open Sans';font-weight:600;font-size:10px;padding:0 24px;}
+  .cs-legend .lbar.sm{padding:0 10px;height:20px;}
+  .cs-legend .lbar.hatch{background-color:#D7EEE2;background-image:radial-gradient(circle,#00854D 1.1px,transparent 1.2px);background-size:5px 5px;color:#004F26;}
+  .cs-legend .lcap{font-family:'Open Sans';font-weight:600;font-size:9.5px;color:#67676A;text-align:center;max-width:150px;line-height:13px;}
+  .cs-legend .plus{font-size:14px;font-weight:700;color:#67676A;margin-top:4px;}
+  .cs-legend .lval .b{font-size:12px;font-weight:700;color:#232222;}
+  .cs-legend .lval .t{font-size:11px;line-height:15px;color:#67676A;max-width:210px;margin-top:4px;}
+  .cs-count{margin:32px 0 12px;font-size:14px;font-weight:600;color:#67676A;}
+  .cs-count b{color:#232222;font-weight:600;}
+  .cs-dots{display:flex;gap:20px;align-items:center;margin-bottom:16px;}
+  .cs-dots .d{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:#6B7280;}
+  .cs-dots .dot{width:8px;height:8px;border-radius:4px;flex:0 0 auto;}
+  .cs-scroll{overflow-x:auto;}
+  .cs-table{min-width:900px;border:1px solid var(--border-default);border-radius:8px;overflow:hidden;background:#fff;}
+  .cs-head{display:flex;height:30px;background:#003B54;border-bottom:2px solid #007EB6;}
+  .cs-head .c-col{
+    flex:0 0 200px;display:flex;align-items:center;padding:0 14px;
+    font-family:'Open Sans';font-weight:600;font-size:9.5px;letter-spacing:0.6px;color:rgba(255,255,255,0.7);
+    border-right:1px solid rgba(255,255,255,0.15);
+  }
+  .cs-head .y-track{flex:1;display:flex;}
+  .cs-head .y-cell{
+    flex:1;display:flex;align-items:center;justify-content:center;
+    font-family:'Open Sans';font-weight:600;font-size:11px;color:rgba(255,255,255,0.6);
+    border-right:1px solid rgba(255,255,255,0.1);
+  }
+  .cs-head .y-cell:last-child{border-right:none;}
+  .cs-head .y-cell.cur{background:rgba(255,255,255,0.12);color:#fff;}
+  .cs-group-h{height:31px;background:#F3F4F6;border-top:1px solid #E5E7EB;border-bottom:1px solid #E5E7EB;display:flex;align-items:center;padding:0 14px;font-size:14px;font-weight:700;color:#0057A8;}
+  .cs-gbody{position:relative;}
+  .cs-row{display:flex;height:44px;border-bottom:1px solid #F3F4F6;}
+  .cs-gbody:last-child .cs-row:last-child{border-bottom:none;}
+  .cs-cty{flex:0 0 200px;display:flex;align-items:center;gap:8px;padding:0 12px 0 14px;border-right:1.5px solid #E5E7EB;min-width:0;}
+  .cs-cty .flag{font-size:17px;line-height:1;flex:0 0 auto;}
+  .cs-cty .nm{font-size:12px;line-height:14px;font-weight:600;color:#111827;white-space:nowrap;}
+  .cs-cty .tp{font-family:'Open Sans';font-weight:600;font-size:11px;line-height:14px;color:#9CA3AF;}
+  .cs-tag{
+    height:19px;padding:0 9px;border-radius:6px;background:#FBEEF3;border:1px solid #C5779C;
+    color:#8B546E;font-family:'Open Sans';font-weight:600;font-size:9.5px;
+    display:inline-flex;align-items:center;white-space:nowrap;flex:0 0 auto;
+  }
+  .cs-track{flex:1;position:relative;display:flex;min-width:0;}
+  .cs-cell{flex:1;border-right:1px solid #F3F4F6;}
+  .cs-cell:last-child{border-right:none;}
+  .cs-cell.cur{background:rgba(0,87,168,0.03);}
+  .cs-bar{
+    position:absolute;top:9px;height:26px;border-radius:4px;
+    display:flex;align-items:center;padding:0 8px;
+    font-family:'Open Sans';font-weight:600;font-size:10px;color:#fff;
+    white-space:nowrap;overflow:hidden;
+  }
+  .cs-bar.gray{background:#919193;opacity:0.7;}
+  .cs-bar.green{background:#00854D;}
+  .cs-bar.blue{background:#007EB6;}
+  .cs-bar.noround-r{border-radius:4px 0 0 4px;}
+  .cs-ext{
+    position:absolute;top:9px;height:26px;border-radius:0 4px 4px 0;
+    background-color:#D7EEE2;background-image:radial-gradient(circle,#00854D 1.1px,transparent 1.2px);background-size:5px 5px;
+  }
+  .cs-today{position:absolute;top:0;bottom:0;width:2px;background:#0057A8;opacity:0.5;z-index:2;}
+  .cs-today-lb{position:absolute;top:2px;transform:translateX(-50%);font-family:'Open Sans';font-weight:600;font-size:9px;color:#0057A8;z-index:3;}
+
   /* ============ Breadcrumb phase dropdown ============ */
   .ws-crumb .ph{cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
   .ws-crumb .ph .chev{
@@ -1505,11 +1589,49 @@
   </main>
 
   <!-- ============ Placeholder screens ============ -->
-  <main class="main screen" id="screen-country-strategies">
-    <div class="placeholder">
-      <span class="msr">flag</span>
-      <h2>Country Strategies</h2>
-      <p>This screen is not part of the prototype yet. Select its frame in Figma and share it with Claude to add it.</p>
+  <main class="main flush screen" id="screen-country-strategies">
+    <div class="prep-hero cs-hero">
+      <div>
+        <h1>Country Strategies &amp; Country Engagement Notes Overview</h1>
+        <span class="sub">Browse, filter and manage IDB CS and CEN across Latin America and the Caribbean.</span>
+      </div>
+      <button class="btn-filled">Create new CS/CEN</button>
+    </div>
+    <div class="cs-body">
+      <div class="cs-filtercard" id="cs-filters">
+        <div class="cs-fwrap"><button class="cs-filter" data-csf="regions">All Regions <span class="cnt0" style="display:none">0</span><span class="msr">expand_more</span></button><div class="menu" data-csm="regions"></div></div>
+        <div class="cs-fwrap"><button class="cs-filter" data-csf="countries">All Countries <span class="cnt0" style="display:none">0</span><span class="msr">expand_more</span></button><div class="menu" data-csm="countries"></div></div>
+        <div class="cs-fwrap"><button class="cs-filter" data-csf="status">Status <span class="cnt0">0</span><span class="msr">expand_more</span></button><div class="menu" data-csm="status"></div></div>
+        <div class="cs-fwrap"><button class="cs-filter" data-csf="type">Type <span class="cnt0">0</span><span class="msr">expand_more</span></button><div class="menu" data-csm="type"></div></div>
+        <div class="cs-fwrap"><button class="cs-filter" data-csf="ayear">Approval Year <span class="cnt0">0</span><span class="msr">expand_more</span></button><div class="menu" data-csm="ayear"></div></div>
+        <div class="cs-fwrap"><button class="cs-filter" data-csf="eyear">Expiration Year <span class="cnt0">0</span><span class="msr">expand_more</span></button><div class="menu" data-csm="eyear"></div></div>
+      </div>
+      <div class="cs-legend">
+        <div class="lread">
+          <div class="cap">How to read this timeline</div>
+          <div class="b">Each bar shows the full Validity Period of an Active Country Strategy/ Country Engagement Note</div>
+        </div>
+        <div class="ldiv"></div>
+        <div class="lmid">
+          <div class="lseg"><span class="lbar">Coverage Period</span><span class="lcap">Original agreed period (e.g 2022-2025)</span></div>
+          <span class="plus">+</span>
+          <div class="lseg"><span class="lbar sm">Transition +1 yr</span><span class="lcap">Until Dec 31 of following year</span></div>
+          <span class="plus">+</span>
+          <div class="lseg"><span class="lbar sm hatch">Extension</span></div>
+        </div>
+        <div class="lval">
+          <div class="b">Validity Period</div>
+          <div class="t">The entire green bar is the valid formally approved period before expiration</div>
+        </div>
+      </div>
+      <div class="cs-count">Showing <b id="cs-count-n">25</b> strategies</div>
+      <div class="cs-dots">
+        <span class="d"><span class="dot" style="background:#E38A05"></span>Under Preparation</span>
+        <span class="d"><span class="dot" style="background:#00854D"></span>Active</span>
+        <span class="d"><span class="dot" style="background:#B3E3BF"></span>Transition</span>
+        <span class="d"><span class="dot" style="background:#D83A52"></span>Expired</span>
+      </div>
+      <div class="cs-scroll"><div class="cs-table" id="cs-table"></div></div>
     </div>
   </main>
   <main class="main flush screen" id="screen-preparation">
@@ -3143,6 +3265,172 @@
     const feed = [...document.querySelectorAll('.ws-item')].find(i => i.textContent.includes('Activity Feed'));
     if (feed) feed.click();
   });
+
+  // ===== Country Strategies timeline =====
+  const CS_YEARS = { start: 2018, span: 10 }; // 2018..2027
+  const CS_DATA = [
+    { title: 'Andean Group (CAN)', rows: [
+      { flag: '\uD83C\uDDE7\uD83C\uDDF4', name: 'Bolivia', type: 'CS', tag: 'Expiring Dec 31st',
+        bars: [ { k: 'gray', s: 2018, e: 2021.9, l: 'BO-S1122' }, { k: 'green', s: 2022, e: 2027, l: 'BO-S1123', ext: 0.8 } ] },
+      { flag: '\uD83C\uDDE8\uD83C\uDDF4', name: 'Colombia', type: 'CS',
+        bars: [ { k: 'gray', s: 2018, e: 2021.9, l: 'CO-S1122' }, { k: 'green', s: 2022, e: 2026, l: 'CO-S1123', ext: 1 } ] },
+      { flag: '\uD83C\uDDEA\uD83C\uDDE8', name: 'Ecuador', type: 'CS',
+        bars: [ { k: 'gray', s: 2018, e: 2023, l: 'EC-S1122' }, { k: 'blue', s: 2023.1, e: 2027.8, l: 'EC-S1123' } ] },
+      { flag: '\uD83C\uDDF5\uD83C\uDDEA', name: 'Peru', type: 'CS',
+        bars: [ { k: 'gray', s: 2019, e: 2024, l: 'PE-S1122' }, { k: 'blue', s: 2024.1, e: 2027.8, l: 'PE-S1123' } ] },
+      { flag: '\uD83C\uDDFB\uD83C\uDDEA', name: 'Venezuela', type: 'CEN', tag: 'No active CS/CEN',
+        bars: [ { k: 'gray', s: 2019, e: 2021, l: 'VEN-S1122' } ] }
+    ] },
+    { title: 'Caribbean Group (CCB)', rows: [
+      { flag: '\uD83C\uDDE7\uD83C\uDDF8', name: 'Bahamas', type: 'CS',
+        bars: [ { k: 'gray', s: 2018, e: 2021.9, l: 'BAH-S1122' }, { k: 'green', s: 2022, e: 2026, l: 'BAH-S1123', ext: 1 } ] },
+      { flag: '\uD83C\uDDE7\uD83C\uDDE7', name: 'Barbados', type: 'CEN',
+        bars: [ { k: 'gray', s: 2019, e: 2023.5, l: 'BA-S1123' } ] },
+      { flag: '\uD83C\uDDEC\uD83C\uDDFE', name: 'Guyana', type: 'CS',
+        bars: [ { k: 'green', s: 2023, e: 2027.8, l: 'GUY-S1123' } ] },
+      { flag: '\uD83C\uDDED\uD83C\uDDF9', name: 'Haiti', type: 'CEN', tag: 'Expiring Dec 31st',
+        bars: [ { k: 'blue', s: 2022.5, e: 2026, l: 'HAI-S1123' } ] },
+      { flag: '\uD83C\uDDEF\uD83C\uDDF2', name: 'Jamaica', type: 'CS',
+        bars: [ { k: 'green', s: 2022, e: 2026.3, l: 'JAM-S1123' } ] },
+      { flag: '\uD83C\uDDF8\uD83C\uDDF7', name: 'Suriname', type: 'CS',
+        bars: [ { k: 'blue', s: 2023.5, e: 2027.8, l: 'SUR-S1123' } ] },
+      { flag: '\uD83C\uDDF9\uD83C\uDDF9', name: 'Trinidad & Tobago', type: 'CS',
+        bars: [ { k: 'blue', s: 2024, e: 2027.8, l: 'TRI-S1123' } ] }
+    ] },
+    { title: 'Isthmus & DR (CID)', rows: [
+      { flag: '\uD83C\uDDE8\uD83C\uDDF7', name: 'Costa Rica', type: 'CS',
+        bars: [ { k: 'gray', s: 2020, e: 2024.5, l: 'CR-S1122' }, { k: 'green', s: 2024.6, e: 2027, l: 'CRI-S1123' } ] },
+      { flag: '\uD83C\uDDE9\uD83C\uDDF4', name: 'Dominican Rep.', type: 'CS',
+        bars: [ { k: 'green', s: 2023, e: 2027, l: 'DOM-S1123', ext: 0.8 } ] },
+      { flag: '\uD83C\uDDF8\uD83C\uDDFB', name: 'El Salvador', type: 'CS',
+        bars: [ { k: 'green', s: 2022.5, e: 2026, l: 'SAL-S1123', ext: 1 } ] },
+      { flag: '\uD83C\uDDEC\uD83C\uDDF9', name: 'Guatemala', type: 'CS',
+        bars: [ { k: 'green', s: 2023.8, e: 2027.5, l: 'GUA-S1123' } ] },
+      { flag: '\uD83C\uDDED\uD83C\uDDF3', name: 'Honduras', type: 'CS',
+        bars: [ { k: 'blue', s: 2024.3, e: 2027.8, l: 'HON-S1123' } ] },
+      { flag: '\uD83C\uDDF3\uD83C\uDDEE', name: 'Nicaragua', type: 'CEN',
+        bars: [ { k: 'gray', s: 2020, e: 2025, l: 'NIC-S1122' } ] },
+      { flag: '\uD83C\uDDF5\uD83C\uDDE6', name: 'Panama', type: 'CS',
+        bars: [ { k: 'blue', s: 2023.5, e: 2027.8, l: 'PAN-S1123' } ] }
+    ] },
+    { title: 'Southern Cone (CSC)', rows: [
+      { flag: '\uD83C\uDDE6\uD83C\uDDF7', name: 'Argentina', type: 'CS',
+        bars: [ { k: 'gray', s: 2018, e: 2022.3, l: 'ARG-S1122' }, { k: 'green', s: 2022.4, e: 2026, l: 'ARG-S1123', ext: 1 } ] },
+      { flag: '\uD83C\uDDE7\uD83C\uDDF7', name: 'Brazil', type: 'CS',
+        bars: [ { k: 'gray', s: 2018.5, e: 2022.8, l: 'BRA-S1122' }, { k: 'green', s: 2023, e: 2027, l: 'BRA-S1123' } ] },
+      { flag: '\uD83C\uDDE8\uD83C\uDDF1', name: 'Chile', type: 'CS',
+        bars: [ { k: 'gray', s: 2018, e: 2021, l: 'CHI-S1122' }, { k: 'green', s: 2021.2, e: 2026, l: 'CHI-S1123', ext: 1 } ] },
+      { flag: '\uD83C\uDDF2\uD83C\uDDFD', name: 'Mexico', type: 'CS',
+        bars: [ { k: 'blue', s: 2023.5, e: 2027.8, l: 'MEX-S1123' } ] },
+      { flag: '\uD83C\uDDF5\uD83C\uDDFE', name: 'Paraguay', type: 'CS',
+        bars: [ { k: 'green', s: 2023.5, e: 2027, l: 'PAR-S1123' } ] },
+      { flag: '\uD83C\uDDFA\uD83C\uDDFE', name: 'Uruguay', type: 'CS',
+        bars: [ { k: 'gray', s: 2020, e: 2024.5, l: 'URU-S1123' } ] }
+    ] }
+  ];
+  const CS_FILTERS = {
+    regions: ['Andean Group (CAN)', 'Caribbean Group (CCB)', 'Isthmus & DR (CID)', 'Southern Cone (CSC)'],
+    countries: [ ['BO','Bolivia'], ['CO','Colombia'], ['EC','Ecuador'], ['PE','Peru'], ['VE','Venezuela'],
+      ['BS','Bahamas'], ['BB','Barbados'], ['GY','Guyana'], ['HT','Haiti'], ['JM','Jamaica'], ['SR','Suriname'],
+      ['TT','Trinidad & Tobago'], ['CR','Costa Rica'], ['DO','Dominican Rep.'], ['SV','El Salvador'], ['GT','Guatemala'],
+      ['HN','Honduras'], ['PA','Panama'], ['NI','Nicaragua'], ['AR','Argentina'], ['BR','Brazil'], ['CL','Chile'],
+      ['MX','Mexico'], ['PY','Paraguay'], ['UY','Uruguay'] ],
+    status: ['Under preparation', 'Active', 'Transition', 'Expired'],
+    type: ['Country Strategy', 'Country Engagement Note'],
+    ayear: ['2020','2021','2022','2023','2024','2025','2026','2027','2028'],
+    eyear: ['2020','2021','2022','2023','2024','2025','2026','2027','2028']
+  };
+  const csSel = { regions: new Set(), countries: new Set(), status: new Set(), type: new Set(), ayear: new Set(), eyear: new Set() };
+  function csRowStatus(r) {
+    if (r.bars.some(b => b.k === 'green')) return 'Active';
+    if (r.bars.some(b => b.k === 'blue')) return 'Transition';
+    return r.bars.length ? 'Expired' : 'Under preparation';
+  }
+  function csRowVisible(gTitle, r) {
+    if (csSel.regions.size && !csSel.regions.has(gTitle)) return false;
+    if (csSel.countries.size && !csSel.countries.has(r.name)) return false;
+    if (csSel.status.size && !csSel.status.has(csRowStatus(r))) return false;
+    if (csSel.type.size && !csSel.type.has(r.type === 'CS' ? 'Country Strategy' : 'Country Engagement Note')) return false;
+    const last = r.bars[r.bars.length - 1];
+    if (csSel.ayear.size && !(last && csSel.ayear.has(String(Math.floor(last.s))))) return false;
+    if (csSel.eyear.size && !(last && csSel.eyear.has(String(Math.floor(last.e + (last.ext || 0)))))) return false;
+    return true;
+  }
+  function renderCS() {
+    const pct = y => ((y - CS_YEARS.start) / CS_YEARS.span * 100);
+    const TODAY = 2026 + 0.25; // today marker inside 2026
+    const cells = () => Array.from({ length: 10 }, (_, i) =>
+      `<div class="cs-cell${i === 8 ? ' cur' : ''}"></div>`).join('');
+    let out = `<div class="cs-head"><div class="c-col">COUNTRY</div><div class="y-track">${
+      Array.from({ length: 10 }, (_, i) => `<div class="y-cell${i === 8 ? ' cur' : ''}">${2018 + i}</div>`).join('')
+    }</div></div>`;
+    let shown = 0;
+    CS_DATA.forEach(g => {
+      const rows = g.rows.filter(r => csRowVisible(g.title, r));
+      if (!rows.length) return;
+      shown += rows.length;
+      out += `<div class="cs-group-h">${g.title}</div><div class="cs-gbody">`;
+      out += rows.map(r => {
+        const bars = r.bars.map(b => {
+          const hasExt = b.ext > 0;
+          let s = `<div class="cs-bar ${b.k}${hasExt ? ' noround-r' : ''}" style="left:${pct(b.s)}%;width:${pct(b.e) - pct(b.s) + (2018 - CS_YEARS.start)}%">${b.l}</div>`;
+          if (hasExt) s += `<div class="cs-ext" style="left:${pct(b.e)}%;width:${b.ext / CS_YEARS.span * 100}%"></div>`;
+          return s;
+        }).join('');
+        return `<div class="cs-row">
+          <div class="cs-cty"><span class="flag">${r.flag}</span><span><div class="nm">${r.name}</div><div class="tp">${r.type}</div></span>${r.tag ? `<span class="cs-tag">${r.tag}</span>` : ''}</div>
+          <div class="cs-track">${cells()}${bars}</div>
+        </div>`;
+      }).join('');
+      // today marker spans the group body, over the year track only
+      out += `<div class="cs-today" style="left:calc(200px + (100% - 200px) * ${(TODAY - CS_YEARS.start) / CS_YEARS.span})"></div>`;
+      out += `<div class="cs-today-lb" style="left:calc(200px + (100% - 200px) * ${(TODAY - CS_YEARS.start) / CS_YEARS.span})">Today</div>`;
+      out += '</div>';
+    });
+    document.getElementById('cs-table').innerHTML = out;
+    document.getElementById('cs-count-n').textContent = shown;
+  }
+  // build the six dropdown menus with the shared menu kit (multi select, checkboxes)
+  function csMenuItems(key) {
+    if (key === 'countries')
+      return CS_FILTERS.countries.map(([cd, nm]) =>
+        `<button class="menu-item${csSel.countries.has(nm) ? ' checked' : ''}" data-v="${nm}"><span class="cbx"><span class="msr">check</span></span><span class="mcode">${cd}</span>${nm}</button>`).join('');
+    return CS_FILTERS[key].map(v =>
+      `<button class="menu-item${csSel[key].has(v) ? ' checked' : ''}" data-v="${v}"><span class="cbx"><span class="msr">check</span></span>${v}</button>`).join('');
+  }
+  function csSyncFilterUI(key) {
+    const btn = document.querySelector(`.cs-filter[data-csf="${key}"]`);
+    const badge = btn.querySelector('.cnt0');
+    const n = csSel[key].size;
+    badge.textContent = n;
+    badge.style.display = (key === 'regions' || key === 'countries') && n === 0 ? 'none' : '';
+  }
+  document.querySelectorAll('#cs-filters .cs-fwrap').forEach(wrap => {
+    const btn = wrap.querySelector('.cs-filter');
+    const menu = wrap.querySelector('.menu');
+    const key = btn.dataset.csf;
+    menu.innerHTML = csMenuItems(key);
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const wasOpen = menu.classList.contains('open');
+      document.querySelectorAll('#cs-filters .menu').forEach(m => m.classList.remove('open'));
+      if (!wasOpen) menu.classList.add('open');
+    });
+    menu.addEventListener('click', e => {
+      const item = e.target.closest('.menu-item');
+      if (!item) return;
+      e.stopPropagation();
+      const v = item.dataset.v;
+      if (csSel[key].has(v)) csSel[key].delete(v); else csSel[key].add(v);
+      item.classList.toggle('checked', csSel[key].has(v));
+      csSyncFilterUI(key);
+      renderCS();
+    });
+  });
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#cs-filters')) document.querySelectorAll('#cs-filters .menu').forEach(m => m.classList.remove('open'));
+  });
+  renderCS();
 
   // ===== Breadcrumb phase dropdown =====
   const crumbMenu = document.getElementById('crumb-menu');
