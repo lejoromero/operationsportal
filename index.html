@@ -327,6 +327,35 @@
   .cs-today{position:absolute;top:0;bottom:0;width:2px;background:#0057A8;opacity:0.5;z-index:2;}
   .cs-today-lb{position:absolute;top:2px;transform:translateX(-50%);font-family:'Open Sans';font-weight:600;font-size:9px;color:#0057A8;z-index:3;}
 
+  /* ============ Pinned operations modal ============ */
+  .pinmodal-scrim{
+    position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:6000;display:none;
+  }
+  .pinmodal-scrim.open{display:block;}
+  .pinmodal{
+    position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:6001;display:none;
+    width:min(910px, calc(100vw - 48px));max-height:calc(100vh - 48px);
+    background:#fff;border-radius:12px;box-shadow:0 16px 48px rgba(0,0,0,0.22);
+    padding:32px 40px 32px;flex-direction:column;
+  }
+  .pinmodal.open{display:flex;}
+  .pm-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;}
+  .pm-head h2{font-size:24px;line-height:32px;font-weight:700;color:#272626;}
+  .pm-sub{font-size:16px;line-height:24px;color:#272626;margin-top:4px;}
+  .pm-count{font-size:13px;font-weight:600;color:#5C5A5A;margin:28px 0 4px;}
+  .pm-list{overflow-y:auto;overflow-x:hidden;min-height:120px;}
+  .pm-row{display:flex;align-items:center;gap:24px;padding:16px 0;}
+  .pm-row .code{font-family:var(--font-mono);font-size:14px;font-weight:700;color:#272626;flex:0 0 84px;}
+  .pm-row .ttl{flex:1;font-size:14px;color:#5C5A5A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;}
+  .pm-row .chip-phase{flex:0 0 auto;}
+  .pm-row .pm-unpin{
+    background:none;border:0;padding:4px;margin:0;cursor:pointer;border-radius:50%;
+    color:#272626;display:inline-flex;flex:0 0 auto;
+  }
+  .pm-row .pm-unpin:hover{background:var(--color-surface-cont-lowest);}
+  .pm-row .pm-unpin .msr{font-size:20px;font-family:'Material Symbols Rounded Fill';}
+  .pm-empty{padding:32px 0;font-size:14px;color:#5C5A5A;}
+
   /* ============ Breadcrumb phase dropdown ============ */
   .ws-crumb .ph{cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
   .ws-crumb .ph .chev{
@@ -1779,7 +1808,7 @@
       <button class="ws-item" data-wsview="opdata"><span class="msr">description</span> Operation Data</button>
     </div>
     <div class="grp">
-      <div class="grp-title">Dimensions</div>
+      <div class="grp-title">Tools</div>
       <button class="ws-item"><span class="msr">science</span> sgDELTA</button>
     </div>
   </nav>
@@ -2073,6 +2102,17 @@
   </div>
 </div>
 
+<div class="pinmodal-scrim" id="pinmodal-scrim"></div>
+<div class="pinmodal" id="pinmodal" role="dialog" aria-label="Pinned operations">
+  <div class="pm-head">
+    <h2>Pinned operations</h2>
+    <button class="icon-btn" id="pinmodal-close" aria-label="Close"><span class="msr">close</span></button>
+  </div>
+  <p class="pm-sub">You can pin up to 10 operations across Preparation, Implementation, and Closing</p>
+  <div class="pm-count" id="pm-count">10 of 10 pinned</div>
+  <div class="pm-list" id="pm-list"></div>
+</div>
+
 <div class="snackbar" id="snackbar"><span id="snack-msg"></span><button class="undo" id="snack-undo">Undo</button></div>
 <div class="scrim" id="scrim"></div>
 <aside class="drawer" id="drawer" role="dialog" aria-label="More Filters">
@@ -2325,9 +2365,10 @@
   const snackUndoBtn = document.getElementById('snack-undo');
   let snackTimer = null, snackUndoFn = null;
 
-  function showSnackbar(message, onUndo) {
+  function showSnackbar(message, onUndo, actionLabel) {
     snackMsg.textContent = message;
     snackUndoFn = onUndo;
+    snackUndoBtn.textContent = actionLabel || 'Undo';
     snackUndoBtn.style.display = onUndo ? '' : 'none';
     snackbar.classList.add('show');
     clearTimeout(snackTimer);
@@ -2349,8 +2390,14 @@
     if (typeof renderList === 'function') renderList();
   }
 
+  const PIN_LIMIT = 10;
   function togglePin(code) {
     const wasPinned = pinnedOps.has(code);
+    if (!wasPinned && pinnedOps.size >= PIN_LIMIT) {
+      showSnackbar('You can pin up to 10 operations across all phases. Unpin one to continue.',
+        openPinModal, 'View Pinned');
+      return;
+    }
     if (wasPinned) pinnedOps.delete(code); else pinnedOps.add(code);
     syncAllPins();
     showSnackbar(
@@ -3492,6 +3539,64 @@
     if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).catch(legacy);
     else legacy();
   }
+
+  // ===== Pinned operations modal (pin limit) =====
+  const pinModal = document.getElementById('pinmodal');
+  const pinScrim = document.getElementById('pinmodal-scrim');
+  function pinInfo(code) {
+    let row = OPO.impCards.find(r => r[0] === code);
+    if (row) return { code, title: row[14], phase: 'implementation' };
+    row = OPO.cards.find(r => r[0] === code);
+    if (row) return { code, title: row[9] || OP_TITLE, phase: 'preparation' };
+    return { code, title: OP_TITLE, phase: 'implementation' };
+  }
+  function phaseChipHTML(phase) {
+    const label = PHASE_LABEL[phase];
+    const src = [...document.querySelectorAll('#pin-carousel .chip-phase')].find(c => c.textContent.trim() === label);
+    return src ? src.outerHTML : `<span class="chip-phase">${label}</span>`;
+  }
+  function renderPinModal() {
+    document.getElementById('pm-count').textContent = pinnedOps.size + ' of ' + PIN_LIMIT + ' pinned';
+    const list = document.getElementById('pm-list');
+    if (!pinnedOps.size) {
+      list.innerHTML = '<div class="pm-empty">No pinned operations. Pin one from any list to see it here.</div>';
+      return;
+    }
+    list.innerHTML = [...pinnedOps].map(code => {
+      const p = pinInfo(code);
+      return `<div class="pm-row" data-code="${p.code}">
+        <span class="code">${p.code}</span>
+        <span class="ttl">${p.title}</span>
+        ${phaseChipHTML(p.phase)}
+        <button class="pm-unpin" aria-label="Unpin ${p.code}" title="Unpin"><span class="msr">push_pin</span></button>
+      </div>`;
+    }).join('');
+  }
+  function openPinModal() {
+    renderPinModal();
+    pinModal.classList.add('open');
+    pinScrim.classList.add('open');
+  }
+  function closePinModal() {
+    pinModal.classList.remove('open');
+    pinScrim.classList.remove('open');
+  }
+  document.getElementById('pinmodal-close').addEventListener('click', closePinModal);
+  pinScrim.addEventListener('click', closePinModal);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePinModal(); });
+  document.getElementById('pm-list').addEventListener('click', e => {
+    const btn = e.target.closest('.pm-unpin');
+    if (!btn) return;
+    const code = btn.closest('.pm-row').dataset.code;
+    pinnedOps.delete(code);
+    syncAllPins();
+    if (wsScreen.classList.contains('open')) {
+      document.getElementById('ws-pin').classList.toggle('pinned', pinnedOps.has(wsScreen.dataset.code));
+      document.getElementById('ws-mini-pin').classList.toggle('pinned', pinnedOps.has(wsScreen.dataset.code));
+    }
+    renderPinModal();
+    showSnackbar(code + ' removed from Pinned', () => { pinnedOps.add(code); syncAllPins(); renderPinModal(); });
+  });
 
   // ===== Workspace more-options menu =====
   const opsMenu = document.getElementById('ops-menu');
