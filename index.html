@@ -183,7 +183,14 @@
     height:50px;display:flex;align-items:center;justify-content:center;gap:10px;
     padding:0 12px;flex:0 0 auto;
     border-bottom:1px solid var(--border-default);
+    position:relative;cursor:pointer;
   }
+  .brand::after{
+    content:attr(data-tip);position:absolute;top:calc(100% + 4px);left:50%;transform:translateX(-50%);
+    background:#1F1E1E;color:#fff;font-size:11px;line-height:14px;padding:5px 8px;border-radius:4px;
+    white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.12s ease;z-index:200;
+  }
+  .brand:hover::after{opacity:1;}
   .brand .logo-mark{display:flex;align-items:center;}
   .brand .logo-mark svg{display:block;width:60px;height:23px;}
   .brand .product{font-size:14px;font-weight:500;color:var(--color-text-default);white-space:nowrap;}
@@ -1062,7 +1069,7 @@
 
   /* Hero */
   .ws-hero{
-    background:linear-gradient(131deg,#FFFFFF 40%,#EDF5FA 74%,#D6E7F3 103%);
+    background:linear-gradient(98.6deg,#FFFFFF -40.31%,#EDF5FA 74.47%,#D6E7F3 103.16%);
   }
   .ws-hero-top{
     height:60px;display:flex;align-items:center;justify-content:flex-end;
@@ -1384,7 +1391,7 @@
 
   <!-- Sidebar -->
   <aside class="sidebar">
-    <div class="brand">
+    <div class="brand" id="brand-home" role="button" tabindex="0" data-tip="Operational Portal" aria-label="Operational Portal, go to Home">
       <span class="logo-mark"><svg width="60" height="23" viewBox="0 0 60 23" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="IDB">
 <g clip-path="url(#clip0_5808_43045)">
 <path d="M57.5072 10.4399C58.5916 9.70533 59.1192 8.7059 59.1192 7.3964V7.35501C59.1192 6.31644 58.7768 5.46979 58.0731 4.76612C57.2024 3.89538 55.8553 3.4348 54.1785 3.4348H47.3187V18.1757H54.3418C57.8835 18.1757 59.9154 16.6652 59.9154 14.0312V13.9913C59.9154 12.2972 59.1689 11.1879 57.5072 10.4399ZM54.3418 14.9704H50.8295V12.2754H54.2395C55.6347 12.2754 56.3422 12.7217 56.3422 13.6022V13.6429C56.3422 14.5241 55.6694 14.9697 54.3418 14.9697V14.9704ZM50.8295 9.21389V6.64081H53.7089C54.5473 6.64081 55.5467 6.85605 55.5467 7.88558V7.92622C55.5467 8.77965 54.8596 9.21314 53.5042 9.21314H50.8295V9.21389Z" fill="#3C3B3B"/>
@@ -1399,7 +1406,7 @@
 </clipPath>
 </defs>
 </svg></span>
-      <span class="product">Operational Portal</span>
+      <span class="product">Ops Portal</span>
     </div>
     <nav class="nav">
       <button class="nav-item active" data-screen="home">
@@ -3659,6 +3666,12 @@
     crumbMenu.classList.remove('open');
   }, true);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') crumbMenu.classList.remove('open'); });
+
+  // ===== Brand click: back to Home =====
+  document.getElementById('brand-home').addEventListener('click', () => {
+    const home = document.querySelector('.nav-item[data-screen="home"]');
+    if (home) home.click();
+  });
 
   // ===== Avatar dropdown =====
   const avMenu = document.getElementById('av-menu');
