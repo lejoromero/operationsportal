@@ -1278,6 +1278,13 @@
   .od-updated .msr{font-size:16px;color:var(--icon-default);}
   .od-updated b{font-weight:600;color:#272626;}
 
+  /* ============ Rich tooltip (field name + value) ============ */
+  #richtip{position:fixed;z-index:9000;background:#1F1E1E;border-radius:8px;padding:10px 14px;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity 0.12s ease,transform 0.12s ease;max-width:320px;box-shadow:0 6px 20px rgba(0,0,0,0.25);}
+  #richtip.show{opacity:1;transform:none;}
+  #richtip .h{font-size:11px;line-height:16px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;color:#fff;white-space:nowrap;}
+  #richtip .b{font-size:13px;line-height:18px;color:#fff;font-weight:400;margin-top:2px;}
+  [data-t2h]{cursor:default;}
+
   /* ============ Activity Feed ============ */
   .fd-filtercard{background:#fff;border:1px solid var(--border-default);border-radius:8px;padding:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:24px;}
   .fd-chip{height:32px;border:1px solid var(--color-outline-variant);border-radius:999px;background:#fff;display:inline-flex;align-items:center;gap:6px;padding:0 14px;cursor:pointer;font-family:var(--font-ui);font-size:12px;font-weight:600;color:#272626;transition:background 0.13s ease,border-color 0.13s ease;}
@@ -1356,6 +1363,14 @@
   }
   .reform-link .msr{font-size:18px;color:#1F4D6D;}
   .reform-link:hover{text-decoration:underline;}
+  .od3-teamfoot{display:flex;align-items:center;gap:8px;margin-top:24px;padding-top:14px;border-top:1px solid #F0F0F0;font-size:12px;line-height:16px;color:#5C5A5A;}
+  .od3-teamfoot > .msr{font-size:16px;color:#8A8888;flex:0 0 auto;}
+  .od3-teamfoot .tf-txt{flex:1;min-width:0;}
+  .tf-link{display:inline-flex;align-items:center;gap:4px;border:0;background:none;padding:0;cursor:pointer;font-family:var(--font-ui);font-size:12px;line-height:16px;font-weight:600;color:var(--link-default);white-space:nowrap;}
+  .tf-link .msr{font-size:15px;}
+  .tf-link:hover{text-decoration:underline;}
+  .od-convnote{display:flex;align-items:center;gap:8px;margin-top:24px;font-size:12px;line-height:16px;color:#5C5A5A;}
+  .od-convnote > .msr{font-size:16px;color:#8A8888;flex:0 0 auto;}
 
   .od3{display:grid;grid-template-columns:minmax(0,1fr) 457px;gap:32px;margin-top:24px;align-items:start;}
   .od3-left,.od3-right{display:flex;flex-direction:column;gap:32px;min-width:0;}
@@ -1365,6 +1380,7 @@
   .od3-kfhead{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:-8px;}
   .od3-kf{font-size:14px;line-height:20px;font-weight:700;color:#272626;margin:0;}
   .od-tabs{display:flex;gap:32px;border-bottom:1px solid var(--border-default);margin:24px 0 32px;}
+  .od-tab[data-odtab="team"]{min-width:116px;text-align:center;}
   .od-tab{
     border:0;background:none;padding:0 4px 12px;cursor:pointer;
     font-family:var(--font-ui);font-size:14px;line-height:20px;font-weight:600;color:#5C5A5A;
@@ -2037,7 +2053,7 @@
 
         <div class="od-tabs">
           <button class="od-tab active" data-odtab="gi">General Information</button>
-          <button class="od-tab" data-odtab="team">Operation Team</button>
+          <button class="od-tab" data-odtab="team">Team</button>
         </div>
 
         <div id="od-tab-gi">
@@ -2062,7 +2078,7 @@
                   <div class="od3-col">
                     <div class="od3-kv"><span class="l">Current Expiration</span><span class="v" id="od-expiration">05 Jul 2030</span></div>
                     <div class="od3-kv"><span class="l">Pipeline</span><span class="v" id="od-pipeline">2026 / A</span></div>
-                    <div class="od3-kv"><span class="l">UDR</span><span class="v" id="od-udr">CCB/CBR – Brazil Country Office</span></div>
+                    <div class="od3-kv"><span class="l">Unit of Disbursement Responsibility</span><span class="v" id="od-udr">CSC/CBR – Brazil Country Office</span></div>
                     <div class="od3-kv"><span class="l">Executing agency</span><span class="v" id="od-agency">Ministerio de Desarrollo Social</span></div>
                   </div>
                 </div>
@@ -2104,6 +2120,10 @@
 
           </div>
         </div>
+        <div class="od-convnote">
+          <span class="msr">info</span>
+          <span class="tf-txt">For more information, visit <button class="tf-link" id="od-conv-link">Convergence <span class="msr">open_in_new</span></button></span>
+        </div>
 
         </div>
 
@@ -2123,15 +2143,17 @@
                 <div class="od3-role"><div class="r">Team Member</div><div class="n">Lafuente, Mariano<br>Pineda Ayerbe, Emilio Inigo<br>Bergamaschi, Andrea</div></div>
                 <div class="od3-role"><div class="r">Project Assistant</div><div class="n">Rojas Gonzalez, Sonia Amalia</div></div>
               </div>
+              <div class="od3-teamfoot">
+                <span class="msr">info</span>
+                <span class="tf-txt">Team roles are managed in Convergence.</span>
+                <button class="tf-link">Edit team in Convergence <span class="msr">open_in_new</span></button>
+              </div>
             </div>
             <div class="od3-card od3-teamcard">
               <div class="od3-teamhead"><span class="ic"><span class="msr">corporate_fare</span></span>Executing Agency Team</div>
               <div class="od3-teamgrid">
                 <div class="od3-role"><div class="r">Borrower</div><div class="n" id="od-team-borrower">Government of Brazil</div></div>
                 <div class="od3-role"><div class="r">Executing Agency</div><div class="n">Ministerio de Desarrollo Social</div></div>
-                <div class="od3-role"><div class="r">Procurement Specialist</div><div class="n">Alfredo Badoza<br>Araceli Blanco<br>Alejandra Giovannetti<br>Cristhian Sandoval<br>Franco Molina</div></div>
-                <div class="od3-role"><div class="r">Operations Support</div><div class="n">Alan Zorz<br>Braulio Cordi<br>C&eacute;sar Ferrer<br>Delfina Dionisio<br>Federico Huarte</div></div>
-                <div class="od3-role"><div class="r">Coordinator</div><div class="n">Dagny Cameron Laurlund</div></div>
               </div>
             </div>
           </div>
@@ -2169,7 +2191,7 @@
 <div class="menu opmenu" id="ops-menu">
   <button class="menu-item"><span class="msr micon">autorenew</span>View Lifecycle</button>
   <button class="menu-item"><span class="msr micon">arrow_outward</span>Open in EZSHare</button>
-  <button class="menu-item"><span class="msr micon">arrow_outward</span>Open in Convergence</button>
+  <button class="menu-item" id="ops-conv"><span class="msr micon">arrow_outward</span>Open in Convergence</button>
   <button class="menu-item" id="ops-share"><span class="msr micon">share</span>Share Operation Link</button>
 </div>
 
@@ -3097,6 +3119,11 @@
     document.getElementById('ws-code').textContent = code;
     document.getElementById('ws-title').textContent = isImpl ? row[14] : (row[9] || OP_TITLE);
     document.getElementById('ws-status').textContent = isImpl ? row[3] : PHASE_LABEL[phase];
+    const wsChip = document.querySelector('.ws-status-chip');
+    if (wsChip) {
+      wsChip.dataset.t2h = (isImpl ? 'Implementation' : 'Preparation') + ' Phase';
+      wsChip.dataset.t2b = row[3] + ' Overall Stage';
+    }
     const PHASE_ICON_SVG = {
       implementation: "<svg class=\"chip-ic\" viewBox=\"98.0 182.0 24 24\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M104.544 194.22C104.968 193.206 105.465 192.234 106.036 191.306C106.608 190.377 107.245 189.495 107.948 188.66L106.602 188.378C106.303 188.318 106.013 188.332 105.73 188.418C105.448 188.505 105.201 188.654 104.989 188.866L102.047 191.808C101.824 192.031 101.74 192.299 101.795 192.615C101.85 192.93 102.026 193.147 102.325 193.267L104.544 194.22ZM118.041 185.001C116.404 184.976 114.854 185.315 113.39 186.018C111.927 186.721 110.617 187.65 109.46 188.807C108.717 189.549 108.062 190.355 107.494 191.223C106.926 192.091 106.425 193.002 105.991 193.957C105.909 194.153 105.868 194.353 105.868 194.556C105.868 194.761 105.944 194.939 106.096 195.091L108.918 197.904C109.071 198.056 109.247 198.134 109.448 198.137C109.649 198.14 109.847 198.101 110.043 198.018C110.998 197.591 111.909 197.09 112.777 196.516C113.645 195.941 114.451 195.283 115.193 194.54C116.35 193.384 117.279 192.073 117.982 190.61C118.685 189.146 119.024 187.596 118.999 185.959C118.999 185.839 118.972 185.723 118.919 185.61C118.865 185.497 118.792 185.394 118.699 185.301C118.607 185.208 118.504 185.135 118.39 185.081C118.277 185.028 118.161 185.001 118.041 185.001ZM111.672 190.596C111.672 190.113 111.839 189.703 112.175 189.368C112.51 189.032 112.92 188.864 113.404 188.864C113.887 188.864 114.297 189.032 114.633 189.368C114.968 189.703 115.136 190.113 115.136 190.596C115.136 191.08 114.968 191.49 114.633 191.825C114.297 192.161 113.887 192.329 113.404 192.329C112.92 192.329 112.51 192.161 112.175 191.825C111.839 191.49 111.672 191.08 111.672 190.596ZM109.77 199.456L110.724 201.675C110.843 201.974 111.061 202.153 111.376 202.213C111.691 202.272 111.96 202.191 112.182 201.969L115.124 199.027C115.337 198.814 115.486 198.563 115.572 198.272C115.659 197.982 115.672 197.688 115.612 197.389L115.346 196.052C114.5 196.755 113.616 197.392 112.693 197.964C111.769 198.535 110.795 199.032 109.77 199.456ZM102.621 197.877C103.104 197.394 103.69 197.151 104.38 197.15C105.069 197.148 105.655 197.388 106.138 197.871C106.621 198.354 106.863 198.94 106.863 199.63C106.863 200.32 106.621 200.906 106.138 201.389C105.466 202.061 104.673 202.47 103.759 202.616C102.845 202.761 101.925 202.889 101 203C101.111 202.068 101.243 201.147 101.397 200.236C101.55 199.326 101.958 198.539 102.621 197.877Z\"/><path d=\"M104.544 194.22C104.968 193.206 105.465 192.234 106.036 191.306C106.608 190.377 107.245 189.495 107.948 188.66L106.602 188.378C106.303 188.318 106.013 188.332 105.73 188.418C105.448 188.505 105.201 188.654 104.989 188.866L102.047 191.808C101.824 192.031 101.74 192.299 101.795 192.615C101.85 192.93 102.026 193.147 102.325 193.267L104.544 194.22ZM118.041 185.001C116.404 184.976 114.854 185.315 113.39 186.018C111.927 186.721 110.617 187.65 109.46 188.807C108.717 189.549 108.062 190.355 107.494 191.223C106.926 192.091 106.425 193.002 105.991 193.957C105.909 194.153 105.868 194.353 105.868 194.556C105.868 194.761 105.944 194.939 106.096 195.091L108.918 197.904C109.071 198.056 109.247 198.134 109.448 198.137C109.649 198.14 109.847 198.101 110.043 198.018C110.998 197.591 111.909 197.09 112.777 196.516C113.645 195.941 114.451 195.283 115.193 194.54C116.35 193.384 117.279 192.073 117.982 190.61C118.685 189.146 119.024 187.596 118.999 185.959C118.999 185.839 118.972 185.723 118.919 185.61C118.865 185.497 118.792 185.394 118.699 185.301C118.607 185.208 118.504 185.135 118.39 185.081C118.277 185.028 118.161 185.001 118.041 185.001ZM111.672 190.596C111.672 190.113 111.839 189.703 112.175 189.368C112.51 189.032 112.92 188.864 113.404 188.864C113.887 188.864 114.297 189.032 114.633 189.368C114.968 189.703 115.136 190.113 115.136 190.596C115.136 191.08 114.968 191.49 114.633 191.825C114.297 192.161 113.887 192.329 113.404 192.329C112.92 192.329 112.51 192.161 112.175 191.825C111.839 191.49 111.672 191.08 111.672 190.596ZM109.77 199.456L110.724 201.675C110.843 201.974 111.061 202.153 111.376 202.213C111.691 202.272 111.96 202.191 112.182 201.969L115.124 199.027C115.337 198.814 115.486 198.563 115.572 198.272C115.659 197.982 115.672 197.688 115.612 197.389L115.346 196.052C114.5 196.755 113.616 197.392 112.693 197.964C111.769 198.535 110.795 199.032 109.77 199.456ZM102.621 197.877C103.104 197.394 103.69 197.151 104.38 197.15C105.069 197.148 105.655 197.388 106.138 197.871C106.621 198.354 106.863 198.94 106.863 199.63C106.863 200.32 106.621 200.906 106.138 201.389C105.466 202.061 104.673 202.47 103.759 202.616C102.845 202.761 101.925 202.889 101 203C101.111 202.068 101.243 201.147 101.397 200.236C101.55 199.326 101.958 198.539 102.621 197.877Z\"/></svg>",
       preparation: "<svg class=\"chip-ic\" viewBox=\"98.0 140.0 24 24\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M114 150C114.283 150 114.521 149.904 114.713 149.713C114.904 149.521 115 149.283 115 149C115 148.717 114.904 148.479 114.713 148.288C114.521 148.096 114.283 148 114 148H111C110.717 148 110.479 148.096 110.288 148.288C110.096 148.479 110 148.717 110 149C110 149.283 110.096 149.521 110.288 149.713C110.479 149.904 110.717 150 111 150H114ZM114 156C114.283 156 114.521 155.904 114.713 155.713C114.904 155.521 115 155.283 115 155C115 154.717 114.904 154.479 114.713 154.288C114.521 154.096 114.283 154 114 154H111C110.717 154 110.479 154.096 110.288 154.288C110.096 154.479 110 154.717 110 155C110 155.283 110.096 155.521 110.288 155.713C110.479 155.904 110.717 156 111 156H114ZM108.413 150.413C108.804 150.021 109 149.55 109 149C109 148.45 108.804 147.979 108.413 147.588C108.021 147.196 107.55 147 107 147C106.45 147 105.979 147.196 105.588 147.588C105.196 147.979 105 148.45 105 149C105 149.55 105.196 150.021 105.588 150.413C105.979 150.804 106.45 151 107 151C107.55 151 108.021 150.804 108.413 150.413ZM108.413 156.413C108.804 156.021 109 155.55 109 155C109 154.45 108.804 153.979 108.413 153.588C108.021 153.196 107.55 153 107 153C106.45 153 105.979 153.196 105.588 153.588C105.196 153.979 105 154.45 105 155C105 155.55 105.196 156.021 105.588 156.413C105.979 156.804 106.45 157 107 157C107.55 157 108.021 156.804 108.413 156.413ZM103 161C102.45 161 101.979 160.804 101.588 160.413C101.196 160.021 101 159.55 101 159V145C101 144.45 101.196 143.979 101.588 143.588C101.979 143.196 102.45 143 103 143H117C117.55 143 118.021 143.196 118.413 143.588C118.804 143.979 119 144.45 119 145V159C119 159.55 118.804 160.021 118.413 160.413C118.021 160.804 117.55 161 117 161H103Z\"/><path d=\"M114 150C114.283 150 114.521 149.904 114.713 149.713C114.904 149.521 115 149.283 115 149C115 148.717 114.904 148.479 114.713 148.288C114.521 148.096 114.283 148 114 148H111C110.717 148 110.479 148.096 110.288 148.288C110.096 148.479 110 148.717 110 149C110 149.283 110.096 149.521 110.288 149.713C110.479 149.904 110.717 150 111 150H114ZM114 156C114.283 156 114.521 155.904 114.713 155.713C114.904 155.521 115 155.283 115 155C115 154.717 114.904 154.479 114.713 154.288C114.521 154.096 114.283 154 114 154H111C110.717 154 110.479 154.096 110.288 154.288C110.096 154.479 110 154.717 110 155C110 155.283 110.096 155.521 110.288 155.713C110.479 155.904 110.717 156 111 156H114ZM108.413 150.413C108.804 150.021 109 149.55 109 149C109 148.45 108.804 147.979 108.413 147.588C108.021 147.196 107.55 147 107 147C106.45 147 105.979 147.196 105.588 147.588C105.196 147.979 105 148.45 105 149C105 149.55 105.196 150.021 105.588 150.413C105.979 150.804 106.45 151 107 151C107.55 151 108.021 150.804 108.413 150.413ZM108.413 156.413C108.804 156.021 109 155.55 109 155C109 154.45 108.804 153.979 108.413 153.588C108.021 153.196 107.55 153 107 153C106.45 153 105.979 153.196 105.588 153.588C105.196 153.979 105 154.45 105 155C105 155.55 105.196 156.021 105.588 156.413C105.979 156.804 106.45 157 107 157C107.55 157 108.021 156.804 108.413 156.413ZM103 161C102.45 161 101.979 160.804 101.588 160.413C101.196 160.021 101 159.55 101 159V145C101 144.45 101.196 143.979 101.588 143.588C101.979 143.196 102.45 143 103 143H117C117.55 143 118.021 143.196 118.413 143.588C118.804 143.979 119 144.45 119 145V159C119 159.55 118.804 160.021 118.413 160.413C118.021 160.804 117.55 161 117 161H103Z\"/></svg>"
@@ -3140,6 +3167,11 @@
       document.getElementById('ws-mini-code').textContent = row[0];
       document.getElementById('ws-mini-name').textContent = title.length > 30 ? title.slice(0, 27) + '...' : title;
       document.getElementById('ws-mini-status').textContent = document.getElementById('ws-status').textContent;
+      const miniChip = document.getElementById('ws-mini-status').closest('.phase-chip');
+      if (miniChip) {
+        miniChip.dataset.t2h = (wsPhase === 'implementation' ? 'Implementation' : 'Preparation') + ' Phase';
+        miniChip.dataset.t2b = wsRow[3] + ' Overall Stage';
+      }
       document.getElementById('ws-mini-phase-icon').innerHTML = document.getElementById('ws-status-icon').innerHTML;
       document.getElementById('ws-mini-date-label').textContent = document.getElementById('ws-date-label').textContent;
       document.getElementById('ws-mini-date').textContent = document.getElementById('ws-date').textContent;
@@ -3221,9 +3253,10 @@
     document.getElementById('od-counterpart').textContent = '$' + fmt(f.counterpart);
     document.getElementById('od-cofin').textContent = '$' + fmt(f.cofin);
     // country & organization card
-    let coHTML = `<div class="od3-co-row"><span class="od3-tag">${dept}</span><span class="flag">${flag}</span><span>${country}</span></div>`;
-    coHTML += `<div class="od3-co-row"><span class="od3-tag">${parts[0]}</span><span>${SECTOR_NAME[parts[0]] || parts[0]}</span></div>`;
-    if (parts[1]) coHTML += `<div class="od3-co-row"><span class="od3-tag">${parts[1]}</span><span>${DIV_NAME[parts[0] + ':' + parts[1]] || parts[1]} Division</span></div>`;
+    const DEPT_FULL = { CSC: 'Southern Cone', CAN: 'Andean Group', CCB: 'Caribbean Group', CID: 'Central America + Mexico + Panama + Dominican Republic + Haiti' };
+    let coHTML = `<div class="od3-co-row" data-t2h="Country Department" data-t2b="${DEPT_FULL[dept] || dept}"><span class="od3-tag">${dept}</span><span class="flag">${flag}</span><span>${country}</span></div>`;
+    coHTML += `<div class="od3-co-row" data-t2h="Sector" data-t2b="IDB sector responsible for the operation"><span class="od3-tag">${parts[0]}</span><span>${SECTOR_NAME[parts[0]] || parts[0]}</span></div>`;
+    if (parts[1]) coHTML += `<div class="od3-co-row" data-t2h="Division" data-t2b="Specialized unit within the sector"><span class="od3-tag">${parts[1]}</span><span>${DIV_NAME[parts[0] + ':' + parts[1]] || parts[1]} Division</span></div>`;
     document.getElementById('od-co').innerHTML = coHTML;
     // team lead
     const lead = row[7];
@@ -4154,6 +4187,62 @@
     if (!e.target.closest('#fd-filters')) document.querySelectorAll('#fd-filters .menu').forEach(m => m.classList.remove('open'));
   });
 
+
+  // ===== Rich tooltip: uppercase field header + value body =====
+  const richtip = document.createElement('div');
+  richtip.id = 'richtip';
+  richtip.innerHTML = '<div class="h"></div><div class="b"></div>';
+  document.body.appendChild(richtip);
+  let rtTimer = null, rtEl = null;
+  function rtShow(el) {
+    richtip.querySelector('.h').textContent = el.dataset.t2h;
+    richtip.querySelector('.b').textContent = el.dataset.t2b || '';
+    const r = el.getBoundingClientRect();
+    richtip.classList.add('show');
+    const tw = richtip.offsetWidth, th = richtip.offsetHeight;
+    let left = r.left, top = r.bottom + 8;
+    if (left + tw > window.innerWidth - 12) left = window.innerWidth - tw - 12;
+    if (top + th > window.innerHeight - 12) top = r.top - th - 8;
+    richtip.style.left = left + 'px';
+    richtip.style.top = top + 'px';
+  }
+  function rtHide() { clearTimeout(rtTimer); richtip.classList.remove('show'); rtEl = null; }
+  document.addEventListener('mouseover', e => {
+    const el = e.target.closest('[data-t2h]');
+    if (el === rtEl) return;
+    clearTimeout(rtTimer);
+    if (!el) { rtHide(); return; }
+    rtEl = el;
+    rtTimer = setTimeout(() => rtShow(el), 200);
+  });
+  document.addEventListener('focusin', e => {
+    const el = e.target.closest('[data-t2h]');
+    if (el) { rtEl = el; rtShow(el); } else rtHide();
+  });
+  document.addEventListener('scroll', rtHide, true);
+
+  const FD_PRODUCT_NAME = { LON: 'Loan', INV: 'Investment', ESP: 'Specific Projects', GOM: 'Multiple Works Program', LBR: 'Loans Based on Results', PFM: 'Multi Phase Program', GRT: 'Grant', TCP: 'Technical Cooperation' };
+  function productTip(text) {
+    return text.split(/\s*[\/\u2022]\s*/).map(t => FD_PRODUCT_NAME[t.trim()] || t.trim()).join(' / ');
+  }
+  // pinned cards: product line tooltip
+  document.querySelectorAll('.op-card .op-meta').forEach(m => {
+    const txt = [...m.childNodes].filter(n => n.nodeType === 3).map(n => n.textContent).join('').trim();
+    if (txt.includes('LON') || txt.includes('GRT')) {
+      m.dataset.t2h = 'Product / Instrument';
+      m.dataset.t2b = productTip(txt);
+    }
+  });
+
+  // ===== Convergence deep links (test env pattern shared by Majo) =====
+  function convergenceUrl() {
+    const code = (wsScreen.dataset.code) || (wsRow && wsRow[0]) || 'BR-L1587';
+    return 'https://test-convergence.iadb.org/operation/' + code;
+  }
+  function openConvergence() { window.open(convergenceUrl(), '_blank', 'noopener'); }
+  document.getElementById('od-conv-link').addEventListener('click', openConvergence);
+  document.getElementById('ops-conv').addEventListener('click', () => { openConvergence(); document.getElementById('ops-menu').classList.remove('open'); });
+  document.querySelectorAll('.tf-link').forEach(b => { if (b.id !== 'od-conv-link') b.addEventListener('click', openConvergence); });
   if (location.hash && location.hash !== '#/' && location.hash !== '#/home') applyRoute();
   else try { history.replaceState(null, '', '#/home'); } catch (err) { /* sandboxed previews block replaceState */ }
 </script>
