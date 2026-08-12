@@ -112,7 +112,7 @@
 
   /* ============ IDB DS v1 tokens ============ */
   :root{
-    --color-primary:#0072A4;
+    --color-primary:#007EB6;
     --color-secondary:#004E70;
     --color-text-default:#232222;
     --color-text-subtle:#67676A;
@@ -125,9 +125,9 @@
     --color-surface-cont-lowest:#F1FAFD;
     --color-icon-default:#535354;
     --icon-default:#5C5A5A;
-    --link-default:#007EB6;
+    --link-default:#00629D;
     --border-default:#E4E4E4;
-    --color-text-link:#007EB6;
+    --color-text-link:#00629D;
     --color-warning:#E38A05;
     --color-warning-container:#FFF8E6;
     --color-warning-on-container:#4C2E02;
@@ -252,8 +252,8 @@
 
   /* ============ Country Strategies ============ */
   .prep-hero.cs-hero{flex-direction:row;align-items:center;justify-content:space-between;gap:24px;}
-  .cs-hero .btn-filled{height:36px;padding:0 20px;font-size:13px;background:#008CCB;}
-  .cs-hero .btn-filled:hover{background:#0077AD;}
+  .cs-hero .btn-filled{height:36px;padding:0 20px;font-size:13px;background:var(--color-primary);}
+  .cs-hero .btn-filled:hover{background:#00629D;}
   .cs-body{padding:40px 40px 48px;display:flex;flex-direction:column;min-width:0;background:var(--color-surface);border-top-right-radius:16px;flex:1;}
   .cs-filtercard{background:#fff;border:1px solid var(--border-default);border-radius:8px;padding:16px;display:flex;gap:12px;flex-wrap:wrap;}
   .cs-filter{
@@ -685,7 +685,7 @@
   .ops-list{display:flex;flex-direction:column;gap:24px;}
   .op-row-card{
     background:var(--color-surface);
-    border:1px solid var(--color-outline-variant);
+    border:1px solid #CBCACA;
     border-radius:8px;overflow:hidden;
   }
   .op-row-top{
@@ -703,7 +703,7 @@
     background:var(--color-primary);color:#FFFFFF;border:none;cursor:pointer;
     font-family:var(--font-ui);font-size:13px;font-weight:600;
   }
-  .btn-open:hover{background:#005E88;}
+  .btn-open:hover{background:#00629D;}
   .op-row-meta{
     border-top:1px solid #E6E6E8;
     padding:14px 16px;
@@ -731,11 +731,12 @@
   .meta-item.grow{flex:1;}
   .chip-status{
     display:inline-flex;align-items:center;gap:8px;
-    height:32px;padding:0 12px;border-radius:4px;flex:0 0 auto;
-    background:#E6F4FA;color:var(--link-default);
-    font-size:13px;font-weight:600;
+    height:32px;padding:0 12px;border-radius:8px;flex:0 0 auto;
+    background:#EDF5FA;color:#004575;
+    font-size:14px;font-weight:600;
   }
-  .chip-status::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--link-default);}
+  .chip-status::before{content:'';width:8px;height:8px;border-radius:50%;background:#2E71A6;}
+  
 
   /* Pagination */
   .pagination{
@@ -958,48 +959,49 @@
   .imp-card .pin{color:var(--icon-default);cursor:pointer;background:none;border:none;padding:2px;border-radius:50%;display:inline-flex;flex:0 0 auto;}
   .imp-card .pin .msr{font-size:20px;}
   .imp-card .pin:hover{background:rgba(35,34,34,0.08);}
-  .imp-card .code{font-family:var(--font-mono);font-size:14px;font-weight:600;color:#00638C;cursor:pointer;flex:0 0 auto;}
+  .imp-card .code{font-family:var(--font-mono);font-size:14px;font-weight:700;color:var(--link-default);cursor:pointer;flex:0 0 auto;}
   .imp-card .vsep{width:1px;align-self:stretch;background:#E4E4E4;flex:0 0 auto;}
-  .imp-card .contract{font-size:14px;font-weight:600;color:#00638C;cursor:pointer;flex:0 0 auto;}
+  .imp-card .contract{font-size:14px;font-weight:600;color:var(--link-default);cursor:pointer;flex:0 0 auto;}
   .imp-card .contract:hover{text-decoration:underline;}
   .imp-card .name{font-size:14px;font-weight:600;color:#272626;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}
-  .imp-card .btn-open{height:32px;padding:0 16px;font-size:12px;font-weight:700;background:#008CCB;}
-  .imp-card .btn-open:hover{background:#0077AD;}
+  
+  
   .imp-card .imp-mid{
     display:flex;align-items:center;gap:40px;padding:16px;
   }
   .imp-chip{
-    height:32px;padding:0 12px;border-radius:8px;flex:0 0 auto;
-    background:#F0F0F0;color:#001B2B;
-    font-family:var(--font-chip);font-size:14px;font-weight:600;
+    width:32px;height:32px;border-radius:8px;flex:0 0 auto;
+    background:#F0F1F2;color:var(--color-text-default);
+    font-size:12px;font-weight:700;
     display:inline-flex;align-items:center;justify-content:center;
   }
   .imp-iconbox{
     width:32px;height:32px;border-radius:8px;flex:0 0 auto;
-    background:#F3F3F3;color:var(--icon-default);
+    background:#F0F1F2;color:var(--icon-default);
     display:inline-flex;align-items:center;justify-content:center;
   }
-  .imp-iconbox .msr{font-size:16px;}
+  .imp-iconbox .msr{font-size:18px;}
   .imp-avatar{
     width:32px;height:32px;border-radius:50%;flex:0 0 auto;
-    background:#00638C;color:#FFFFFF;
-    font-family:var(--font-chip);font-size:16px;font-weight:400;
+    background:var(--color-secondary);color:#FFFFFF;
+    font-size:11px;font-weight:700;
     display:inline-flex;align-items:center;justify-content:center;
   }
   .imp-item{display:flex;align-items:center;gap:8px;min-width:0;}
   .imp-texts{display:flex;flex-direction:column;min-width:0;}
-  .imp-texts .lbl{font-size:11px;line-height:16px;color:#5C5A5A;white-space:nowrap;}
-  .imp-texts .val{font-size:12px;line-height:16px;font-weight:600;color:#272626;white-space:nowrap;}
+  .imp-texts .lbl{font-size:12px;line-height:16px;color:var(--color-text-subtle);white-space:nowrap;}
+  .imp-texts .val{font-size:13px;line-height:16px;font-weight:600;color:var(--color-text-default);white-space:nowrap;}
   .imp-texts .val.mono{font-family:var(--font-mono);}
-  .imp-texts .val.link{color:#00629D;cursor:pointer;}
+  .imp-texts .val.link{color:var(--link-default);cursor:pointer;}
   .imp-date{margin-left:auto;text-align:left;flex:0 0 auto;}
   .imp-status{
-    display:inline-flex;align-items:center;gap:4px;
+    display:inline-flex;align-items:center;gap:8px;
     height:32px;padding:0 12px;border-radius:8px;flex:0 0 auto;
     background:#EDF5FA;color:#004575;
     font-size:14px;font-weight:600;
   }
-  .imp-status::before{content:'';width:8px;height:8px;border-radius:50%;background:#004575;}
+  .imp-status::before{content:'';width:8px;height:8px;border-radius:50%;background:#2E71A6;}
+  
   @media (max-width:1359px){
     .imp-card .imp-mid{flex-wrap:wrap;gap:24px;row-gap:16px;}
     .imp-date{margin-left:0;}
@@ -1242,7 +1244,7 @@
     width:328px;border:1px solid var(--border-default);border-radius:8px;background:var(--color-surface);
     padding:20px 24px;display:flex;flex-direction:column;gap:6px;
   }
-  .ws-qa-card .imp-iconbox{background:#EDF5FA;color:#00638C;}
+  .ws-qa-card 
   .ws-qa-card h3{font-size:16px;font-weight:700;color:#272626;margin-top:4px;}
   .ws-qa-card p{font-size:12px;line-height:16px;color:#5C5A5A;}
   .ws-qa-card .start{
@@ -1349,7 +1351,7 @@
   .fd-evdesc{font-size:13px;line-height:18px;color:#5C5A5A;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .fd-ev.open .fd-evdesc{white-space:normal;overflow:visible;text-overflow:clip;}
   .fd-evside{display:flex;align-items:center;gap:16px;flex:0 0 auto;padding-top:1px;}
-  .fd-tag{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border:1px solid var(--border-default);border-radius:4px;background:#FAFAFA;font-family:var(--font-chip);font-size:12px;font-weight:600;color:#5C5A5A;white-space:nowrap;}
+  .fd-tag{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border:1px solid var(--border-default);border-radius:4px;background:#FFFFFF;font-family:var(--font-chip);font-size:12px;font-weight:600;color:#5C5A5A;white-space:nowrap;}
   .fd-tag .msr{font-size:15px;color:#8A8888;}
   .fd-evdate{font-size:12px;color:#5C5A5A;white-space:nowrap;}
   .fd-evchev{font-size:20px;color:var(--icon-default);transition:transform 0.15s ease;flex:0 0 auto;}
@@ -1369,8 +1371,8 @@
   .fd-custom.show{display:flex;}
   .fd-custom label{font-size:11px;font-weight:600;color:#5C5A5A;text-transform:uppercase;letter-spacing:0.4px;}
   .fd-custom input{height:32px;border:1px solid var(--color-outline-variant);border-radius:6px;padding:0 8px;font-family:var(--font-ui);font-size:12px;color:#272626;}
-  .fd-apply{height:32px;border:0;border-radius:6px;background:#008CCB;color:#fff;font-family:var(--font-ui);font-size:12px;font-weight:600;cursor:pointer;margin-top:4px;}
-  .fd-apply:hover{background:#0077AD;}
+  .fd-apply{height:32px;border:0;border-radius:6px;background:var(--color-primary);color:#fff;font-family:var(--font-ui);font-size:12px;font-weight:600;cursor:pointer;margin-top:4px;}
+  .fd-apply:hover{background:#00629D;}
 
 
   /* ============ Operation Data — dossier layout ============ */
@@ -2611,7 +2613,7 @@
         <div class="imp-item"><span class="imp-chip">${prodChip}</span><span class="imp-texts"><span class="lbl">Product</span><span class="val">${prodPair}</span></span></div>
         <div class="imp-item"><span class="imp-chip">USD</span><span class="imp-texts"><span class="lbl">IDB Amount</span><span class="val mono">${amount}</span></span></div>
         <div class="imp-item"><span class="imp-iconbox"><span class="msr">lan</span></span><span class="imp-texts"><span class="lbl">Org. Unit</span><span class="val link">${orgUnit}</span></span></div>
-        <div class="imp-item"><span class="imp-avatar">${initials(lead)}</span><span class="imp-texts"><span class="lbl">Team Lead</span><span class="val link">${lead.includes(',') ? lead : lead.split(' ').reverse().join(', ')}</span></span></div>
+        <div class="imp-item"><span class="imp-avatar">${initials(lead)}</span><span class="imp-texts"><span class="lbl">Team Lead</span><span class="val link">${lead.includes(',') ? lead.split(', ').reverse().join(' ') : lead}</span></span></div>
         <div class="imp-item imp-date"><span class="imp-texts"><span class="lbl">Current Expiration</span><span class="val">${expiration}</span></span></div>
         <span class="imp-status">${status}</span>
       </div>
