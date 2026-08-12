@@ -261,10 +261,15 @@
     display:inline-flex;align-items:center;gap:8px;padding:0 8px 0 14px;cursor:pointer;
     font-family:var(--font-ui);font-size:12px;font-weight:600;color:#272626;
   }
-  .cs-filter:hover{background:var(--color-surface-cont-lowest);}
+  .cs-filter:hover{border-color:#67676A;}
+  .cs-filter:hover .cnt0{background:var(--color-primary);color:#FFFFFF;}
   .cs-fwrap{position:relative;}
   .cs-fwrap .menu{max-height:340px;overflow-y:auto;}
-  .cs-filter .cnt0{min-width:18px;height:18px;border-radius:999px;background:#F0F0F0;display:inline-flex;align-items:center;justify-content:center;font-size:11px;color:#5C5A5A;padding:0 5px;}
+  .cs-filter .cnt0{min-width:18px;height:18px;border-radius:6px;background:#F0F0F0;display:inline-flex;align-items:center;justify-content:center;font-size:11px;color:#5C5A5A;padding:0 5px;transition:background 0.13s ease,color 0.13s ease;}
+  .filter-dd .msr:last-child, .cs-filter .msr:last-child{transition:transform 0.15s ease;}
+  .filter-dd.dd-open, .cs-filter.dd-open{border-color:var(--color-primary);background:var(--color-surface-cont-lowest);box-shadow:inset 0 0 0 1px var(--color-primary);}
+  .filter-dd.dd-open .msr:last-child, .cs-filter.dd-open .msr:last-child{transform:rotate(180deg);color:var(--color-secondary);}
+  .cs-filter.dd-open .cnt0, .cs-filter .cnt0.has{background:var(--color-primary);color:#FFFFFF;}
   .cs-filter .msr{font-size:18px;color:var(--icon-default);}
   .cs-legend{background:#fff;border:1px solid var(--border-default);border-radius:8px;padding:20px 24px;display:flex;gap:24px;align-items:center;margin-top:32px;flex-wrap:wrap;}
   .cs-legend .lread .cap{font-family:'Open Sans';font-weight:600;font-size:10px;color:#67676A;}
@@ -641,6 +646,7 @@
     cursor:pointer;
   }
   .segmented button.on{background:var(--color-primary);color:#FFFFFF;}
+  .segmented button.dis{color:#A6A6A8;cursor:default;}
   .filter-dd{
     height:32px;padding:0 10px 0 14px;border-radius:8px;
     border:1px solid var(--color-outline-variant);background:var(--color-surface);
@@ -654,10 +660,13 @@
   .filter-dd.disabled .msr{color:var(--color-outline);}
   .filter-dd.disabled:hover{background:var(--color-surface);}
   .filter-dd .cnt{
-    min-width:18px;height:18px;padding:0 5px;border-radius:100px;
+    min-width:18px;height:18px;padding:0 5px;border-radius:6px;
     background:#F0F0F1;color:var(--color-text-subtle);
     font-size:11px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;
+    transition:background 0.13s ease,color 0.13s ease;
   }
+  .filter-dd:not(.disabled):hover .cnt, .filter-dd.dd-open .cnt, .filter-dd .cnt.has{background:var(--color-primary);color:#FFFFFF;}
+  .filter-dd:not(.disabled):hover{border-color:#67676A;}
 
   /* Count + sort row */
   .count-row{display:flex;align-items:center;justify-content:space-between;margin:64px 0 16px 0;}
@@ -687,6 +696,7 @@
   .op-row-top .pin .msr{font-size:20px;}
   .op-row-top .pin:hover{background:rgba(35,34,34,0.08);}
   .op-row-top .code{font-family:var(--font-mono);font-size:14px;font-weight:700;color:var(--link-default);cursor:pointer;}
+  .op-row-top .code:hover, .imp-card .code:hover{text-decoration:underline;}
   .op-row-top .name{font-size:14px;font-weight:600;color:var(--color-text-default);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}
   .btn-open{
     height:32px;padding:0 20px;border-radius:80px;flex:0 0 auto;
@@ -1296,19 +1306,34 @@
   .fd-filtercard{justify-content:space-between;}
   .fd-fleft,.fd-fright{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
   #fd-filters .cs-filter .msr:first-child{font-size:16px;}
-  .fd-count{font-size:13px;line-height:18px;color:#5C5A5A;margin-top:16px;}
-  .fd-list{display:flex;flex-direction:column;margin-top:4px;}
+  .fd-count{font-size:14px;line-height:20px;font-weight:700;color:#272626;margin:24px 0 16px;}
+  .fd-list{display:flex;flex-direction:column;}
   .fd-group{position:relative;display:flex;flex-direction:column;gap:16px;}
-  .fd-item + .fd-item::before{content:'';position:absolute;left:15px;top:-16px;height:28px;width:1px;background:#C7C7C9;}
-  .fd-item:not(:last-child)::after{content:'';position:absolute;left:15px;top:44px;bottom:-16px;width:1px;background:#C7C7C9;}
-  .fd-item{display:grid;grid-template-columns:32px minmax(0,1fr);gap:0 16px;position:relative;}
-  .fd-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;margin-top:12px;box-shadow:0 0 0 3px var(--color-background,#F9F9FA);}
-  .fd-dot .msr{font-size:16px;}
-  .fd-dot.g{background:#E6F6EE;color:#00854D;}
-  .fd-dot.b{background:#E6F6FC;color:#0072A4;}
-  .fd-dot.a{background:#FFF8E6;color:#E38A05;}
-  .fd-dot.r{background:#FDE7EA;color:#D83A52;}
-  .fd-dot.n{background:#F0F0F0;color:#5C5A5A;}
+  .fd-evic{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+  .fd-evic .msr{font-size:18px;}
+  .fd-evic.g{background:#E6F6EE;color:#00854D;}
+  .fd-evic.b{background:#E6F6FC;color:#0072A4;}
+  .fd-evic.a{background:#FFF8E6;color:#E38A05;}
+  .fd-evic.r{background:#FDE7EA;color:#D83A52;}
+  .fd-evic.n{background:#F0F0F0;color:#5C5A5A;}
+  .fd-evic.nt{background:#E6F6FC;color:#004E70;}
+  .fd-ev.reveal{opacity:0;animation:fdIn 0.25s ease-out forwards;}
+  .fd-ev.reveal .fd-evic{animation:fdPop 0.3s ease-out backwards;animation-delay:inherit;}
+  @keyframes fdIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  @keyframes fdPop{0%{transform:scale(0.85);}70%{transform:scale(1.04);}100%{transform:scale(1);}}
+  .fd-skdot{width:36px;height:36px;border-radius:50%;flex:0 0 auto;background:linear-gradient(90deg,#EDEDEF 25%,#F7F7F8 50%,#EDEDEF 75%);background-size:200% 100%;animation:fdShimmer 1.4s ease infinite;}
+  .fd-skcard{background:#fff;border:1px solid var(--border-default);border-radius:8px;padding:16px 20px;display:flex;align-items:center;gap:16px;}
+  .fd-skcard .skl{flex:1;min-width:0;}
+  .fd-skcard .l1,.fd-skcard .l2{height:12px;border-radius:6px;background:linear-gradient(90deg,#EDEDEF 25%,#F7F7F8 50%,#EDEDEF 75%);background-size:200% 100%;animation:fdShimmer 1.4s ease infinite;}
+  .fd-skcard .l1{width:34%;}
+  .fd-skcard .l2{width:62%;margin-top:10px;}
+  .fd-skgroup{display:flex;flex-direction:column;gap:16px;margin-top:12px;}
+  @keyframes fdShimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+  .fd-more{display:flex;justify-content:center;margin-top:24px;}
+  .fd-more button{height:36px;padding:0 24px;border-radius:999px;border:1px solid var(--color-outline-variant);background:#fff;font-family:var(--font-ui);font-size:13px;font-weight:600;color:#272626;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:background 0.13s ease;}
+  .fd-more button:hover{background:var(--color-surface-cont-lowest);}
+  .fd-more .msr{font-size:18px;color:var(--icon-default);}
+  @media (prefers-reduced-motion: reduce){.fd-item.reveal,.fd-item.reveal .fd-dot,.fd-skdot,.fd-skcard .l1,.fd-skcard .l2{animation:none;opacity:1;}}
 
   .fd-month{display:flex;align-items:center;gap:12px;margin:48px 0 16px;}
   .fd-list > .fd-month:first-child{margin-top:12px;}
@@ -1318,18 +1343,18 @@
   .fd-ev{background:#fff;border:1px solid var(--border-default);border-radius:8px;transition:border-color 0.15s ease;}
   .fd-ev:hover{border-color:#D2D1D4;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
   .fd-ev{transition:border-color 0.15s ease,box-shadow 0.2s ease;}
-  .fd-evhead{display:flex;align-items:flex-start;gap:16px;padding:14px 20px;cursor:pointer;width:100%;border:0;background:none;font-family:var(--font-ui);text-align:left;}
+  .fd-evhead{display:flex;align-items:center;gap:16px;padding:14px 20px;cursor:pointer;width:100%;border:0;background:none;font-family:var(--font-ui);text-align:left;}
   .fd-evmain{flex:1;min-width:0;}
   .fd-evtitle{font-size:14px;line-height:20px;font-weight:600;color:#272626;}
   .fd-evdesc{font-size:13px;line-height:18px;color:#5C5A5A;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .fd-ev.open .fd-evdesc{white-space:normal;overflow:visible;text-overflow:clip;}
   .fd-evside{display:flex;align-items:center;gap:16px;flex:0 0 auto;padding-top:1px;}
-  .fd-tag{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border:1px solid var(--border-default);border-radius:999px;background:#FAFAFA;font-family:var(--font-chip);font-size:12px;font-weight:600;color:#5C5A5A;white-space:nowrap;}
+  .fd-tag{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border:1px solid var(--border-default);border-radius:4px;background:#FAFAFA;font-family:var(--font-chip);font-size:12px;font-weight:600;color:#5C5A5A;white-space:nowrap;}
   .fd-tag .msr{font-size:15px;color:#8A8888;}
   .fd-evdate{font-size:12px;color:#5C5A5A;white-space:nowrap;}
   .fd-evchev{font-size:20px;color:var(--icon-default);transition:transform 0.15s ease;flex:0 0 auto;}
   .fd-ev.open .fd-evchev{transform:rotate(180deg);}
-  .fd-evbody{display:none;padding:0 20px 18px;}
+  .fd-evbody{display:none;padding:0 20px 18px 72px;}
   .fd-ev.open .fd-evbody{display:block;}
   .fd-attrs{display:flex;flex-direction:column;gap:4px;background:#FAFAFA;border:1px solid #F0F0F0;border-radius:8px;padding:16px 20px;margin-top:14px;}
   .fd-attr{display:flex;align-items:center;gap:24px;padding:2px 0;}
@@ -2042,7 +2067,7 @@
       <div class="ws-page">
         <div class="od-titlerow">
           <h1>Operation Data</h1>
-          <span class="od-updated" title="Operation data is refreshed daily from the data warehouse"><span class="msr">schedule</span>Last updated: <b id="od-updated-at">28 Jul 2026, 6:00 AM</b></span>
+          <span class="od-updated" data-t2h="Data Refresh" data-t2b="Project information is updated from Convergence once a day, so changes will not be instantly reflected in the Operations Portal."><span class="msr">schedule</span>Last updated: <b id="od-updated-at">28 Jul 2026, 6:00 AM</b></span>
         </div>
 
         <div class="od-reform">
@@ -2166,12 +2191,15 @@
       <div class="ws-page">
         <div class="od-titlerow">
           <h1>Activity Feed</h1>
-          <span class="od-updated" title="Events are synced daily from the source systems"><span class="msr">schedule</span>Last updated: <b id="fd-updated-at">28 Jul 2026, 6:00 AM</b></span>
+          <span class="od-updated" data-t2h="Data Refresh" data-t2b="Project information is updated from Convergence once a day, so changes will not be instantly reflected in the Operations Portal."><span class="msr">schedule</span>Last updated: <b id="fd-updated-at">28 Jul 2026, 6:00 AM</b></span>
         </div>
         <div class="fd-filtercard" id="fd-filters">
           <div class="fd-fleft">
-            <button class="fd-chip" data-chip="financial"><span class="msr">paid</span>Financial</button>
-            <button class="fd-chip" data-chip="contracts"><span class="msr">contract</span>Contracts</button>
+            <div class="segmented" id="fd-seg">
+              <button class="on" data-seg="all">All</button>
+              <button data-seg="financial">Financial</button>
+              <button data-seg="contracts">Contracts</button>
+            </div>
           </div>
           <div class="fd-fright">
             <div class="cs-fwrap"><button class="cs-filter" data-fdf="source">Source <span class="cnt0">0</span><span class="msr">expand_more</span></button><div class="menu right" data-fdm="source"></div></div>
@@ -3182,9 +3210,22 @@
     if (view === 'opdata' && wsRow) populateOpData();
     if (view === 'feed') {
       const code = (wsScreen.dataset.code) || (wsRow && wsRow[0]) || 'BR-L1587';
-      if (fdCode !== code) { fdCode = code; fdEvents = fdGen(code, wsPhase); fdResetFilters(); }
-      document.querySelector('#fd-filters .fd-fleft').style.display = wsPhase === 'preparation' ? 'none' : '';
-      renderFeed();
+      const fresh = fdCode !== code;
+      if (fresh) { fdCode = code; fdEvents = fdGen(code, wsPhase); fdResetFilters(); fdShown = 15; }
+      const isPrep = wsPhase === 'preparation';
+      document.querySelectorAll('#fd-seg button').forEach(b => {
+        if (b.dataset.seg === 'all') return;
+        b.classList.toggle('dis', isPrep);
+        if (isPrep) {
+          b.dataset.t2h = '';
+          b.dataset.t2b = 'Financial and contract events are visible once the operation enters the Implementation phase.';
+        } else { delete b.dataset.t2h; delete b.dataset.t2b; }
+      });
+      clearTimeout(fdLoadTimer);
+      if (fresh) {
+        fdShowSkeleton();
+        fdLoadTimer = setTimeout(() => renderFeed(0), 700);
+      } else renderFeed();
     }
     document.querySelector('.ws-main').scrollTop = 0;
   }
@@ -3630,6 +3671,7 @@
     const badge = btn.querySelector('.cnt0');
     const n = csSel[key].size;
     badge.textContent = n;
+    badge.classList.toggle('has', n > 0);
     badge.style.display = (key === 'regions' || key === 'countries') && n === 0 ? 'none' : '';
   }
   document.querySelectorAll('#cs-filters .cs-fwrap').forEach(wrap => {
@@ -3859,9 +3901,9 @@
     openWorkspace(phase, row);
   });
 
-  // Open buttons in phase lists
+  // Open buttons and operation codes in phase lists
   opsList.addEventListener('click', e => {
-    const btn = e.target.closest('.btn-open');
+    const btn = e.target.closest('.btn-open') || e.target.closest('.op-row-top .code, .imp-card .code');
     if (!btn) return;
     const code = btn.closest('.op-row-card, .imp-card').querySelector('.code').textContent.trim();
     const source = currentPhase === 'implementation' ? OPO.impCards : OPO.cards;
@@ -3927,7 +3969,8 @@
   const FD_CLAUSES = ['Special Execution Clause','Audited Financial Statements','Environmental License Submission','Counterpart Funding Commitment','Mid Term Evaluation Report'];
   const FD_MILES = ['Eligibility Approved','First Disbursement','QRR Review','POD Approval','Contract Signature'];
 
-  var fdCode = null, fdEvents = [];
+  var fdCode = null, fdEvents = [], fdShown = 15, fdLoadTimer = null;
+  var FD_DOT_MODE = 'neutral'; // 'neutral' (Majo proposal) | 'contextual' (documented alternative)
   const fdSel = { source: new Set(), type: new Set(), range: 'all', from: null, to: null, chip: null };
 
   function fdHash(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
@@ -4036,7 +4079,10 @@
   }
   function fdSyncBadge(key) {
     const btn = document.querySelector(`.cs-filter[data-fdf="${key}"]`);
-    if (btn) btn.querySelector('.cnt0').textContent = fdSel[key].size;
+    if (!btn) return;
+    const badge = btn.querySelector('.cnt0');
+    badge.textContent = fdSel[key].size;
+    badge.classList.toggle('has', fdSel[key].size > 0);
   }
   function fdMenuHTML(key) {
     if (key === 'source') return FD_SOURCES_LIST.map(s =>
@@ -4048,8 +4094,8 @@
       + `<div class="fd-custom" id="fd-custom"><label>From</label><input type="date" id="fd-from"><label>To</label><input type="date" id="fd-to"><button class="fd-apply" id="fd-apply">Apply</button></div>`;
   }
   function fdResetFilters() {
-    fdSel.source.clear(); fdSel.type.clear(); fdSel.chip = null; fdSel.range = 'all'; fdSel.from = null; fdSel.to = null;
-    document.querySelectorAll('#fd-filters .fd-chip').forEach(c => c.classList.remove('active'));
+    fdSel.source.clear(); fdSel.type.clear(); fdSel.chip = null; fdSel.range = 'all'; fdSel.from = null; fdSel.to = null; fdShown = 15;
+    document.querySelectorAll('#fd-seg button').forEach(b => b.classList.toggle('on', b.dataset.seg === 'all'));
     document.querySelectorAll('#fd-filters .menu').forEach(m => { m.classList.remove('open'); m.innerHTML = fdMenuHTML(m.dataset.fdm); });
     fdSyncBadge('source'); fdSyncBadge('type');
     document.getElementById('fd-range-label').textContent = 'All time';
@@ -4067,49 +4113,70 @@
       } else if (fdSel.range !== 'all' && e.date.getTime() < now - (+fdSel.range) * 864e5) return false;
       return true;
     });
-    document.getElementById('fd-count').textContent = 'Showing ' + list.length + (list.length === 1 ? ' event' : ' events');
+    document.getElementById('fd-count').textContent = 'Showing ' + list.length + (list.length === 1 ? ' result' : ' results');
     const wrap = document.getElementById('fd-list');
     if (!list.length) {
       wrap.innerHTML = `<div class="fd-empty"><span class="msr">search</span><div class="t">No events match your filters</div><div class="s">Try removing a filter or widening the time range.</div></div>`;
       return;
     }
+    const revealFrom = arguments.length ? arguments[0] : -1;
+    const shown = list.slice(0, fdShown);
     const groups = [];
-    list.forEach(e => {
+    shown.forEach(e => {
       const key = e.date.getFullYear() + '-' + e.date.getMonth();
       if (!groups.length || groups[groups.length - 1].key !== key) groups.push({ key, date: e.date, evs: [] });
       groups[groups.length - 1].evs.push(e);
     });
-    let out = '';
+    let out = '', idx = 0;
     groups.forEach(g => {
       const n = g.evs.length;
       out += `<div class="fd-month"><span>${FD_MONTHS_FULL[g.date.getMonth()]} ${g.date.getFullYear()}</span><em>${n} ${n === 1 ? 'event' : 'events'}</em></div><div class="fd-group">`;
       g.evs.forEach(e => {
-        const attrsHtml = e.attrs.map(([k, v]) =>
+        const rv = revealFrom >= 0 && idx >= revealFrom;
+      const dly = rv ? Math.min((idx - revealFrom) * 40, 600) : 0;
+      idx++;
+      const attrsHtml = e.attrs.map(([k, v]) =>
           `<div class="fd-attr"><div class="k">${k}</div><div class="v">${v}</div></div>`).join('')
           + `<div class="fd-attr src"><div class="k">Type</div><div class="v"><span class="fd-tag"><span class="msr">${FD_TYPE_ICON[e.type] || 'info'}</span>${e.type}</span></div></div>`
           + `<div class="fd-attr"><div class="k">Source</div><div class="v"><span class="fd-tag"><span class="msr">${FD_SRC_ICON[e.source]}</span>${FD_SRC_LABEL[e.source] || e.source}</span></div></div>`;
-        out += `<div class="fd-item">
-          <span class="fd-dot ${fdFamily(e)}"><span class="msr">${FD_TYPE_ICON[e.type] || 'info'}</span></span>
-          <div class="fd-ev">
-            <button class="fd-evhead" aria-expanded="false">
-              <div class="fd-evmain">
-                <div class="fd-evtitle">${e.name}</div>
-                <div class="fd-evdesc">${e.desc}</div>
-              </div>
-              <div class="fd-evside">
-                <span class="fd-evdate">${fdDate(e.date)}</span>
-                <span class="msr fd-evchev">expand_more</span>
-              </div>
-            </button>
-            <div class="fd-evbody"><div class="fd-attrs">${attrsHtml}</div></div>
-          </div>
+        out += `<div class="fd-ev${rv ? ' reveal' : ''}"${rv ? ` style="animation-delay:${dly}ms"` : ''}>
+          <button class="fd-evhead" aria-expanded="false">
+            <span class="fd-evic ${FD_DOT_MODE === 'neutral' ? 'nt' : fdFamily(e)}"><span class="msr">${FD_TYPE_ICON[e.type] || 'info'}</span></span>
+            <div class="fd-evmain">
+              <div class="fd-evtitle">${e.name}</div>
+              <div class="fd-evdesc">${e.desc}</div>
+            </div>
+            <div class="fd-evside">
+              <span class="fd-evdate">${fdDate(e.date)}</span>
+              <span class="msr fd-evchev">expand_more</span>
+            </div>
+          </button>
+          <div class="fd-evbody"><div class="fd-attrs">${attrsHtml}</div></div>
         </div>`;
       });
       out += '</div>';
     });
+    if (list.length > fdShown) {
+      const rest = list.length - fdShown;
+      out += `<div class="fd-more"><button id="fd-showmore">Show more <span class="msr">expand_more</span></button></div>`;
+    }
     wrap.innerHTML = out;
+    const more = document.getElementById('fd-showmore');
+    if (more) more.addEventListener('click', () => {
+      const prev = fdShown;
+      more.parentElement.outerHTML = `<div class="fd-skgroup" id="fd-skmore">${fdSkeletonItems(3)}</div>`;
+      setTimeout(() => { fdShown = prev + 15; renderFeed(prev); }, 550);
+    });
   }
 
+  function fdSkeletonItems(n) {
+    return Array.from({ length: n }, () =>
+      `<div class="fd-skcard"><span class="fd-skdot"></span><div class="skl"><div class="l1"></div><div class="l2"></div></div></div>`).join('');
+  }
+  function fdShowSkeleton() {
+    document.getElementById('fd-count').textContent = 'Loading events\u2026';
+    document.getElementById('fd-list').innerHTML = `<div class="fd-skgroup">${fdSkeletonItems(4)}</div>`;
+  }
   document.getElementById('fd-list').addEventListener('click', e => {
     const head = e.target.closest('.fd-evhead');
     if (!head) return;
@@ -4117,18 +4184,21 @@
     head.setAttribute('aria-expanded', open);
   });
 
-  document.querySelectorAll('#fd-filters .fd-chip').forEach(ch => {
-    ch.addEventListener('click', () => {
-      const c = ch.dataset.chip;
-      if (fdSel.chip === c) { fdSel.chip = null; ch.classList.remove('active'); }
-      else {
-        fdSel.chip = c;
-        document.querySelectorAll('#fd-filters .fd-chip').forEach(x => x.classList.toggle('active', x.dataset.chip === c));
+  function fdSetSeg(seg) {
+    fdSel.chip = seg === 'all' ? null : seg;
+    document.querySelectorAll('#fd-seg button').forEach(b => b.classList.toggle('on', b.dataset.seg === seg));
+  }
+  document.querySelectorAll('#fd-seg button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.classList.contains('on') || btn.classList.contains('dis')) return;
+      fdSetSeg(btn.dataset.seg);
+      if (btn.dataset.seg !== 'all') {
         fdSel.type.clear();
         const m = document.querySelector('[data-fdm="type"]');
         if (m) m.querySelectorAll('.menu-item').forEach(i => i.classList.remove('checked'));
         fdSyncBadge('type');
       }
+      fdShown = 15;
       renderFeed();
     });
   });
@@ -4160,6 +4230,7 @@
       if (!item) return;
       e.stopPropagation();
       const v = item.dataset.v;
+      fdShown = 15;
       if (key === 'range') {
         if (v === 'custom') {
           menu.querySelectorAll('.menu-item').forEach(i => i.classList.toggle('selected', i.dataset.v === 'custom'));
@@ -4175,10 +4246,7 @@
         if (fdSel[key].has(v)) fdSel[key].delete(v); else fdSel[key].add(v);
         item.classList.toggle('checked', fdSel[key].has(v));
         fdSyncBadge(key);
-        if (key === 'type' && fdSel.chip) {
-          fdSel.chip = null;
-          document.querySelectorAll('#fd-filters .fd-chip').forEach(x => x.classList.remove('active'));
-        }
+        if (key === 'type' && fdSel.chip) fdSetSeg('all');
       }
       renderFeed();
     });
@@ -4195,8 +4263,12 @@
   document.body.appendChild(richtip);
   let rtTimer = null, rtEl = null;
   function rtShow(el) {
-    richtip.querySelector('.h').textContent = el.dataset.t2h;
-    richtip.querySelector('.b').textContent = el.dataset.t2b || '';
+    const h = richtip.querySelector('.h');
+    h.textContent = el.dataset.t2h;
+    h.style.display = el.dataset.t2h ? '' : 'none';
+    const b = richtip.querySelector('.b');
+    b.textContent = el.dataset.t2b || '';
+    b.style.marginTop = el.dataset.t2h ? '' : '0';
     const r = el.getBoundingClientRect();
     richtip.classList.add('show');
     const tw = richtip.offsetWidth, th = richtip.offsetHeight;
@@ -4243,6 +4315,24 @@
   document.getElementById('od-conv-link').addEventListener('click', openConvergence);
   document.getElementById('ops-conv').addEventListener('click', () => { openConvergence(); document.getElementById('ops-menu').classList.remove('open'); });
   document.querySelectorAll('.tf-link').forEach(b => { if (b.id !== 'od-conv-link') b.addEventListener('click', openConvergence); });
+
+  // ===== Filter dropdown active state (open menus highlight their trigger) =====
+  const ddObs = new MutationObserver(muts => muts.forEach(m => {
+    const menu = m.target;
+    const p = menu.parentElement;
+    if (!p) return;
+    const btn = p.querySelector(':scope > .filter-dd, :scope > .cs-filter');
+    if (btn) btn.classList.toggle('dd-open', menu.classList.contains('open'));
+  }));
+  document.querySelectorAll('.menu').forEach(m => ddObs.observe(m, { attributes: true, attributeFilter: ['class'] }));
+
+  // ===== badge 'has' sync: blue fill when a dropdown badge holds a count =====
+  function syncBadgeHas() {
+    document.querySelectorAll('.filter-dd .cnt, .cs-filter .cnt0').forEach(b => b.classList.toggle('has', parseInt(b.textContent, 10) > 0));
+  }
+  const badgeObs = new MutationObserver(syncBadgeHas);
+  document.querySelectorAll('.filter-dd .cnt, .cs-filter .cnt0').forEach(b => badgeObs.observe(b, { childList: true, characterData: true, subtree: true }));
+  syncBadgeHas();
   if (location.hash && location.hash !== '#/' && location.hash !== '#/home') applyRoute();
   else try { history.replaceState(null, '', '#/home'); } catch (err) { /* sandboxed previews block replaceState */ }
 </script>
