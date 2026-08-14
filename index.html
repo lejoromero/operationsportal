@@ -920,7 +920,7 @@
     font-size:13px;font-weight:500;border:none;cursor:pointer;font-family:var(--font-ui);
   }
   .chip-removable .msr{font-size:16px;color:var(--icon-default);}
-  .chip-removable:hover .msr{color:var(--color-error, #D83A52);}
+  .chip-removable:hover .msr{color:var(--color-secondary);}
   .clear-all{
     display:none;align-items:center;gap:8px;margin-top:20px;
     background:none;border:none;cursor:pointer;
@@ -1308,7 +1308,17 @@
   .fd-filtercard{justify-content:space-between;}
   .fd-fleft,.fd-fright{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
   #fd-filters .cs-filter .msr:first-child{font-size:16px;}
-  .fd-count{font-size:14px;line-height:20px;font-weight:700;color:#272626;margin:24px 0 16px;}
+  .fd-countrow{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:24px 0 16px;flex-wrap:wrap;}
+  .fd-count{font-size:14px;line-height:20px;font-weight:700;color:#272626;}
+  .fd-search{display:flex;align-items:center;gap:8px;height:36px;padding:0 14px;border:1px solid var(--color-outline-variant);border-radius:100px;background:#fff;width:300px;transition:border-color 0.13s ease;}
+  .fd-search:focus-within{border-color:#00629D;}
+  .fd-search > .msr{font-size:18px;color:var(--icon-default);flex:0 0 auto;}
+  .fd-search input{border:0;outline:0;flex:1;min-width:0;font-family:var(--font-ui);font-size:13px;color:#272626;background:none;}
+  .fd-search input::placeholder{color:#939292;}
+  .fd-sclear{border:0;background:none;padding:2px;cursor:pointer;display:inline-flex;border-radius:50%;color:var(--icon-default);}
+  .fd-sclear:hover{background:rgba(35,34,34,0.08);}
+  .fd-sclear .msr{font-size:16px;}
+  mark.fd-hl{background:#FFE58F;color:inherit;border-radius:2px;padding:0 1px;}
   .fd-list{display:flex;flex-direction:column;}
   .fd-group{position:relative;display:flex;flex-direction:column;gap:16px;}
   .fd-evic{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
@@ -1345,7 +1355,7 @@
   .fd-ev{background:#fff;border:1px solid var(--border-default);border-radius:8px;transition:border-color 0.15s ease;}
   .fd-ev:hover{border-color:#D2D1D4;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
   .fd-ev{transition:border-color 0.15s ease,box-shadow 0.2s ease;}
-  .fd-evhead{display:flex;align-items:center;gap:16px;padding:14px 20px;cursor:pointer;width:100%;border:0;background:none;font-family:var(--font-ui);text-align:left;}
+  .fd-evhead{display:flex;align-items:center;gap:16px;padding:24px 20px;cursor:pointer;width:100%;border:0;background:none;font-family:var(--font-ui);text-align:left;}
   .fd-evmain{flex:1;min-width:0;}
   .fd-evtitle{font-size:14px;line-height:20px;font-weight:600;color:#272626;}
   .fd-evdesc{font-size:13px;line-height:18px;color:#5C5A5A;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -1367,6 +1377,10 @@
   .fd-empty .msr{font-size:32px;color:#C9C8CC;}
   .fd-empty .t{font-size:14px;font-weight:600;color:#272626;}
   .fd-empty .s{font-size:13px;color:#5C5A5A;}
+  .fd-empty-big{padding:72px 24px;gap:0;}
+  .fd-empty-big svg{margin-bottom:24px;}
+  .fd-empty-big .t{font-size:18px;line-height:24px;font-weight:700;color:#5C5A5A;}
+  .fd-empty-big .s{font-size:14px;line-height:20px;color:#5C5A5A;margin-top:6px;}
   .fd-custom{display:none;flex-direction:column;gap:6px;padding:10px 12px 12px;border-top:1px solid var(--border-default);margin-top:6px;}
   .fd-custom.show{display:flex;}
   .fd-custom label{font-size:11px;font-weight:600;color:#5C5A5A;text-transform:uppercase;letter-spacing:0.4px;}
@@ -2206,10 +2220,18 @@
           <div class="fd-fright">
             <div class="cs-fwrap"><button class="cs-filter" data-fdf="source">Source <span class="cnt0">0</span><span class="msr">expand_more</span></button><div class="menu right" data-fdm="source"></div></div>
             <div class="cs-fwrap"><button class="cs-filter" data-fdf="type">Type <span class="cnt0">0</span><span class="msr">expand_more</span></button><div class="menu right" data-fdm="type"></div></div>
-            <div class="cs-fwrap"><button class="cs-filter" data-fdf="range"><span class="msr" style="font-size:16px;">today</span><span id="fd-range-label">All time</span> <span class="msr">expand_more</span></button><div class="menu right" data-fdm="range"></div></div>
+            <div class="cs-fwrap"><button class="cs-filter" data-fdf="range"><span class="msr" style="font-size:16px;">today</span><span id="fd-range-label">Last 30 days</span> <span class="msr">expand_more</span></button><div class="menu right" data-fdm="range"></div></div>
+          </div>
+          <div class="active-chips" id="fd-chips"></div>
+        </div>
+        <div class="fd-countrow">
+          <div class="fd-count" id="fd-count">Showing 30 results</div>
+          <div class="fd-search" id="fd-searchbox">
+            <span class="msr">search</span>
+            <input id="fd-search" type="text" placeholder="Search events" aria-label="Search events">
+            <button class="fd-sclear" id="fd-search-clear" aria-label="Clear search" style="display:none;"><span class="msr">close</span></button>
           </div>
         </div>
-        <div class="fd-count" id="fd-count">Showing 30 events</div>
         <div class="fd-list" id="fd-list"></div>
       </div>
     </div>
@@ -3112,8 +3134,14 @@
     applied.sectors.forEach(s => addChip(s, () => { applied.sectors.delete(s); syncDraftFromApplied(); }));
     applied.divisions.forEach(k => addChip(k.split(':')[1], () => { applied.divisions.delete(k); syncDraftFromApplied(); }));
     const any = chipsRow.children.length > 0;
+    if (chipsRow.children.length >= 2) {
+      const ca = document.createElement('button');
+      ca.className = 'tf-link';
+      ca.textContent = 'Clear all';
+      ca.addEventListener('click', () => clearAllBtn.click());
+      chipsRow.appendChild(ca);
+    }
     chipsRow.classList.toggle('has', any);
-    clearAllBtn.classList.toggle('has', any);
     renderList();
   }
 
@@ -3214,15 +3242,7 @@
       const code = (wsScreen.dataset.code) || (wsRow && wsRow[0]) || 'BR-L1587';
       const fresh = fdCode !== code;
       if (fresh) { fdCode = code; fdEvents = fdGen(code, wsPhase); fdResetFilters(); fdShown = 15; }
-      const isPrep = wsPhase === 'preparation';
-      document.querySelectorAll('#fd-seg button').forEach(b => {
-        if (b.dataset.seg === 'all') return;
-        b.classList.toggle('dis', isPrep);
-        if (isPrep) {
-          b.dataset.t2h = '';
-          b.dataset.t2b = 'Financial and contract events are visible once the operation enters the Implementation phase.';
-        } else { delete b.dataset.t2h; delete b.dataset.t2b; }
-      });
+
       clearTimeout(fdLoadTimer);
       if (fresh) {
         fdShowSkeleton();
@@ -3971,9 +3991,9 @@
   const FD_CLAUSES = ['Special Execution Clause','Audited Financial Statements','Environmental License Submission','Counterpart Funding Commitment','Mid Term Evaluation Report'];
   const FD_MILES = ['Eligibility Approved','First Disbursement','QRR Review','POD Approval','Contract Signature'];
 
-  var fdCode = null, fdEvents = [], fdShown = 15, fdLoadTimer = null;
+  var fdCode = null, fdEvents = [], fdShown = 15, fdLoadTimer = null, fdQuery = '';
   var FD_DOT_MODE = 'neutral'; // 'neutral' (Majo proposal) | 'contextual' (documented alternative)
-  const fdSel = { source: new Set(), type: new Set(), range: 'all', from: null, to: null, chip: null };
+  const fdSel = { source: new Set(), type: new Set(), range: '30', from: null, to: null, chip: null };
 
   function fdHash(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
   function fdRngFactory(seed) { let s = seed || 1; return function () { s = (Math.imul(s, 1103515245) + 12345) & 0x7fffffff; return s / 0x7fffffff; }; }
@@ -4062,7 +4082,9 @@
     for (let i = 0; i < n; i++) {
       const src = (keyPool.length && i % 2 === 0) ? keyPool : pool;
       const def = src[Math.floor(rng() * src.length)];
-      const dt = new Date(now.getTime() - Math.floor(rng() * 364) * 864e5 - Math.floor(rng() * 864e5));
+      // ~40% of events land in the last 30 days so the default view has substance
+      const daysAgo = rng() < 0.4 ? Math.floor(rng() * 29) : 30 + Math.floor(rng() * 334);
+      const dt = new Date(now.getTime() - daysAgo * 864e5 - Math.floor(rng() * 864e5));
       const attrs = def[4].map(a => [a, fdVal(a, rng, dt, def)]);
       evs.push({ type: def[0], name: def[1], source: def[2], date: dt, attrs, desc: fdDesc(def, attrs) });
     }
@@ -4096,11 +4118,12 @@
       + `<div class="fd-custom" id="fd-custom"><label>From</label><input type="date" id="fd-from"><label>To</label><input type="date" id="fd-to"><button class="fd-apply" id="fd-apply">Apply</button></div>`;
   }
   function fdResetFilters() {
-    fdSel.source.clear(); fdSel.type.clear(); fdSel.chip = null; fdSel.range = 'all'; fdSel.from = null; fdSel.to = null; fdShown = 15;
+    fdSel.source.clear(); fdSel.type.clear(); fdSel.chip = null; fdSel.range = '30'; fdSel.from = null; fdSel.to = null; fdShown = 15;
+    fdQuery = ''; const si = document.getElementById('fd-search'); if (si) { si.value = ''; document.getElementById('fd-search-clear').style.display = 'none'; }
     document.querySelectorAll('#fd-seg button').forEach(b => b.classList.toggle('on', b.dataset.seg === 'all'));
     document.querySelectorAll('#fd-filters .menu').forEach(m => { m.classList.remove('open'); m.innerHTML = fdMenuHTML(m.dataset.fdm); });
     fdSyncBadge('source'); fdSyncBadge('type');
-    document.getElementById('fd-range-label').textContent = 'All time';
+    document.getElementById('fd-range-label').textContent = 'Last 30 days';
   }
 
   function renderFeed() {
@@ -4113,12 +4136,27 @@
         if (fdSel.from && e.date < fdSel.from) return false;
         if (fdSel.to && e.date > fdSel.to) return false;
       } else if (fdSel.range !== 'all' && e.date.getTime() < now - (+fdSel.range) * 864e5) return false;
+      if (fdQuery) {
+        const q = fdQuery;
+        const head = (e.name + ' ' + e.desc).toLowerCase().includes(q);
+        const body = !head && (e.type + ' ' + e.source + ' ' + e.attrs.map(a => a[0] + ' ' + a[1]).join(' ')).toLowerCase().includes(q);
+        if (!head && !body) return false;
+        e._qbody = body;
+      } else e._qbody = false;
       return true;
     });
     document.getElementById('fd-count').textContent = 'Showing ' + list.length + (list.length === 1 ? ' result' : ' results');
+    if (typeof fdRenderChips === 'function') fdRenderChips();
     const wrap = document.getElementById('fd-list');
     if (!list.length) {
-      wrap.innerHTML = `<div class="fd-empty"><span class="msr">search</span><div class="t">No events match your filters</div><div class="s">Try removing a filter or widening the time range.</div></div>`;
+      if (wsPhase === 'preparation' && fdSel.chip) {
+        const what = fdSel.chip === 'financial' ? 'financial' : 'contract';
+        wrap.innerHTML = `<div class="fd-empty fd-empty-big"><svg width="258" height="128" viewBox="0 0 258 128" fill="none" xmlns="http://www.w3.org/2000/svg"><g filter="url(#filter0_f_7583_25061)"><rect x="54" y="0.75" width="150" height="33" rx="3" fill="url(#paint0_linear_7583_25061)"/><rect x="54.375" y="1.125" width="149.25" height="32.25" rx="2.625" stroke="url(#paint1_linear_7583_25061)" stroke-width="0.75"/><rect x="60" y="6.75" width="18" height="18" rx="9" fill="#E5E4E4"/><rect x="84" y="11.625" width="84" height="8.25" rx="4.125" fill="#E5E4E4"/><rect x="187.5" y="11.625" width="10.5" height="8.25" rx="4.125" fill="#F3F3F3"/></g><g filter="url(#filter1_d_7583_25061)"><path d="M29 45.75C29 43.5409 30.7909 41.75 33 41.75H225C227.209 41.75 229 43.5409 229 45.75V81.75C229 83.9591 227.209 85.75 225 85.75H33C30.7909 85.75 29 83.9591 29 81.75V45.75Z" fill="white"/><path d="M33 42.25H225C226.933 42.25 228.5 43.817 228.5 45.75V81.75C228.5 83.683 226.933 85.25 225 85.25H33C31.067 85.25 29.5 83.683 29.5 81.75V45.75C29.5 43.817 31.067 42.25 33 42.25Z" stroke="#E4E4E4"/><rect x="39" y="51.75" width="24" height="24" rx="12" fill="#CBCACA"/><rect x="71" y="58.25" width="112" height="11" rx="5.5" fill="#CBCACA"/><rect x="205" y="58.25" width="14" height="11" rx="5.5" fill="#E5E4E4"/></g><g filter="url(#filter2_f_7583_25061)"><rect x="54" y="93.75" width="150" height="33" rx="3" fill="url(#paint2_linear_7583_25061)"/><rect x="54.375" y="94.125" width="149.25" height="32.25" rx="2.625" stroke="url(#paint3_linear_7583_25061)" stroke-width="0.75"/><rect x="60" y="99.75" width="18" height="18" rx="9" fill="#E5E4E4"/><rect x="84" y="104.625" width="84" height="8.25" rx="4.125" fill="#E5E4E4"/><rect x="187.5" y="104.625" width="10.5" height="8.25" rx="4.125" fill="#F3F3F3"/></g><defs><filter id="filter0_f_7583_25061" x="53.25" y="0" width="151.5" height="34.5" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="0.375" result="effect1_foregroundBlur_7583_25061"/></filter><filter id="filter1_d_7583_25061" x="0" y="19.75" width="258" height="102" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/><feOffset dy="7"/><feGaussianBlur stdDeviation="14.5"/><feColorMatrix type="matrix" values="0 0 0 0 0.392157 0 0 0 0 0.392157 0 0 0 0 0.435294 0 0 0 0.2 0"/><feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_7583_25061"/><feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_7583_25061" result="shape"/></filter><filter id="filter2_f_7583_25061" x="53.25" y="93" width="151.5" height="34.5" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="0.375" result="effect1_foregroundBlur_7583_25061"/></filter><linearGradient id="paint0_linear_7583_25061" x1="128.951" y1="-0.0133213" x2="130.523" y2="58.5117" gradientUnits="userSpaceOnUse"><stop stop-color="#FDFEFF"/><stop offset="0.9964" stop-color="#F3F3F3"/></linearGradient><linearGradient id="paint1_linear_7583_25061" x1="114" y1="-17.25" x2="103" y2="33.75" gradientUnits="userSpaceOnUse"><stop stop-color="#F2F2F2"/><stop offset="1" stop-color="#FEFEFE"/></linearGradient><linearGradient id="paint2_linear_7583_25061" x1="128.951" y1="92.9867" x2="130.523" y2="151.512" gradientUnits="userSpaceOnUse"><stop stop-color="#FDFEFF"/><stop offset="0.9964" stop-color="#F3F3F3"/></linearGradient><linearGradient id="paint3_linear_7583_25061" x1="114" y1="75.75" x2="103" y2="126.75" gradientUnits="userSpaceOnUse"><stop stop-color="#F2F2F2"/><stop offset="1" stop-color="#FEFEFE"/></linearGradient></defs></svg><div class="t">No ${what} events yet</div><div class="s">Financial and contract events appear once the operation enters the Implementation phase.</div></div>`;
+      } else if (fdQuery) {
+        wrap.innerHTML = `<div class="fd-empty"><span class="msr">search</span><div class="t">No events match your search</div><div class="s">Try a different word, or clear the search to see all events.</div></div>`;
+      } else {
+        wrap.innerHTML = `<div class="fd-empty"><span class="msr">search</span><div class="t">No events match your filters</div><div class="s">Try removing a filter or widening the time range.</div></div>`;
+      }
       return;
     }
     const revealFrom = arguments.length ? arguments[0] : -1;
@@ -4138,15 +4176,15 @@
       const dly = rv ? Math.min((idx - revealFrom) * 40, 600) : 0;
       idx++;
       const attrsHtml = e.attrs.map(([k, v]) =>
-          `<div class="fd-attr"><div class="k">${k}</div><div class="v">${v}</div></div>`).join('')
-          + `<div class="fd-attr src"><div class="k">Type</div><div class="v"><span class="fd-tag"><span class="msr">${FD_TYPE_ICON[e.type] || 'info'}</span>${e.type}</span></div></div>`
-          + `<div class="fd-attr"><div class="k">Source</div><div class="v"><span class="fd-tag"><span class="msr">${FD_SRC_ICON[e.source]}</span>${FD_SRC_LABEL[e.source] || e.source}</span></div></div>`;
-        out += `<div class="fd-ev${rv ? ' reveal' : ''}"${rv ? ` style="animation-delay:${dly}ms"` : ''}>
+          `<div class="fd-attr"><div class="k">${fdHl(k)}</div><div class="v">${fdHl(v)}</div></div>`).join('')
+          + `<div class="fd-attr src"><div class="k">Type</div><div class="v"><span class="fd-tag"><span class="msr">${FD_TYPE_ICON[e.type] || 'info'}</span>${fdHl(e.type)}</span></div></div>`
+          + `<div class="fd-attr"><div class="k">Source</div><div class="v"><span class="fd-tag"><span class="msr">${FD_SRC_ICON[e.source]}</span>${fdHl(FD_SRC_LABEL[e.source] || e.source)}</span></div></div>`;
+        out += `<div class="fd-ev${e._qbody ? ' open' : ''}${rv ? ' reveal' : ''}"${rv ? ` style="animation-delay:${dly}ms"` : ''}>
           <button class="fd-evhead" aria-expanded="false">
             <span class="fd-evic ${FD_DOT_MODE === 'neutral' ? 'nt' : fdFamily(e)}"><span class="msr">${FD_TYPE_ICON[e.type] || 'info'}</span></span>
             <div class="fd-evmain">
-              <div class="fd-evtitle">${e.name}</div>
-              <div class="fd-evdesc">${e.desc}</div>
+              <div class="fd-evtitle">${fdHl(e.name)}</div>
+              <div class="fd-evdesc">${fdHl(e.desc)}</div>
             </div>
             <div class="fd-evside">
               <span class="fd-evdate">${fdDate(e.date)}</span>
@@ -4171,6 +4209,11 @@
     });
   }
 
+  function fdHl(text) {
+    if (!fdQuery) return text;
+    const esc = fdQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return String(text).replace(new RegExp('(' + esc + ')', 'ig'), '<mark class="fd-hl">$1</mark>');
+  }
   function fdSkeletonItems(n) {
     return Array.from({ length: n }, () =>
       `<div class="fd-skcard"><span class="fd-skdot"></span><div class="skl"><div class="l1"></div><div class="l2"></div></div></div>`).join('');
@@ -4179,6 +4222,24 @@
     document.getElementById('fd-count').textContent = 'Loading events\u2026';
     document.getElementById('fd-list').innerHTML = `<div class="fd-skgroup">${fdSkeletonItems(4)}</div>`;
   }
+  const fdSearchInput = document.getElementById('fd-search');
+  let fdSearchTimer = null;
+  fdSearchInput.addEventListener('input', () => {
+    clearTimeout(fdSearchTimer);
+    fdSearchTimer = setTimeout(() => {
+      fdQuery = fdSearchInput.value.trim().toLowerCase();
+      document.getElementById('fd-search-clear').style.display = fdQuery ? '' : 'none';
+      fdShown = 15;
+      renderFeed();
+    }, 150);
+  });
+  document.getElementById('fd-search-clear').addEventListener('click', () => {
+    fdSearchInput.value = ''; fdQuery = '';
+    document.getElementById('fd-search-clear').style.display = 'none';
+    fdShown = 15;
+    renderFeed();
+    fdSearchInput.focus();
+  });
   document.getElementById('fd-list').addEventListener('click', e => {
     const head = e.target.closest('.fd-evhead');
     if (!head) return;
@@ -4335,6 +4396,50 @@
   const badgeObs = new MutationObserver(syncBadgeHas);
   document.querySelectorAll('.filter-dd .cnt, .cs-filter .cnt0').forEach(b => badgeObs.observe(b, { childList: true, characterData: true, subtree: true }));
   syncBadgeHas();
+
+  // ===== Activity Feed: applied filter chips row (same pattern as the lists) =====
+  function fdRenderChips() {
+    const row = document.getElementById('fd-chips');
+    const chips = [];
+    fdSel.source.forEach(s => chips.push({ kind: 'source', v: s, label: FD_SRC_LABEL[s] || s }));
+    fdSel.type.forEach(t => chips.push({ kind: 'type', v: t, label: t }));
+    if (fdSel.range === 'custom') {
+      const lbl = (fdSel.from ? fdDate(fdSel.from) : 'Start') + ' to ' + (fdSel.to ? fdDate(fdSel.to) : 'today');
+      chips.push({ kind: 'range', v: 'custom', label: lbl });
+    }
+    let out = chips.map(c =>
+      `<button class="chip-removable" data-fk="${c.kind}" data-fv="${c.v}">${c.label}<span class="msr">close</span></button>`).join('');
+    if (chips.length >= 2) out += `<button class="tf-link" id="fd-chips-clear">Clear all</button>`;
+    row.innerHTML = out;
+    row.classList.toggle('has', chips.length > 0);
+  }
+  document.getElementById('fd-chips').addEventListener('click', e => {
+    if (e.target.closest('#fd-chips-clear')) {
+      fdSel.source.clear(); fdSel.type.clear();
+      if (fdSel.range === 'custom') { fdSel.range = '30'; fdSel.from = null; fdSel.to = null; document.getElementById('fd-range-label').textContent = 'Last 30 days'; }
+      document.querySelectorAll('#fd-filters .menu[data-fdm="source"] .menu-item, #fd-filters .menu[data-fdm="type"] .menu-item').forEach(i => i.classList.remove('checked'));
+      document.querySelectorAll('#fd-filters .menu[data-fdm="range"] .menu-item').forEach(i => i.classList.toggle('selected', i.dataset.v === '30'));
+      fdSyncBadge('source'); fdSyncBadge('type');
+      fdShown = 15;
+      renderFeed();
+      return;
+    }
+    const chip = e.target.closest('.chip-removable');
+    if (!chip) return;
+    const k = chip.dataset.fk, v = chip.dataset.fv;
+    if (k === 'range') {
+      fdSel.range = '30'; fdSel.from = null; fdSel.to = null;
+      document.getElementById('fd-range-label').textContent = 'Last 30 days';
+      document.querySelectorAll('#fd-filters .menu[data-fdm="range"] .menu-item').forEach(i => i.classList.toggle('selected', i.dataset.v === '30'));
+    } else {
+      fdSel[k].delete(v);
+      const m = document.querySelector(`#fd-filters .menu[data-fdm="${k}"]`);
+      if (m) { const item = [...m.querySelectorAll('.menu-item')].find(i => i.dataset.v === v); if (item) item.classList.remove('checked'); }
+      fdSyncBadge(k);
+    }
+    fdShown = 15;
+    renderFeed();
+  });
   if (location.hash && location.hash !== '#/' && location.hash !== '#/home') applyRoute();
   else try { history.replaceState(null, '', '#/home'); } catch (err) { /* sandboxed previews block replaceState */ }
 </script>
