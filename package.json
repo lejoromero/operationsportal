@@ -2,8 +2,9 @@
   "name": "opo-prototype",
   "scripts": {
     "build": "staticrypt index.html -d dist --remember 7 --template opo-gate.html"
+      
   },
   "devDependencies": {
-    "staticrypt": "^3.5.0"
+    "staticrypt": "3.5.4"
   }
 }
