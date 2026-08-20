@@ -1,0 +1,9 @@
+{
+  "name": "opo-prototype",
+  "scripts": {
+    "build": "staticrypt index.html -d dist --short --remember 7"
+  },
+  "devDependencies": {
+    "staticrypt": "^3.5.0"
+  }
+}
