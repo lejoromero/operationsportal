@@ -265,6 +265,26 @@
   .cs-filter:hover .cnt0{background:var(--color-primary);color:#FFFFFF;}
   .cs-fwrap{position:relative;}
   .cs-fwrap .menu{max-height:340px;overflow-y:auto;}
+  .menu.has-search{max-height:none;overflow:hidden;}
+  .menu-search{
+    display:flex;align-items:center;gap:8px;height:36px;padding:0 10px;
+    border:1px solid var(--color-outline-variant);border-radius:8px;margin:2px 2px 8px;
+    background:var(--color-surface);flex:0 0 auto;
+  }
+  .menu-search:focus-within{border-color:#00629D;}
+  .menu-search .msr{font-size:18px;color:var(--icon-default);}
+  .menu-search input{border:none;outline:none;flex:1;min-width:0;background:transparent;font-family:var(--font-ui);font-size:13px;color:#272626;}
+  .menu-search input::placeholder{color:#8A8A8D;}
+  .menu-scroll{
+    max-height:288px;overflow-y:auto;
+    display:flex;flex-direction:column;gap:4px;
+    padding-right:4px;margin-right:-6px;
+    scrollbar-width:thin;scrollbar-color:#D7D6D9 transparent;
+  }
+  .menu-scroll::-webkit-scrollbar{width:8px;}
+  .menu-scroll::-webkit-scrollbar-thumb{background:#D7D6D9;border-radius:8px;}
+  .menu-scroll::-webkit-scrollbar-track{background:transparent;}
+  .menu-empty{padding:14px 10px;font-size:13px;color:#5C5A5A;}
   .cs-filter .cnt0{min-width:18px;height:18px;border-radius:6px;background:#F0F0F0;display:inline-flex;align-items:center;justify-content:center;font-size:11px;color:#5C5A5A;padding:0 5px;transition:background 0.13s ease,color 0.13s ease;}
   .filter-dd .msr:last-child, .cs-filter .msr:last-child{transition:transform 0.15s ease;}
   .filter-dd.dd-open, .cs-filter.dd-open{border-color:var(--color-primary);background:var(--color-surface-cont-lowest);box-shadow:inset 0 0 0 1px var(--color-primary);}
@@ -2378,7 +2398,7 @@
                 <button class="tf-link">Edit team in Convergence <span class="msr">open_in_new</span></button>
               </div>
             </div>
-            <div class="od3-card od3-teamcard">
+            <div class="od3-card od3-teamcard" data-flag="executingAgencyTeam">
               <div class="od3-teamhead"><span class="ic"><span class="msr">corporate_fare</span></span>Executing Agency Team</div>
               <div class="od3-teamgrid">
                 <div class="od3-role"><div class="r">Borrower</div><div class="n" id="od-team-borrower">Government of Brazil</div></div>
@@ -3943,12 +3963,42 @@
     const btn = wrap.querySelector('.cs-filter');
     const menu = wrap.querySelector('.menu');
     const key = btn.dataset.csf;
-    menu.innerHTML = csMenuItems(key);
+    if (key === 'countries') {
+      menu.classList.add('has-search');
+      menu.innerHTML = `<div class="menu-search"><span class="msr">search</span><input type="text" placeholder="Search country" aria-label="Search country"></div><div class="menu-scroll">${csMenuItems(key)}</div>`;
+      const inp = menu.querySelector('.menu-search input');
+      inp.addEventListener('click', e => e.stopPropagation());
+      inp.addEventListener('input', () => {
+        const q = inp.value.trim().toLowerCase();
+        let any = false;
+        menu.querySelectorAll('.menu-item').forEach(it => {
+          const hit = !q || it.textContent.toLowerCase().includes(q);
+          it.style.display = hit ? '' : 'none';
+          any = any || hit;
+        });
+        const prev = menu.querySelector('.menu-empty');
+        if (prev) prev.remove();
+        if (!any) menu.querySelector('.menu-scroll').insertAdjacentHTML('beforeend',
+          `<div class="menu-empty">No country matches "${inp.value.trim()}"</div>`);
+      });
+    } else {
+      menu.innerHTML = csMenuItems(key);
+    }
     btn.addEventListener('click', e => {
       e.stopPropagation();
       const wasOpen = menu.classList.contains('open');
       document.querySelectorAll('#cs-filters .menu').forEach(m => m.classList.remove('open'));
-      if (!wasOpen) menu.classList.add('open');
+      if (!wasOpen) {
+        menu.classList.add('open');
+        const inp = menu.querySelector('.menu-search input');
+        if (inp) {
+          inp.value = '';
+          menu.querySelectorAll('.menu-item').forEach(it => it.style.display = '');
+          const prev = menu.querySelector('.menu-empty');
+          if (prev) prev.remove();
+          setTimeout(() => inp.focus(), 30);
+        }
+      }
     });
     menu.addEventListener('click', e => {
       const item = e.target.closest('.menu-item');
@@ -4253,7 +4303,7 @@
   // ===== Feature flags =====
   // false = feature not launched: elements with data-flag are hidden, elements with data-flag-off are shown.
   // Toggle from the browser console: OPO_FLAGS.set('upcomingPending', true)
-  const FLAGS = { upcomingPending: false };
+  const FLAGS = { upcomingPending: false, executingAgencyTeam: false };
   function applyFlags() {
     document.querySelectorAll('[data-flag]').forEach(el => {
       el.style.display = FLAGS[el.dataset.flag] ? '' : 'none';
