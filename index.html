@@ -4259,7 +4259,10 @@
     if (e.key.toLowerCase() === 'h') {
       if (wsScreen.dataset.code !== 'BR-L1587') { tmEdgeCount = 0; return; }
       tmEdgeCount++;
-      if (tmEdgeCount >= 5) document.getElementById('tm-edge').classList.add('show');
+      if (tmEdgeCount >= 5) {
+        document.getElementById('tm-edge').classList.toggle('show');
+        tmEdgeCount = 0;
+      }
     } else {
       tmEdgeCount = 0;
     }
