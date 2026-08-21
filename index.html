@@ -1555,7 +1555,7 @@
   }
   .reform-link .msr{font-size:18px;color:#1F4D6D;}
   .reform-link:hover{text-decoration:underline;}
-  .od3-teamfoot{display:flex;align-items:center;gap:8px;margin-top:24px;padding-top:14px;border-top:1px solid #F0F0F0;font-size:12px;line-height:16px;color:#5C5A5A;}
+  .od3-teamfoot{display:flex;align-items:center;gap:8px;margin-top:48px;padding-top:20px;border-top:1px solid var(--border-default);font-size:12px;line-height:16px;color:#5C5A5A;}
   .od3-teamfoot > .msr{font-size:16px;color:#8A8888;flex:0 0 auto;}
   .od3-teamfoot .tf-txt{flex:1;min-width:0;}
   .tf-link{display:inline-flex;align-items:center;gap:4px;border:0;background:none;padding:0;cursor:pointer;font-family:var(--font-ui);font-size:12px;line-height:16px;font-weight:600;color:var(--link-default);white-space:nowrap;}
@@ -1635,12 +1635,39 @@
   .od3-teamsec{margin-top:0;padding-top:0;}
   .od3-teams{display:flex;gap:32px;align-items:stretch;}
   .od3-teamcard{flex:1;min-width:0;}
-  .od3-teamhead{display:flex;align-items:center;gap:12px;font-size:14px;line-height:20px;font-weight:700;color:#272626;margin-bottom:32px;}
+  .od3-teamhead{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+  .tm-titlewrap .tt{font-size:15px;line-height:20px;font-weight:700;color:#272626;}
+  .tm-divider{height:1px;background:var(--border-default);margin:0 -24px 28px;}
   .od3-teamhead .ic{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#F3F3F3;flex:0 0 auto;}
   .od3-teamhead .ic .msr{font-size:20px;color:#272626;}
-  .od3-teamgrid{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-content:start;}
-  .od3-role .r{font-size:12px;line-height:16px;font-weight:600;color:#272626;}
-  .od3-role .n{font-size:12px;line-height:16px;color:#5C5A5A;}
+  .od3-teamgrid{display:grid;grid-template-columns:1fr 1fr;gap:44px 32px;align-content:start;}
+  .tm-edge{display:none;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+  .tm-edge.show{display:flex;}
+  .tm-edge .lb{font-size:12px;font-weight:600;color:#5C5A5A;margin-right:4px;}
+  .tm-chip{
+    height:28px;padding:0 12px;border-radius:100px;
+    border:1px solid var(--color-outline-variant);background:var(--color-surface);
+    font-family:var(--font-ui);font-size:12px;font-weight:600;color:#43424B;cursor:pointer;
+    transition:background .12s ease,border-color .12s ease;
+  }
+  .tm-chip:hover{border-color:#67676A;}
+  .tm-chip.on{background:#EDF5FA;border-color:#8FCFE9;color:#00587C;}
+  .tm-titlewrap .tm-count{font-size:13px;line-height:18px;font-weight:400;color:#5C5A5A;margin-top:2px;}
+  .tm-search{width:340px;margin-left:auto;}
+  .od3-role.tm-wide{grid-column:1 / -1;}
+  .od3-role .n.exp{columns:2;column-gap:32px;}
+  .od3-more{
+    display:inline-flex;align-items:center;margin-top:10px;padding:0;border:none;background:none;
+    font-family:var(--font-ui);font-size:12px;line-height:16px;font-weight:600;
+    color:var(--link-default);cursor:pointer;
+  }
+  .od3-more:hover{text-decoration:underline;color:#004575;}
+  mark.tm-hl{background:#FFE58F;border-radius:2px;padding:0 1px;color:inherit;}
+  .tm-empty{grid-column:1 / -1;padding:24px 0;font-size:14px;color:#5C5A5A;}
+  .od3-role .r{font-size:13px;line-height:18px;font-weight:700;color:#272626;margin-bottom:8px;}
+  .od3-role .n{font-size:13px;line-height:18px;color:#5C5A5A;display:flex;flex-direction:column;gap:4px;}
+  .od3-role .n.exp{display:block;}
+  .od3-role .n.exp > div{margin-bottom:8px;break-inside:avoid;}
   @media (max-width:1280px){.od3{grid-template-columns:1fr;}}
   @media (max-width:900px){.od3-teams{flex-direction:column;}.od3-esa{gap:48px;}}
 
@@ -2378,20 +2405,29 @@
 
         <div id="od-tab-team" style="display:none">
         <div class="od3-teamsec">
+          <div class="tm-edge" id="tm-edge">
+            <span class="lb">Edge case preview</span>
+            <button class="tm-chip on" data-tmset="default">Default team</button>
+            <button class="tm-chip" data-tmset="co">CO-L1269 &middot; 46 members</button>
+            <button class="tm-chip" data-tmset="gy">GY-G1007 &middot; 15 roles</button>
+            <button class="tm-chip" data-tmset="rg">RG-T3556 &middot; 84 members (TC)</button>
+          </div>
           <div class="od3-teams">
             <div class="od3-card od3-teamcard">
-              <div class="od3-teamhead"><span class="ic"><span class="msr">groups_2</span></span>IDB Operation Team</div>
-              <div class="od3-teamgrid">
-                <div class="od3-role"><div class="r">Team Leader</div><div class="n" id="od-team-lead">Carter, James</div></div>
-                <div class="od3-role"><div class="r">Alternate Team Leader</div><div class="n">Mosquera Medina, Edgardo</div></div>
-                <div class="od3-role"><div class="r">Fiduciary Financial Management Specialist</div><div class="n">La Rosa, Analia<br>De Leon Contreras, Diana Margarita</div></div>
-                <div class="od3-role"><div class="r">Fiduciary Tasks Support</div><div class="n">Tamayo, Pablo Nicolas</div></div>
-                <div class="od3-role"><div class="r">Procurement Fiduciary Specialist</div><div class="n">Garcia Bailon, Sofia Alejandra</div></div>
-                <div class="od3-role"><div class="r">Operational Analyst</div><div class="n">Hernandez Horacio Nicolas</div></div>
-                <div class="od3-role"><div class="r">Attorney</div><div class="n">Graham, Rodolfo B.</div></div>
-                <div class="od3-role"><div class="r">Team Member</div><div class="n">Lafuente, Mariano<br>Pineda Ayerbe, Emilio Inigo<br>Bergamaschi, Andrea</div></div>
-                <div class="od3-role"><div class="r">Project Assistant</div><div class="n">Rojas Gonzalez, Sonia Amalia</div></div>
+              <div class="od3-teamhead">
+                <span class="ic"><span class="msr">groups_2</span></span>
+                <div class="tm-titlewrap">
+                  <div class="tt">IDB Operation Team</div>
+                  <div class="tm-count" id="tm-count"></div>
+                </div>
+                <div class="fd-search tm-search" id="tm-searchbox" style="display:none;">
+                  <span class="msr">search</span>
+                  <input id="tm-search" type="text" placeholder="Search by name or role" autocomplete="off">
+                  <button class="fd-sclear" id="tm-search-clear" aria-label="Clear search" style="display:none;"><span class="msr">close</span></button>
+                </div>
               </div>
+              <div class="tm-divider"></div>
+              <div class="od3-teamgrid" id="tm-grid"></div>
               <div class="od3-teamfoot">
                 <span class="msr">info</span>
                 <span class="tf-txt">Team roles are managed in Convergence.</span>
@@ -3575,9 +3611,9 @@
     coHTML += `<div class="od3-co-row" data-t2h="Sector" data-t2b="IDB sector responsible for the operation"><span class="od3-tag">${parts[0]}</span><span>${SECTOR_NAME[parts[0]] || parts[0]}</span></div>`;
     if (parts[1]) coHTML += `<div class="od3-co-row" data-t2h="Division" data-t2b="Specialized unit within the sector"><span class="od3-tag">${parts[1]}</span><span>${DIV_NAME[parts[0] + ':' + parts[1]] || parts[1]} Division</span></div>`;
     document.getElementById('od-co').innerHTML = coHTML;
-    // team lead
+    // team lead feeds the dynamic team renderer (First Last format)
     const lead = row[7];
-    document.getElementById('od-team-lead').textContent = lead.includes(',') ? lead : lead.split(' ').reverse().join(', ');
+    tmSetLead(lead.includes(',') ? lead.split(',').map(s => s.trim()).reverse().join(' ') : lead);
   }
   let wsContracts = [];
   function renderContracts(expanded) {
@@ -4088,6 +4124,173 @@
     renderPinModal();
     showSnackbar(code + ' removed from Pinned', () => { pinnedOps.add(code); syncAllPins(); renderPinModal(); });
   });
+
+  // ===== Operation Data: scalable team model (core roles, +N expand, search) =====
+  const TM_CORE = ['Team Leader','Alternate Team Leader','Fiduciary Financial Management Specialist','Procurement Fiduciary Specialist','Attorney'];
+  const TM_FIRST = ['Maria','Juan','Ana','Carlos','Lucia','Pedro','Sofia','Diego','Valentina','Andres','Camila','Jorge','Isabella','Luis','Gabriela','Miguel','Daniela','Fernando','Paula','Ricardo','Carolina','Alejandro','Mariana','Roberto','Patricia','Eduardo','Veronica','Hernan','Claudia','Nicolas'];
+  const TM_LAST = ['Gomez','Rodriguez','Fernandez','Lopez','Martinez','Perez','Sanchez','Ramirez','Torres','Flores','Rivera','Vargas','Castro','Ortiz','Morales','Silva','Rojas','Mendoza','Herrera','Medina','Aguilar','Vega','Campos','Fuentes','Cabrera','Navarro','Reyes','Molina','Paredes','Salazar'];
+  function tmNames(n, seed) {
+    // deterministic and guaranteed unique for n <= 90
+    const out = [];
+    for (let i = 0; i < n; i++) {
+      const L = TM_LAST[(seed + i) % TM_LAST.length];
+      const F = TM_FIRST[(seed * 3 + i) % TM_FIRST.length];
+      if (i < 30) out.push(F + ' ' + L);
+      else if (i < 60) out.push(F + ' ' + L + ' ' + TM_LAST[(seed * 5 + i) % TM_LAST.length]);
+      else out.push(F + ' ' + TM_FIRST[(seed * 7 + i) % TM_FIRST.length] + ' ' + L);
+    }
+    return out;
+  }
+  const TM_SETS = {
+    default: { roles: [
+      ['Team Leader', ['James Carter']],
+      ['Alternate Team Leader', ['Edgardo Mosquera Medina']],
+      ['Fiduciary Financial Management Specialist', ['Analia La Rosa','Diana Margarita De Leon Contreras']],
+      ['Procurement Fiduciary Specialist', ['Sofia Alejandra Garcia Bailon']],
+      ['Attorney', ['Rodolfo B. Graham']],
+      ['Fiduciary Tasks Support', ['Pablo Nicolas Tamayo']],
+      ['Operational Analyst', ['Horacio Nicolas Hernandez']],
+      ['Team Member', ['Mariano Lafuente','Emilio Inigo Pineda Ayerbe','Andrea Bergamaschi']],
+      ['Project Assistant', ['Sonia Amalia Rojas Gonzalez']]
+    ]},
+    co: { roles: [
+      ['Team Leader', tmNames(1, 3)],
+      ['Alternate Team Leader', tmNames(1, 4)],
+      ['Fiduciary Financial Management Specialist', tmNames(3, 5)],
+      ['Procurement Fiduciary Specialist', tmNames(2, 6)],
+      ['Attorney', tmNames(2, 7)],
+      ['Sector Specialist', tmNames(6, 8)],
+      ['Operational Analyst', tmNames(4, 9)],
+      ['ESG Specialist', tmNames(3, 10)],
+      ['Team Member', tmNames(20, 11)],
+      ['Project Assistant', tmNames(4, 12)]
+    ]},
+    gy: { roles: [
+      ['Team Leader', tmNames(1, 13)],
+      ['Alternate Team Leader', tmNames(1, 14)],
+      ['Fiduciary Financial Management Specialist', tmNames(2, 15)],
+      ['Procurement Fiduciary Specialist', tmNames(1, 16)],
+      ['Attorney', tmNames(1, 17)],
+      ['Fiduciary Tasks Support', tmNames(1, 18)],
+      ['Sector Specialist', tmNames(2, 19)],
+      ['ESG Specialist', tmNames(1, 20)],
+      ['Climate Change Specialist', tmNames(1, 21)],
+      ['Gender and Diversity Specialist', tmNames(1, 22)],
+      ['Communications Specialist', tmNames(1, 23)],
+      ['Evaluation Economist', tmNames(1, 24)],
+      ['Operational Analyst', tmNames(2, 25)],
+      ['Team Member', tmNames(3, 26)],
+      ['Project Assistant', tmNames(1, 27)]
+    ]},
+    rg: { roles: [
+      ['Team Leader', tmNames(1, 28)],
+      ['Alternate Team Leader', tmNames(1, 29)],
+      ['Fiduciary Financial Management Specialist', tmNames(2, 30)],
+      ['Attorney', tmNames(1, 31)],
+      ['Sector Specialist', tmNames(8, 32)],
+      ['Operational Analyst', tmNames(6, 33)],
+      ['Team Member', tmNames(58, 34)],
+      ['Project Assistant', tmNames(7, 35)]
+    ]}
+  };
+  let tmSel = 'default', tmQuery = '', tmOpen = new Set();
+  function tmSetLead(name) {
+    tmEdgeCount = 0;
+    document.getElementById('tm-edge').classList.remove('show');
+    TM_SETS.default.roles[0][1] = [name];
+    tmSel = 'default'; tmQuery = ''; tmOpen = new Set();
+    const inp = document.getElementById('tm-search');
+    if (inp) inp.value = '';
+    document.querySelectorAll('#tm-edge .tm-chip').forEach(c => c.classList.toggle('on', c.dataset.tmset === 'default'));
+    tmRender();
+  }
+  function tmHl(text) {
+    if (!tmQuery) return text;
+    const esc = tmQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return String(text).replace(new RegExp('(' + esc + ')', 'ig'), '<mark class="tm-hl">$1</mark>');
+  }
+  function tmOrderedRoles() {
+    const roles = TM_SETS[tmSel].roles;
+    const core = TM_CORE.map(r => roles.find(x => x[0] === r)).filter(Boolean);
+    const rest = roles.filter(x => !TM_CORE.includes(x[0]));
+    return core.concat(rest);
+  }
+  function tmRender() {
+    const grid = document.getElementById('tm-grid');
+    if (!grid) return;
+    const roles = tmOrderedRoles();
+    const total = roles.reduce((a, r) => a + r[1].length, 0);
+    document.getElementById('tm-count').textContent = total + ' team members \u00B7 ' + roles.length + ' roles';
+    document.getElementById('tm-searchbox').style.display = total > 10 ? '' : 'none';
+    const q = tmQuery.toLowerCase();
+    let shown = roles;
+    if (q) shown = roles.filter(([role, names]) =>
+      role.toLowerCase().includes(q) || names.some(n => n.toLowerCase().includes(q)));
+    if (!shown.length) {
+      grid.innerHTML = '<div class="tm-empty">No one matches "' + tmQuery + '". Check the spelling or try the last name.</div>';
+      return;
+    }
+    grid.innerHTML = shown.map(([role, names]) => {
+      const hasMatch = q && names.some(n => n.toLowerCase().includes(q));
+      const open = tmOpen.has(tmSel + ':' + role) || (hasMatch && names.length > 3);
+      const list = open ? names : names.slice(0, 3);
+      const extra = names.length - 3;
+      const wide = open && names.length > 8;
+      const chip = names.length > 3
+        ? '<button class="od3-more" data-tmrole="' + role + '">' + (open ? 'Show less' : '+' + extra + ' Show more') + '</button>'
+        : '';
+      return '<div class="od3-role' + (wide ? ' tm-wide' : '') + '">'
+        + '<div class="r">' + tmHl(role) + '</div>'
+        + '<div class="n' + (wide ? ' exp' : '') + '">' + list.map(n => '<div>' + tmHl(n) + '</div>').join('') + '</div>'
+        + chip + '</div>';
+    }).join('');
+  }
+  document.getElementById('tm-grid').addEventListener('click', e => {
+    const btn = e.target.closest('.od3-more');
+    if (!btn) return;
+    const key = tmSel + ':' + btn.dataset.tmrole;
+    if (tmOpen.has(key)) tmOpen.delete(key); else tmOpen.add(key);
+    tmRender();
+  });
+  // Edge case preview unlock: press H five times while viewing BR-L1587
+  let tmEdgeCount = 0;
+  document.addEventListener('keydown', e => {
+    if (e.target.closest('input, textarea')) return;
+    if (e.key.toLowerCase() === 'h') {
+      if (wsScreen.dataset.code !== 'BR-L1587') { tmEdgeCount = 0; return; }
+      tmEdgeCount++;
+      if (tmEdgeCount >= 5) document.getElementById('tm-edge').classList.add('show');
+    } else {
+      tmEdgeCount = 0;
+    }
+  });
+  document.getElementById('tm-edge').addEventListener('click', e => {
+    const chip = e.target.closest('.tm-chip');
+    if (!chip) return;
+    tmSel = chip.dataset.tmset;
+    tmQuery = ''; tmOpen = new Set();
+    document.getElementById('tm-search').value = '';
+    document.getElementById('tm-search-clear').style.display = 'none';
+    document.querySelectorAll('#tm-edge .tm-chip').forEach(c => c.classList.toggle('on', c === chip));
+    tmRender();
+  });
+  (function () {
+    const inp = document.getElementById('tm-search');
+    const clr = document.getElementById('tm-search-clear');
+    let t = null;
+    inp.addEventListener('input', () => {
+      clearTimeout(t);
+      t = setTimeout(() => {
+        tmQuery = inp.value.trim();
+        clr.style.display = tmQuery ? '' : 'none';
+        tmRender();
+      }, 150);
+    });
+    clr.addEventListener('click', () => {
+      inp.value = ''; tmQuery = ''; clr.style.display = 'none'; tmRender(); inp.focus();
+    });
+  })();
+  tmRender();
 
   // ===== Operation search dialog (pin from empty state) =====
   const osd = document.getElementById('osd');
