@@ -591,6 +591,21 @@
 
   /* ============ Pinned operations ============ */
   .carousel-wrap{position:relative;min-width:0;}
+  #pin-carousel{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(261px,1fr));
+    gap:32px;overflow:visible;scroll-behavior:auto;
+  }
+  #pin-carousel .op-card{width:auto;flex:none;}
+  /* Hybrid (flag pinCarouselHybrid): collapsed state renders as a carousel */
+  #pin-carousel.cmode{display:flex;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;padding:12px 6px;margin:-12px -6px;}
+  #pin-carousel.cmode::-webkit-scrollbar{display:none;}
+  #pin-carousel.cmode .op-card{flex:0 0 261px;width:261px;}
+  #pin-nav{align-items:center;}
+  #pin-nav .view-all{margin-left:8px;}
+  #pin-viewall .msr{font-size:18px;transition:transform .15s ease;}
+  #pin-viewall.open .msr{transform:rotate(180deg);}
+  #pin-viewall:hover{text-decoration:none;}
+  #pin-viewall:hover .lbl{text-decoration:underline;}
   .carousel{
     display:flex;gap:32px;
     overflow-x:auto;scroll-behavior:smooth;
@@ -1796,8 +1811,9 @@
       <div class="section-head">
         <div class="left"><h2>Pinned operations</h2><span class="badge" id="pinned-count">12</span></div>
         <div class="carousel-nav" id="pin-nav">
-          <button class="icon-btn outlined" id="pin-prev" aria-label="Scroll left" disabled><span class="msr">chevron_left</span></button>
-          <button class="icon-btn outlined" id="pin-next" aria-label="Scroll right"><span class="msr">chevron_right</span></button>
+          <button class="icon-btn outlined" id="pin-prev" aria-label="Scroll pinned operations left" style="display:none;"><span class="msr">chevron_left</span></button>
+          <button class="icon-btn outlined" id="pin-next" aria-label="Scroll pinned operations right" style="display:none;"><span class="msr">chevron_right</span></button>
+          <button class="view-all" id="pin-viewall" style="display:none;"><span class="lbl">View all</span> <span class="msr">expand_more</span></button>
         </div>
       </div>
       <div class="carousel-wrap" id="pin-carousel-wrap">
@@ -2409,7 +2425,7 @@
             <span class="lb">Edge case preview</span>
             <button class="tm-chip on" data-tmset="default">Default team</button>
             <button class="tm-chip" data-tmset="co">CO-L1269 &middot; 46 members</button>
-            <button class="tm-chip" data-tmset="gy">GY-G1007 &middot; 15 roles</button>
+            <button class="tm-chip" data-tmset="gy">GY-G1007 &middot; 15 roles &middot; 22 members</button>
             <button class="tm-chip" data-tmset="rg">RG-T3556 &middot; 84 members (TC)</button>
           </div>
           <div class="od3-teams">
@@ -2830,8 +2846,10 @@
       const btn = card.querySelector('.pin-btn');
       btn.classList.toggle('pinned', pinned);
       btn.setAttribute('aria-label', pinned ? 'Unpin' : 'Pin');
+      card.dataset.unpinned = pinned ? '' : '1';
       card.style.display = pinned ? '' : 'none';
     });
+    if (typeof updatePinGrid === 'function') updatePinGrid();
     const badge = document.getElementById('pinned-count');
     if (badge) badge.textContent = pinnedOps.size;
     const empty = pinnedOps.size === 0;
@@ -4167,19 +4185,19 @@
     ]},
     gy: { roles: [
       ['Team Leader', tmNames(1, 13)],
-      ['Alternate Team Leader', tmNames(1, 14)],
-      ['Fiduciary Financial Management Specialist', tmNames(2, 15)],
+      ['Alternate Team Leader', tmNames(3, 14)],
+      ['Fiduciary Financial Management Specialist', tmNames(1, 15)],
       ['Procurement Fiduciary Specialist', tmNames(1, 16)],
       ['Attorney', tmNames(1, 17)],
-      ['Fiduciary Tasks Support', tmNames(1, 18)],
-      ['Sector Specialist', tmNames(2, 19)],
-      ['ESG Specialist', tmNames(1, 20)],
-      ['Climate Change Specialist', tmNames(1, 21)],
-      ['Gender and Diversity Specialist', tmNames(1, 22)],
-      ['Communications Specialist', tmNames(1, 23)],
-      ['Evaluation Economist', tmNames(1, 24)],
-      ['Operational Analyst', tmNames(2, 25)],
-      ['Team Member', tmNames(3, 26)],
+      ['Alternate Attorney', tmNames(1, 18)],
+      ['Fiduciary Tasks Support', tmNames(1, 19)],
+      ['ESG Primary Team Member', tmNames(1, 20)],
+      ['ESG Team Member', tmNames(2, 21)],
+      ['GCM PSG Coordinator', tmNames(2, 22)],
+      ['PTR PSG Coordinator', tmNames(1, 23)],
+      ['Project Procurement Committee', tmNames(1, 24)],
+      ['Operational Analyst', tmNames(3, 25)],
+      ['Team Member', tmNames(2, 26)],
       ['Project Assistant', tmNames(1, 27)]
     ]},
     rg: { roles: [
@@ -4509,7 +4527,7 @@
   // ===== Feature flags =====
   // false = feature not launched: elements with data-flag are hidden, elements with data-flag-off are shown.
   // Toggle from the browser console: OPO_FLAGS.set('upcomingPending', true)
-  const FLAGS = { upcomingPending: false, executingAgencyTeam: false };
+  const FLAGS = { upcomingPending: false, executingAgencyTeam: false, pinCarouselHybrid: false };
   function applyFlags() {
     document.querySelectorAll('[data-flag]').forEach(el => {
       el.style.display = FLAGS[el.dataset.flag] ? '' : 'none';
@@ -4517,6 +4535,7 @@
     document.querySelectorAll('[data-flag-off]').forEach(el => {
       el.style.display = FLAGS[el.dataset.flagOff] ? 'none' : '';
     });
+    if (typeof updatePinGrid === 'function') updatePinGrid();
   }
   window.OPO_FLAGS = {
     list: () => ({ ...FLAGS }),
@@ -4548,17 +4567,75 @@
   document.getElementById('upcoming-prev').addEventListener('click', () => { upIdx = (upIdx+4)%5; renderUpcoming(); });
   document.getElementById('upcoming-next').addEventListener('click', () => { upIdx = (upIdx+1)%5; renderUpcoming(); });
 
-  // ===== Pinned carousel =====
-  const carousel = document.getElementById('pin-carousel');
-  const prevBtn = document.getElementById('pin-prev');
-  const nextBtn = document.getElementById('pin-next');
-  const step = 285; // card width + gap
-  prevBtn.addEventListener('click', () => carousel.scrollBy({left:-step*2}));
-  nextBtn.addEventListener('click', () => carousel.scrollBy({left:step*2}));
-  carousel.addEventListener('scroll', () => {
-    prevBtn.disabled = carousel.scrollLeft <= 2;
-    nextBtn.disabled = carousel.scrollLeft >= carousel.scrollWidth - carousel.clientWidth - 2;
+  // ===== Pinned operations: two variants behind flag pinCarouselHybrid =====
+  // flag ON  (hybrid): collapsed = carousel with arrows, expanded = full grid. Never both at once.
+  // flag OFF (grid only): collapsed = first grid row, View all (N) expands inline.
+  var pinExpanded = false;
+  function updatePinArrows() {
+    const grid = document.getElementById('pin-carousel');
+    const prev = document.getElementById('pin-prev');
+    const next = document.getElementById('pin-next');
+    const over = grid.scrollWidth > grid.clientWidth + 4;
+    const show = FLAGS.pinCarouselHybrid && !pinExpanded && over;
+    prev.style.display = next.style.display = show ? '' : 'none';
+    if (show) {
+      prev.disabled = grid.scrollLeft <= 2;
+      next.disabled = grid.scrollLeft >= grid.scrollWidth - grid.clientWidth - 2;
+    }
+  }
+  function updatePinGrid() {
+    const grid = document.getElementById('pin-carousel');
+    const btn = document.getElementById('pin-viewall');
+    const cards = [...grid.querySelectorAll('.op-card')];
+    // unpinned cards stay hidden; pinned ones start visible for measurement
+    cards.forEach(c => c.style.display = c.dataset.unpinned === '1' ? 'none' : '');
+    const visible = cards.filter(c => c.dataset.unpinned !== '1');
+    grid.classList.toggle('cmode', FLAGS.pinCarouselHybrid && !pinExpanded);
+    if (!visible.length) { btn.style.display = 'none'; updatePinArrows(); return; }
+    if (FLAGS.pinCarouselHybrid) {
+      if (pinExpanded) {
+        btn.style.display = '';
+        btn.innerHTML = '<span class="lbl">View less</span> <span class="msr">expand_more</span>';
+        btn.classList.add('open');
+      } else {
+        const over = grid.scrollWidth > grid.clientWidth + 4;
+        btn.style.display = over ? '' : 'none';
+        btn.innerHTML = '<span class="lbl">View all (' + visible.length + ')</span> <span class="msr">expand_more</span>';
+        btn.classList.remove('open');
+      }
+      updatePinArrows();
+      return;
+    }
+    const firstTop = visible[0].offsetTop;
+    const overflow = visible.filter(c => c.offsetTop > firstTop);
+    if (!overflow.length) { btn.style.display = 'none'; pinExpanded = false; updatePinArrows(); return; }
+    btn.style.display = '';
+    if (pinExpanded) {
+      btn.innerHTML = '<span class="lbl">View less</span> <span class="msr">expand_more</span>';
+      btn.classList.add('open');
+    } else {
+      overflow.forEach(c => c.style.display = 'none');
+      btn.innerHTML = '<span class="lbl">View all (' + overflow.length + ')</span> <span class="msr">expand_more</span>';
+      btn.classList.remove('open');
+    }
+    updatePinArrows();
+  }
+  document.getElementById('pin-viewall').addEventListener('click', () => {
+    pinExpanded = !pinExpanded;
+    updatePinGrid();
+    if (!pinExpanded) { document.getElementById('pin-carousel').scrollLeft = 0; updatePinArrows(); }
   });
+  const pinScrollStep = () => {
+    const grid = document.getElementById('pin-carousel');
+    return Math.max(293, grid.clientWidth - 293);
+  };
+  document.getElementById('pin-prev').addEventListener('click', () =>
+    document.getElementById('pin-carousel').scrollBy({ left: -pinScrollStep(), behavior: 'smooth' }));
+  document.getElementById('pin-next').addEventListener('click', () =>
+    document.getElementById('pin-carousel').scrollBy({ left: pinScrollStep(), behavior: 'smooth' }));
+  document.getElementById('pin-carousel').addEventListener('scroll', () => updatePinArrows());
+  window.addEventListener('resize', () => updatePinGrid());
+  updatePinGrid();
 
   // initial route: runs last so every module's state is ready
 
