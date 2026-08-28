@@ -1313,10 +1313,154 @@
   .st.phase .chipx{background:transparent;color:#272626;}
   .st.phase .chipx .msr{font-size:16px;color:var(--icon-default);}
 
+  /* One continuous lifecycle timeline */
+  .ws-sec-title .ctrl{align-items:center;}
+  .lc-titlegrp{display:flex;align-items:baseline;gap:12px;min-width:0;}
+  .lc-sum{font-size:12px;line-height:16px;color:#5C5A5A;white-space:nowrap;}
+  .lc-drag-hint{display:inline-flex;align-items:center;gap:5px;margin-right:2px;font-size:11px;color:#67676A;white-space:nowrap;}
+  .lc-drag-hint .msr{font-size:15px;}
+  .lc-shell.enhanced{margin-top:10px;border:1px solid #DEDEDF;border-radius:9px;background:#FFFFFF;overflow:hidden;}
+  .lct{display:flex;align-items:stretch;min-width:max-content;padding:0;}
+  .lc-band{position:relative;flex:0 0 auto;padding:13px 0 18px;background:#FFFFFF;}
+  .lc-band + .lc-band{border-left:1px solid #EEEDED;}
+  .lc-band.active{background:#FBFDFB;}
+  .lc-band .bh{position:sticky;left:12px;z-index:2;width:max-content;display:flex;align-items:center;gap:6px;margin:0 13px 12px;padding:3px 7px 3px 5px;border-radius:5px;background:rgba(255,255,255,.94);font-size:10px;line-height:14px;font-weight:700;letter-spacing:.35px;text-transform:uppercase;color:#67676A;}
+  .lc-band.active .bh{color:#00693D;background:#EDF8F2;}
+  .lc-band .bh svg{width:14px;height:14px;display:block;color:currentColor;flex:0 0 auto;}
+  .lc-band .bh .cnt{font-weight:600;color:#8A8888;text-transform:none;letter-spacing:0;}
+  .lc-band.active .bh .cnt{color:#3E8A66;}
+  .lc-brow{display:flex;align-items:flex-start;min-width:max-content;}
+  .lcn{position:relative;display:flex;flex-direction:column;align-items:center;min-width:170px;max-width:190px;border-radius:8px;outline:none;scroll-snap-align:center;transition:transform .26s cubic-bezier(0.33,0,0.15,1);}
+  .lcn:focus-visible{box-shadow:0 0 0 2px #007EB6;}
+  .lcn .trk{display:flex;align-items:center;width:100%;height:22px;}
+  .lcn .trk .sg{flex:1;height:3px;background:#DADADB;}
+  .lcn .trk .sg.on{background:#00854D;}
+  .lcn .trk .sg.hide{background:transparent;}
+  .lcn .dot{width:20px;height:20px;border-radius:50%;flex:0 0 auto;margin:0 3px;display:flex;align-items:center;justify-content:center;box-sizing:border-box;background:#FFFFFF;transition:transform .16s ease,box-shadow .18s ease;}
+  .lcn.done .dot{background:#00854D;}
+  .lcn.done .dot .msr{font-size:13px;color:#FFFFFF;font-weight:700;}
+  .lcn.current .dot{border:2px solid #00854D;box-shadow:0 0 0 4px rgba(0,133,77,.13);animation:lc-pulse 2.4s ease-in-out infinite;}
+  .lcn.current .dot::after{content:"";width:8px;height:8px;border-radius:50%;background:#00854D;}
+  .lcn.todo .dot{border:2px solid #C7C7C9;}
+  .lcn .lb{margin-top:9px;font-size:12px;line-height:17px;font-weight:650;color:#272626;text-align:center;padding:0 7px;max-width:100%;transition:color .16s ease;}
+  .lcn.todo .lb{color:#67676A;font-weight:500;}
+  .lcn .sub{font-size:10px;line-height:14px;color:#8A8888;margin-top:2px;white-space:nowrap;}
+  .lcn .sub.est{font-style:italic;}
+  /* contract milestone between stages (e.g. CED): diamond marker, quieter than a stage node */
+  .lcm{position:relative;display:flex;flex-direction:column;align-items:center;min-width:118px;max-width:132px;border-radius:8px;outline:none;scroll-snap-align:center;}
+  .lcm .trk{display:flex;align-items:center;width:100%;height:22px;}
+  .lcm .trk .sg{flex:1;height:3px;background:#DADADB;}
+  .lcm .trk .sg.on{background:#00854D;}
+  .lcm .mk{width:12px;height:12px;flex:0 0 auto;margin:0 4px;background:#FFFFFF;border:2px solid #C7C7C9;transform:rotate(45deg);border-radius:3px;box-sizing:border-box;}
+  .lcm.done .mk{background:#00854D;border-color:#00854D;}
+  .lcm .lb{margin-top:12px;font-size:11px;line-height:15px;font-weight:650;color:#5C5A5A;text-align:center;}
+  .lcm .sub{font-size:10px;line-height:14px;color:#8A8888;margin-top:2px;white-space:nowrap;font-style:italic;}
+  .lcn.current .pill{margin-top:7px;display:inline-flex;flex-direction:column;align-items:center;gap:1px;background:#FFFFFF;border:1.5px solid #00854D;border-radius:8px;padding:5px 12px 6px;box-shadow:0 2px 7px rgba(0,105,61,.14);transition:transform .16s ease,box-shadow .16s ease;}
+  .lcn.current .pill .lb2{font-size:12px;line-height:17px;font-weight:700;color:#272626;white-space:nowrap;}
+  .lcn.current .pill .dt2{font-size:10px;line-height:14px;font-weight:700;color:#00693D;text-transform:uppercase;letter-spacing:.3px;}
+  /* dock-style hover: the hover target (.lcn) never moves, so the hitbox stays under the cursor
+     (a transform on the hovered element itself makes hover flicker at its edges);
+     only the visual pieces lift: dot, labels and pill. The line needs no counter-transform. */
+  .lcn .lb,.lcn .sub{transition:transform .26s cubic-bezier(0.33,0,0.15,1),color .16s ease;}
+  .lcn:hover .dot{transform:translateY(-4px) scale(1.18);transition:transform .32s cubic-bezier(0.34,1.56,0.64,1),box-shadow .18s ease;}
+  .lcn:hover .lb,.lcn:hover .sub{transform:translateY(-4px);transition:transform .32s cubic-bezier(0.34,1.56,0.64,1),color .16s ease;}
+  .lcn.current:hover .pill{transform:translateY(-4px);transition:transform .32s cubic-bezier(0.34,1.56,0.64,1),box-shadow .16s ease;}
+  /* secondary layer: elevation shadow instead of a flat color swap */
+  .lcn.done:hover .dot{box-shadow:0 5px 12px rgba(0,105,61,0.30);}
+  .lcn.todo:hover .dot{box-shadow:0 4px 10px rgba(0,0,0,0.14);}
+  .lcn:hover .lb{color:#0F0E0E;}
+  .lcn.todo:hover .lb{color:#43424B;}
+  .lcn.current:hover .pill{box-shadow:0 6px 14px rgba(0,105,61,.20);}
+  .ws-stages.bare{border:0;background:transparent;padding:0;margin-top:0;border-radius:0;scroll-snap-type:x proximity;overscroll-behavior-inline:contain;touch-action:pan-x;--fadeL:0px;--fadeR:0px;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 var(--fadeL),#000 calc(100% - var(--fadeR)),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 var(--fadeL),#000 calc(100% - var(--fadeR)),transparent 100%);}
+  .ws-stages.can-drag{cursor:grab;}
+  .ws-stages.dragging{cursor:grabbing;user-select:none;scroll-snap-type:none;}
+  .ws-stages.dragging .lcn{pointer-events:none;}
+  .lct.entering{animation:lc-in .18s ease-out;}
+  @keyframes lc-in{from{opacity:.25;transform:translateY(3px);}to{opacity:1;transform:none;}}
+  @keyframes lc-pulse{0%,100%{box-shadow:0 0 0 4px rgba(0,133,77,.12);}50%{box-shadow:0 0 0 6px rgba(0,133,77,.06);}}
+  #ws-st-prev:disabled,#ws-st-next:disabled{opacity:.38;cursor:default;background:#FFFFFF;}
+  @media (prefers-reduced-motion:reduce){.lct.entering,.lcn.current .dot{animation:none;}.lcn,.lcn .dot,.lcn .pill,.lcn .lb,.lcn .sub{transition:none;}.lcn:hover .dot,.lcn:hover .lb,.lcn:hover .sub,.lcn.current:hover .pill{transform:none;}}
+
+  /* ===== Home loading state preview (press L five times on Home) ===== */
+  #screen-home.skel > .section{display:none;}
+  /* same vertical rhythm as .main (40px between sections) so toggling causes no jump */
+  #screen-home.skel #home-skel{display:flex;flex-direction:column;gap:56px;}
+  #home-skel{display:none;}
+  .bone{
+    background:linear-gradient(90deg,#ECECEE 25%,#F6F6F7 37%,#ECECEE 63%);
+    background-size:400% 100%;
+    animation:skel-sweep 1.6s ease infinite;
+    border-radius:4px;
+  }
+  @keyframes skel-sweep{0%{background-position:100% 0;}100%{background-position:0% 0;}}
+  @media (prefers-reduced-motion:reduce){.bone{animation:none;background:#ECECEE;}}
+  /* geometry mirrors the loaded components: same paddings, gaps and fixed card width */
+  .skel-upcoming{border:1px solid #E3E1E1;border-radius:8px;background:#FFFFFF;min-height:207px;box-sizing:border-box;padding:24px;display:flex;align-items:center;justify-content:space-between;gap:24px;}
+  .skel-upcoming .tx{flex:1;display:flex;flex-direction:column;gap:10px;}
+  .skel-cards{display:flex;gap:32px;overflow:hidden;}
+  .skel-card{flex:0 0 261px;width:261px;height:168px;box-sizing:border-box;border:1px solid var(--border-default);border-radius:8px;background:#FFFFFF;padding:16px 20px;display:flex;flex-direction:column;gap:12px;}
+  .skel-card .bone:last-child{margin-top:auto;}
+  .skel-card .top{display:flex;justify-content:space-between;align-items:flex-start;}
+  .skel-rows{border:1px solid var(--color-outline-variant);border-radius:8px;background:#FFFFFF;overflow:hidden;}
+  .skel-row{display:flex;align-items:center;gap:16px;padding:16px 20px;border-bottom:1px solid var(--color-outline-variant);}
+  .skel-row:last-child{border-bottom:none;}
+  .skel-row .tx{flex:1;display:flex;flex-direction:column;gap:8px;}
+
   /* AI summary */
   .ws-ai{display:flex;gap:24px;align-items:flex-start;margin-top:10px;}
   .ws-ai p{font-size:16px;line-height:28px;color:#272626;flex:1;}
   @media (min-width:1920px){ .ws-ai p{max-width:1156px;} }
+  /* inline source references and inferred text (OP-1275) */
+  sup.ai-ref{
+    font-size:11px;line-height:1;font-weight:600;color:var(--link-default);
+    vertical-align:super;margin-left:1px;cursor:default;white-space:nowrap;
+  }
+  .ai-inf{
+    text-decoration:underline dotted;text-decoration-color:#9A9898;
+    text-underline-offset:4px;text-decoration-thickness:1px;cursor:default;
+  }
+  .ws-ai p.clamp{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;}
+  .ai-more{
+    display:inline-flex;margin-top:8px;padding:0;border:none;background:none;
+    font-family:var(--font-ui);font-size:13px;line-height:18px;font-weight:600;
+    color:var(--link-default);cursor:pointer;
+  }
+  .ai-more:hover{text-decoration:underline;color:#004575;}
+  .ai-sep{height:1px;background:var(--border-default);margin-top:16px;}
+  .ws-ai-foot{margin-top:12px;}
+  .ai-srcwrap{margin-top:12px;}
+  .ai-srcbtn{
+    display:inline-flex;align-items:center;gap:4px;height:28px;padding:0 12px;
+    border-radius:100px;border:1px solid var(--color-outline-variant);background:var(--color-surface);
+    font-family:var(--font-ui);font-size:12px;font-weight:600;color:#272626;cursor:pointer;
+  }
+  .ai-srcbtn:hover{background:var(--color-surface-cont-lowest);}
+  .ai-srcbtn .msr{font-size:16px;color:var(--icon-default);transition:transform .15s ease;}
+  .ai-srcbtn.open .msr{transform:rotate(180deg);}
+  .ai-srclist{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+  .ai-srclist .row{display:flex;gap:10px;font-size:13px;line-height:18px;color:#272626;}
+  .ai-srclist .n{font-weight:600;color:var(--link-default);flex:0 0 auto;}
+  .ai-srclist .d{color:#8A8888;}
+  /* negative feedback dialog */
+  .aifb-scrim{position:fixed;inset:0;background:rgba(20,20,20,0.45);z-index:960;display:none;}
+  .aifb{
+    position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:961;display:none;
+    width:520px;max-width:92vw;background:#FFFFFF;border-radius:16px;padding:28px 28px 24px;
+    box-shadow:0 12px 40px rgba(0,0,0,0.22);
+  }
+  .aifb.open,.aifb-scrim.open{display:block;}
+  .aifb h3{font-size:18px;line-height:24px;font-weight:700;color:#272626;margin-bottom:16px;}
+  .aifb-lbl{display:block;font-size:13px;line-height:18px;font-weight:600;color:#272626;margin:14px 0 6px;}
+  .aifb select,.aifb textarea{
+    width:100%;border:1px solid var(--color-outline-variant);border-radius:8px;
+    font-family:var(--font-ui);font-size:13px;color:#272626;background:#FFFFFF;
+    padding:9px 12px;outline:none;resize:vertical;
+  }
+  .aifb select:focus,.aifb textarea:focus{border-color:#00629D;}
+  .aifb textarea::placeholder{color:#8A8A8D;}
+  .aifb-note{font-size:12px;line-height:17px;color:#8A8888;margin-top:12px;}
+  .aifb-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px;}
+  .aifb-actions .btn-filled{height:32px;padding:0 18px;font-size:13px;}
   .ws-ai .btn-filled{flex:0 0 auto;height:32px;padding:0 18px;font-size:13px;}
   .ai-skel{display:flex;flex-direction:column;justify-content:center;gap:12px;padding:6px 0;min-height:98px;}
   .ai-skel .bar{
@@ -1372,11 +1516,12 @@
   .ws-fin .hrow .lbl{font-size:14px;font-weight:600;color:#272626;}
   .ws-fin .hrow .big{font-family:var(--font-mono);font-size:20px;font-weight:700;color:#272626;margin-top:6px;}
   .ws-fin .hrow .right{text-align:right;}
+  #ws-fin-pct{color:#004F26;} /* success/30: deep financial green */
   .ws-fin .bar-labels{display:flex;justify-content:space-between;margin-top:20px;font-size:12px;}
   .ws-fin .bar-labels .l{color:#5C5A5A;}
   .ws-fin .bar-labels .v{font-family:var(--font-mono);font-weight:600;color:#272626;margin-left:8px;}
   .ws-fin .track{height:12px;border-radius:6px;background:#E7E7E9;overflow:hidden;margin-top:8px;display:flex;}
-  .ws-fin .track .fill{background:#00854D;border-radius:6px 0 0 6px;}
+  .ws-fin .track .fill{background:#004F26;border-radius:6px 0 0 6px;} /* success/30: deep financial green */
   .ws-fin .bdown{display:flex;gap:24px;margin-top:20px;}
   .ws-fin .bd{flex:1;border-left:1px solid var(--border-default);padding-left:24px;}
   .ws-fin .bd:first-child{border-left:none;padding-left:0;}
@@ -1400,9 +1545,9 @@
   .ws-contracts .kv .v{font-family:var(--font-mono);font-size:13px;font-weight:600;color:#272626;}
   .ws-donut{width:92px;height:92px;border-radius:50%;flex:0 0 auto;
     display:flex;align-items:center;justify-content:center;
-    background:conic-gradient(#00854D 0 90.53%, #E7E7E9 90.53% 100%);position:relative;}
+    background:conic-gradient(#004F26 0 90.53%, #E7E7E9 90.53% 100%);position:relative;}
   .ws-donut::before{content:'';position:absolute;inset:10px;background:var(--color-surface);border-radius:50%;}
-  .ws-donut span{position:relative;font-family:var(--font-mono);font-size:14px;font-weight:700;color:#00854D;}
+  .ws-donut span{position:relative;font-family:var(--font-mono);font-size:14px;font-weight:700;color:#004F26;}
 
   /* Quick access */
   .ws-qa{display:flex;gap:24px;margin-top:10px;}
@@ -1457,10 +1602,11 @@
   .od-updated b{font-weight:600;color:#272626;}
 
   /* ============ Rich tooltip (field name + value) ============ */
-  #richtip{position:fixed;z-index:9000;background:#1F1E1E;border-radius:8px;padding:10px 14px;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity 0.12s ease,transform 0.12s ease;max-width:320px;box-shadow:0 6px 20px rgba(0,0,0,0.25);}
+  #richtip{position:fixed;z-index:9000;background:#1F1E1E;border:1px solid #3B3939;border-radius:8px;padding:11px 14px 12px;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity 0.12s ease,transform 0.12s ease;max-width:320px;box-shadow:0 8px 24px rgba(0,0,0,0.24);}
   #richtip.show{opacity:1;transform:none;}
   #richtip .h{font-size:11px;line-height:16px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;color:#fff;white-space:nowrap;}
-  #richtip .b{font-size:13px;line-height:18px;color:#fff;font-weight:400;margin-top:2px;}
+  #richtip .m{font-size:11px;line-height:16px;color:#AEE2C8;font-weight:600;margin-top:2px;}
+  #richtip .b{font-size:13px;line-height:18px;color:#fff;font-weight:400;margin-top:5px;}
   [data-t2h]{cursor:default;}
 
   /* ============ Activity Feed ============ */
@@ -1612,7 +1758,7 @@
   .od3-org > .l{font-size:11px;line-height:16px;color:#5C5A5A;}
   .od3-orgrow{display:flex;align-items:center;gap:8px;font-size:12px;line-height:16px;color:#272626;}
   .od3-orgrow .od3-tag{color:#272626;}
-  .od3-contracts{display:flex;flex-direction:row;align-items:center;gap:16px;}
+  .od3-contracts{display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;gap:8px 16px;}
   .od3-contracts .contract{font-size:12px;font-weight:600;color:var(--link-default);text-decoration:underline;cursor:pointer;}
   .od3-plus{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#F3F3F3;font-size:10px;font-weight:600;color:#272626;border:0;font-family:inherit;padding:0;}
   .od3-plus.clickable{cursor:pointer;}
@@ -1648,6 +1794,11 @@
   .od3-co-row .od3-tag{width:50px;padding:0;flex:0 0 auto;}
   .od3-co-row .flag{font-size:15px;line-height:1;}
   .od3-teamsec{margin-top:0;padding-top:0;}
+  /* Responsibility units: uniform Key Facts kv grid (3 cols x 2 rows), no chips */
+  .ru-card{margin-bottom:32px;}
+  .ru-sub{font-size:12px;line-height:17px;color:#5C5A5A;margin-top:4px;}
+  .ru-list{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px 32px;padding-top:24px;}
+  @media (max-width:1100px){.ru-list{grid-template-columns:1fr 1fr;}}
   .od3-teams{display:flex;gap:32px;align-items:stretch;}
   .od3-teamcard{flex:1;min-width:0;}
   .od3-teamhead{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
@@ -1677,8 +1828,47 @@
     color:var(--link-default);cursor:pointer;
   }
   .od3-more:hover{text-decoration:underline;color:#004575;}
+  /* inside running text (Objective) the link is plain inline: the inline-flex + margin-top of the
+     generic .od3-more inflated the last line's spacing */
+  .od3-objtext .od3-more{display:inline;margin-top:0;font-size:14px;line-height:20px;text-decoration:underline;}
   mark.tm-hl{background:#FFE58F;border-radius:2px;padding:0 1px;color:inherit;}
   .tm-empty{grid-column:1 / -1;padding:24px 0;font-size:14px;color:#5C5A5A;}
+  /* ===== Team table v2 (flag teamTableV2): accordion groups, avatars, copy ===== */
+  /* nested container: the table floats inside the card with its own border, instead of bleeding edge to edge */
+  /* option A: one card per role, collapsible header, air between groups */
+  .tmt{margin-top:16px;display:flex;flex-direction:column;gap:12px;}
+  .tmc{border:1px solid #E7E6E8;border-radius:8px;background:#FFFFFF;overflow:hidden;}
+  .tmc-h{
+    display:flex;align-items:center;gap:10px;width:100%;
+    padding:12px 18px;background:#F3F3F3;
+    border:none;font-family:var(--font-ui);text-align:left;cursor:pointer;
+  }
+  .tmc-h:hover{background:#EDEDEE;}
+  .tmc-h .car{font-size:18px;color:#5C5A5A;transition:transform .18s ease;}
+  .tmc.open .tmc-h .car{transform:rotate(180deg);}
+  .tmc-h .r{font-size:13px;line-height:18px;font-weight:700;color:#272626;}
+  .tmc-h .c{
+    min-width:22px;height:20px;padding:0 7px;border-radius:100px;
+    background:#E4E4E6;display:inline-flex;align-items:center;justify-content:center;
+    font-size:11px;line-height:16px;font-weight:600;color:#43424B;
+  }
+  /* fixed columns: name block left, Organizational Unit aligned at the midline like the Figma spec */
+  .tmc-row{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center;padding:11px 18px;border-top:1px solid #F3F2F3;}
+  .tmc-row .nmw{display:flex;align-items:center;gap:12px;min-width:0;}
+  .tmt-av{
+    flex:0 0 auto;width:32px;height:32px;border-radius:50%;
+    background:#E3EDF5;color:#00629D;
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:700;letter-spacing:.3px;
+  }
+  .tmc-row .nm{font-size:13px;line-height:18px;color:#272626;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .tmc-row .ou{font-size:12.5px;line-height:18px;color:#5C5A5A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  /* Show more/less inside a role card (8+ people preview 5) */
+  .tmc-more{padding:10px 18px 12px;border-top:1px solid #F3F2F3;}
+  .tmc-more .od3-more{margin-top:0;}
+  /* global safety: icon glyphs never inherit link underlines */
+  button:hover .msr, a:hover .msr{text-decoration:none;}
+  .tmt .tm-empty{padding:24px;}
   .od3-role .r{font-size:13px;line-height:18px;font-weight:700;color:#272626;margin-bottom:8px;}
   .od3-role .n{font-size:13px;line-height:18px;color:#5C5A5A;display:flex;flex-direction:column;gap:4px;}
   .od3-role .n.exp{display:block;}
@@ -1760,7 +1950,7 @@
     <!-- Upcoming & pending (live version, behind feature flag) -->
     <section class="section" data-flag="upcomingPending">
       <div class="section-head">
-        <div class="left"><h2>Upcoming &amp; pending for my operations</h2></div>
+        <div class="left"><h2>What needs your attention</h2></div>
         <div class="pager">
           <button class="icon-btn" id="upcoming-prev" aria-label="Previous"><span class="msr">chevron_left</span></button>
           <span class="count" id="upcoming-count">1/5</span>
@@ -1782,7 +1972,7 @@
     <!-- Upcoming & pending (coming soon ghost, shown while flag is off) -->
     <section class="section" data-flag-off="upcomingPending">
       <div class="section-head">
-        <div class="left"><h2>Upcoming &amp; pending for my operations</h2><span class="chip-soon">Coming soon</span></div>
+        <div class="left"><h2>What needs your attention</h2><span class="chip-soon">Coming soon</span></div>
       </div>
       <div class="upcoming-ghost">
         <div class="ghost-bg" aria-hidden="true">
@@ -1801,7 +1991,7 @@
         <div class="ghost-front">
           <div class="ghost-ic" aria-hidden="true"><span class="msr">hourglass_top</span></div>
           <div class="t">Your priorities, all in one place</div>
-          <div class="s">Soon this space will gather deadlines and pending actions across all your operations.</div>
+          <div class="s">Soon this space will gather deadlines and other important information relevant for you.</div>
         </div>
       </div>
     </section>
@@ -1948,47 +2138,36 @@
       </div>
     </section>
 
-    <!-- My pending approvals -->
-    <section class="section">
-      <div class="section-head">
-        <div class="left"><h2>My pending approvals</h2><span class="badge">27</span></div>
-        <button class="view-all">View all <span class="msr">arrow_forward</span></button>
-      </div>
-      <div class="approvals">
-        <a class="approval-row">
-          <span class="lead-icon"><span class="msr">task</span></span>
-          <span class="texts">
-            <span class="r-title">sgDELTA questionnaire for BR-L1587 pending validation</span>
-            <span class="r-due">Due May 28, 2026</span>
-          </span>
-          <span class="chev"><span class="msr">chevron_right</span></span>
-        </a>
-        <a class="approval-row">
-          <span class="lead-icon"><span class="msr">check_circle</span></span>
-          <span class="texts">
-            <span class="r-title">Review Disbursement request Tranche 3 — CO-L1203 Digital Transformation</span>
-            <span class="r-due">Due May 29, 2026</span>
-          </span>
-          <span class="chev"><span class="msr">chevron_right</span></span>
-        </a>
-        <a class="approval-row">
-          <span class="lead-icon"><span class="msr">check_circle</span></span>
-          <span class="texts">
-            <span class="r-title">Review Disbursement request Tranche 3 — CO-L1203 Digital Transformation</span>
-            <span class="r-due">Due May 29, 2026</span>
-          </span>
-          <span class="chev"><span class="msr">chevron_right</span></span>
-        </a>
-        <a class="approval-row">
-          <span class="lead-icon"><span class="msr">check_circle</span></span>
-          <span class="texts">
-            <span class="r-title">Review Procurement plan Year 3 — EC-L1051 Rural Water Supply</span>
-            <span class="r-due">Due Jun 2, 2026</span>
-          </span>
-          <span class="chev"><span class="msr">chevron_right</span></span>
-        </a>
-      </div>
-    </section>
+
+    <!-- Loading state preview (toggle: press L five times on Home). Skeleton mirrors the loaded layout so nothing jumps. -->
+    <div id="home-skel" aria-hidden="true">
+      <section class="section">
+        <div class="section-head">
+          <div class="left"><h2>What needs your attention</h2></div>
+        </div>
+        <div class="skel-upcoming">
+          <div class="tx">
+            <span style="display:flex;gap:12px;align-items:center;">
+              <span class="bone" style="width:230px;height:20px;"></span>
+              <span class="bone" style="width:104px;height:24px;border-radius:12px;"></span>
+            </span>
+            <span class="bone" style="width:58%;height:15px;"></span>
+          </div>
+          <span class="bone" style="width:122px;height:40px;border-radius:80px;"></span>
+        </div>
+      </section>
+      <section class="section">
+        <div class="section-head">
+          <div class="left"><h2>Pinned operations</h2><span class="bone" style="width:28px;height:20px;border-radius:10px;"></span></div>
+        </div>
+        <div class="skel-cards">
+          <div class="skel-card"><div class="top"><span class="bone" style="width:132px;height:24px;border-radius:12px;"></span><span class="bone" style="width:20px;height:20px;border-radius:50%;"></span></div><div style="display:flex;flex-direction:column;gap:8px;"><span class="bone" style="width:96px;height:22px;"></span><span class="bone" style="width:100%;height:14px;"></span><span class="bone" style="width:92%;height:14px;"></span></div><span class="bone" style="width:96px;height:15px;"></span></div>
+          <div class="skel-card"><div class="top"><span class="bone" style="width:118px;height:24px;border-radius:12px;"></span><span class="bone" style="width:20px;height:20px;border-radius:50%;"></span></div><div style="display:flex;flex-direction:column;gap:8px;"><span class="bone" style="width:96px;height:22px;"></span><span class="bone" style="width:96%;height:14px;"></span><span class="bone" style="width:85%;height:14px;"></span></div><span class="bone" style="width:96px;height:15px;"></span></div>
+          <div class="skel-card"><div class="top"><span class="bone" style="width:132px;height:24px;border-radius:12px;"></span><span class="bone" style="width:20px;height:20px;border-radius:50%;"></span></div><div style="display:flex;flex-direction:column;gap:8px;"><span class="bone" style="width:96px;height:22px;"></span><span class="bone" style="width:100%;height:14px;"></span><span class="bone" style="width:88%;height:14px;"></span></div><span class="bone" style="width:96px;height:15px;"></span></div>
+          <div class="skel-card"><div class="top"><span class="bone" style="width:124px;height:24px;border-radius:12px;"></span><span class="bone" style="width:20px;height:20px;border-radius:50%;"></span></div><div style="display:flex;flex-direction:column;gap:8px;"><span class="bone" style="width:96px;height:22px;"></span><span class="bone" style="width:94%;height:14px;"></span><span class="bone" style="width:90%;height:14px;"></span></div><span class="bone" style="width:96px;height:15px;"></span></div>
+        </div>
+      </section>
+          </div>
   </main>
 
   <!-- ============ Placeholder screens ============ -->
@@ -2154,7 +2333,7 @@
     <div class="avatar" title="Alejandro Romero">AR</div>
   </div>
   <nav class="ws-nav">
-    <button class="ws-back" id="ws-back"><span class="msr">west</span> Go Back</button>
+    <button class="ws-back" id="ws-back"><span class="msr">west</span> <span id="ws-back-lbl">Go Back</span></button>
     <div class="grp">
       <div class="grp-title">Information</div>
       <button class="ws-item active" data-wsview="dashboard"><span class="msr">space_dashboard</span> Dashboard</button>
@@ -2218,28 +2397,57 @@
     </div>
     <div class="ws-wrap">
       <section>
-        <div class="ws-sec-title"><h2 class="ai-h"><span class="msr ai-spark">auto_awesome</span>What You Should Know!</h2></div>
+        <div class="ws-sec-title"><h2 class="ai-h"><span class="msr ai-spark">auto_awesome</span>AI Summary</h2></div>
         <div class="ws-ai">
           <p id="ws-ai-text"></p>
         </div>
+        <button class="ai-more" id="ai-more" style="display:none;">Show more</button>
+        <div class="ai-srcwrap" id="ai-srcwrap" style="display:none;">
+          <button class="ai-srcbtn" id="ai-srcbtn" aria-expanded="false">Sources (<span id="ai-srcn">0</span>) <span class="msr">expand_more</span></button>
+          <div class="ai-srclist" id="ai-srclist" style="display:none;"></div>
+        </div>
+        <div class="ai-sep" id="ai-sep" style="display:none;"></div>
         <div class="ws-ai-foot">
-          <span class="ws-ai-caption">AI summary based on the Activity Feed &middot; Last updated <span id="ws-ai-time">28 Jul 2026, 6:15 AM</span></span>
+          <span class="ws-ai-caption" id="ai-caption">AI Generated. May contain errors.</span>
           <span class="ws-ai-fb" id="ws-ai-fb">
+            <button class="fb-btn" id="ai-copy" data-tip="Copy summary" aria-label="Copy summary"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg></button>
+            <button class="fb-btn" id="ai-regen" data-tip="Regenerate" aria-label="Regenerate summary"><span class="msr">autorenew</span></button>
             <button class="fb-btn" data-fb="up" data-tip="Good Response" aria-label="Good Response"><span class="msr">thumb_up</span></button>
             <button class="fb-btn" data-fb="down" data-tip="Bad Response" aria-label="Bad Response"><span class="msr">thumb_down</span></button>
           </span>
         </div>
+        <div class="aifb-scrim" id="aifb-scrim"></div>
+        <div class="aifb" id="aifb" role="dialog" aria-modal="true" aria-labelledby="aifb-title">
+          <h3 id="aifb-title">Give negative feedback</h3>
+          <label class="aifb-lbl" for="aifb-reason">What type of issue do you wish to report? (optional)</label>
+          <select id="aifb-reason">
+            <option value="">Select...</option>
+            <option>Incorrect</option>
+            <option>Outdated</option>
+            <option>Not relevant</option>
+            <option>Inappropriate</option>
+          </select>
+          <label class="aifb-lbl" for="aifb-details">Please provide details: (optional)</label>
+          <textarea id="aifb-details" rows="4" placeholder="What was unsatisfying about this summary?"></textarea>
+          <p class="aifb-note">Your feedback and this summary will be shared with the portal team to improve AI generated content.</p>
+          <div class="aifb-actions">
+            <button class="ai-retry" id="aifb-cancel">Cancel</button>
+            <button class="btn-filled" id="aifb-submit">Submit</button>
+          </div>
+        </div>
       </section>
       <section>
         <div class="ws-sec-title">
-          <h2>Overall Stages</h2>
+          <div class="lc-titlegrp"><h2>Overall Stages</h2><span class="lc-sum" id="lc-sum"></span></div>
           <div class="ctrl">
             <button class="icon-btn outlined" id="ws-st-prev" aria-label="Scroll stages left"><span class="msr">chevron_left</span></button>
             <button class="icon-btn outlined" id="ws-st-next" aria-label="Scroll stages right"><span class="msr">chevron_right</span></button>
           </div>
         </div>
+        <div class="lc-shell" id="lc-shell">
         <div class="ws-stages" id="ws-stages">
-          <div class="ws-stage-row">
+          <div class="lct" id="lc-track" role="list" style="display:none;"></div>
+          <div class="ws-stage-row" id="ws-stages-legacy">
             <div class="st done"><span class="chipx">POD Approved</span><span class="sub">07 Nov 2025</span></div>
             <div class="st done"><span class="chipx">DLP Approved</span><span class="sub">07 Nov 2025</span></div>
             <div class="st done"><span class="chipx">Negotiation</span><span class="sub">07 Nov 2025</span></div>
@@ -2252,8 +2460,9 @@
             <div class="st todo"><span class="chipx">Closed Pending AFRs</span></div>
           </div>
         </div>
+        </div>
       </section>
-      <section>
+      <section data-flag="finModules">
         <div class="ws-amounts">
           <div class="ws-fin">
             <div class="hrow">
@@ -2306,7 +2515,7 @@
         </div>
       </section>
       <section data-flag-off="upcomingPending">
-        <div class="ws-sec-title" style="justify-content:flex-start;gap:12px;"><h2>Upcoming &amp; pending</h2><span class="chip-soon">Coming soon</span></div>
+        <div class="ws-sec-title" style="justify-content:flex-start;gap:12px;"><h2>What needs your attention</h2><span class="chip-soon">Coming soon</span></div>
         <div class="upcoming-ghost" style="margin-top:12px;">
           <div class="ghost-bg" aria-hidden="true">
             <div class="upcoming-card">
@@ -2337,7 +2546,7 @@
           <span class="od-updated" data-t2h="Data Refresh" data-t2b="Project information is updated from Convergence once a day, so changes will not be instantly reflected in the Operations Portal."><span class="msr">schedule</span>Last updated: <b id="od-updated-at">28 Jul 2026, 6:00 AM</b></span>
         </div>
 
-        <div class="od-reform">
+        <div class="od-reform" data-flag="reformBanner">
           <span class="msr">info</span>
           <div class="rt">This operation and its <b>objectives were reformulated</b> on <b>14 Mar 2026.</b></div>
           <button class="reform-link">Check Objectives <span class="msr">open_in_new</span></button>
@@ -2345,7 +2554,7 @@
 
         <div class="od-tabs">
           <button class="od-tab active" data-odtab="gi">General Information</button>
-          <button class="od-tab" data-odtab="team">Team</button>
+          <button class="od-tab" data-odtab="team">Team &amp; Responsibilities</button>
         </div>
 
         <div id="od-tab-gi">
@@ -2370,6 +2579,7 @@
                   <div class="od3-col">
                     <div class="od3-kv"><span class="l">Current Expiration</span><span class="v" id="od-expiration">05 Jul 2030</span></div>
                     <div class="od3-kv"><span class="l">Pipeline</span><span class="v" id="od-pipeline">2026 / A</span></div>
+                    <div class="od3-kv"><span class="l">Co-Responsible</span><span class="v" id="od-coresp">SCL/GDI – Gender and Diversity</span></div>
                     <div class="od3-kv"><span class="l">Unit of Disbursement Responsibility</span><span class="v" id="od-udr">CSC/CBR – Brazil Country Office</span></div>
                     <div class="od3-kv"><span class="l">Executing agency</span><span class="v" id="od-agency">Ministerio de Desarrollo Social</span></div>
                   </div>
@@ -2428,6 +2638,11 @@
             <button class="tm-chip" data-tmset="gy">GY-G1007 &middot; 15 roles &middot; 22 members</button>
             <button class="tm-chip" data-tmset="rg">RG-T3556 &middot; 84 members (TC)</button>
           </div>
+          <div class="od3-card ru-card">
+            <h3 class="od3-h3">Responsibility units</h3>
+            <div class="ru-sub">Units with assigned responsibilities and contributions to this operation</div>
+            <div class="ru-list" id="ru-list"></div>
+          </div>
           <div class="od3-teams">
             <div class="od3-card od3-teamcard">
               <div class="od3-teamhead">
@@ -2444,6 +2659,7 @@
               </div>
               <div class="tm-divider"></div>
               <div class="od3-teamgrid" id="tm-grid"></div>
+              <div class="tmt" id="tm-table" style="display:none;"></div>
               <div class="od3-teamfoot">
                 <span class="msr">info</span>
                 <span class="tf-txt">Team roles are managed in Convergence.</span>
@@ -3507,9 +3723,13 @@
     document.getElementById('ws-pin').classList.toggle('pinned', pinnedOps.has(code));
     wsScreen.dataset.code = code;
     wsRow = row; wsPhase = phase;
+    // architectural back: label and destination follow the operation's phase hub
+    document.getElementById('ws-back-lbl').textContent =
+      'Back to ' + (phase === 'implementation' ? 'Implementation' : phase === 'closing' ? 'Closing' : 'Preparation');
     renderAiSummary(phase, row);
     document.querySelectorAll('#ws-ai-fb .fb-btn').forEach(b => b.classList.remove('sel'));
     renderFinancial(phase, row);
+    if (typeof lcInit === 'function') lcInit(phase, row);
     setWsView('dashboard');
     wsScreen.classList.add('open');
     document.body.classList.add('no-scroll');
@@ -3605,14 +3825,28 @@
     const orgUnit = isImpl ? row[12] : sector;
     const parts = orgUnit.split(' \u2022 ');
     // responsible unit and UDR
-    document.getElementById('od-responsible').textContent = parts[1]
+    const respText = parts[1]
       ? `${parts[0]}/${parts[1]} \u2013 ${DIV_NAME[parts[0] + ':' + parts[1]] || parts[1]}`
       : `${parts[0]} \u2013 ${SECTOR_NAME[parts[0]] || parts[0]}`;
+    document.getElementById('od-responsible').textContent = respText;
     document.getElementById('od-udr').textContent = `${dept}/C${cc} \u2013 ${country} Country Office`;
+    // co-responsible + participants: deterministic per op, one source for Key Facts and Responsibility units
+    const RU_CO = ['SCL/GDI \u2013 Gender and Diversity', 'CSD/CCS \u2013 Climate Change Solutions Division', 'IFD/ICS \u2013 Innovation in Citizen Services', 'SCL/SPH \u2013 Social Protection and Health'];
+    const RU_PART = ['CSC/CSC \u2013 Southern Cone', 'LEG/LEG \u2013 Legal', 'VPC/FMP \u2013 Ops Fin Mgmt & Procurement Svc', 'ESG/SEN \u2013 Environmental and Social Solutions', 'KIC/KLD \u2013 Knowledge, Innovation and Communication'];
+    const rh = fdHash(row[0]);
+    const coResp = RU_CO[rh % RU_CO.length];
+    document.getElementById('od-coresp').textContent = coResp;
+    const ruParts = [0, 1, 2].map(i => RU_PART[(rh + i * 2) % RU_PART.length]);
+    const ruKv = (label, unit, def) =>
+      '<div class="od3-kv" data-t2h="' + label + '" data-t2b="' + def + '"><span class="l">' + label + '</span><span class="v">' + unit + '</span></div>';
+    document.getElementById('ru-list').innerHTML =
+      ruKv('Responsible', respText, 'Unit accountable for the operation')
+      + ruKv('Co-Responsible', coResp, 'Unit sharing responsibility for the operation')
+      + ruParts.map(u => ruKv('Participant', u, 'Unit contributing to the operation')).join('');
     // contracts: implementation only; preparation ops have no signed contracts yet
     document.getElementById('od-contracts-kv').style.display = isImpl ? '' : 'none';
     wsContracts = isImpl ? row[8] : [];
-    renderContracts(false);
+    renderContracts();
     // borrower
     document.getElementById('od-borrower').textContent = 'Government of ' + country;
     document.getElementById('od-team-borrower').textContent = 'Government of ' + country;
@@ -3634,23 +3868,11 @@
     tmSetLead(lead.includes(',') ? lead.split(',').map(s => s.trim()).reverse().join(' ') : lead);
   }
   let wsContracts = [];
-  function renderContracts(expanded) {
+  function renderContracts() {
+    // all contract IDs visible as links, wrapping to new lines (no +N collapse)
     const holder = document.getElementById('od-contracts');
-    if (!wsContracts.length) { holder.innerHTML = ''; return; }
-    if (expanded) {
-      holder.classList.add('expanded');
-      holder.innerHTML = wsContracts.map(c => `<span class="contract">${c}</span>`).join('') +
-        '<span class="od3-more sm" data-c="less">view less</span>';
-    } else {
-      holder.classList.remove('expanded');
-      holder.innerHTML = `<span class="contract">${wsContracts[0]}</span>` +
-        (wsContracts.length > 1 ? `<button class="od3-plus clickable" title="Show all contracts">+${wsContracts.length - 1}</button>` : '');
-    }
+    holder.innerHTML = wsContracts.map(c => `<span class="contract">${c}</span>`).join('');
   }
-  document.getElementById('od-contracts').addEventListener('click', e => {
-    if (e.target.closest('.od3-plus.clickable')) renderContracts(true);
-    else if (e.target.closest('[data-c="less"]')) renderContracts(false);
-  });
   const OD_OBJ_FULL = document.getElementById('od-objective').textContent.trim();
   const OD_OBJ_CUT = (() => { const i = OD_OBJ_FULL.indexOf(' are: (i)'); return i > 0 ? i : 320; })();
   function renderObjective(expanded) {
@@ -3683,8 +3905,10 @@
   document.getElementById('ws-back').addEventListener('click', () => {
     wsScreen.classList.remove('open');
     document.body.classList.remove('no-scroll');
-    const active = document.querySelector('.nav-item.active');
-    setHash('#/' + (active ? active.dataset.screen : 'home'));
+    // go to the operation's phase hub, not to whatever screen was active before
+    const target = wsPhase === 'implementation' ? 'implementation' : wsPhase === 'closing' ? 'closing' : 'preparation';
+    const nav = document.querySelector('.nav-item[data-screen="' + target + '"]');
+    if (nav) nav.click(); else setHash('#/home');
   });
   document.getElementById('ws-logo-home').addEventListener('click', () => {
     wsScreen.classList.remove('open');
@@ -3701,8 +3925,222 @@
     document.getElementById('ws-pin').classList.toggle('pinned', pinnedOps.has(code));
   });
   // stages strip scroll
-  document.getElementById('ws-st-prev').addEventListener('click', () => document.getElementById('ws-stages').scrollBy({left: -240, behavior: 'smooth'}));
-  document.getElementById('ws-st-next').addEventListener('click', () => document.getElementById('ws-stages').scrollBy({left: 240, behavior: 'smooth'}));
+  const lcScrollBehavior = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+  document.getElementById('ws-st-prev').addEventListener('click', () => document.getElementById('ws-stages').scrollBy({left: -240, behavior: lcScrollBehavior()}));
+  document.getElementById('ws-st-next').addEventListener('click', () => document.getElementById('ws-stages').scrollBy({left: 240, behavior: lcScrollBehavior()}));
+
+  // ===== Overall Stages lifecycle timeline (flag lcTimeline) =====
+  // '@PP' resolves per operation to 'PP Approved' or 'PP Not Required' (mutually exclusive)
+  const LC_STAGES = {
+    preparation: ['Registered','Started','PP Distributed','@PP','QRR Approved','POD Approved','OPC Approved','DLP Approved','Approved'],
+    implementation: ['Pending Signature','Pending Ratification','Pending Eligibility','Disbursing','Fully Disbursed','Fully Justified'],
+    closing: ['Operational Closure','PCR Approved']
+  };
+  const LC_ORDER = ['preparation','implementation','closing'];
+  const LC_META = {
+    preparation: { label: 'Preparation', icon: 'list_alt', hint: 'Design, review and approval' },
+    implementation: { label: 'Implementation', icon: 'rocket_launch', hint: 'Signature, eligibility and disbursement' },
+    closing: { label: 'Closing', icon: 'inventory', hint: 'Operational close and completion report' }
+  };
+  const LC_OPS = {
+    'BR-L1587': { phase: 'preparation', current: 'POD Approved', pp: 'PP Approved' }
+  };
+  let lcOp = null;
+  const lcHash = s => { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; };
+  const lcStagesOf = k => LC_STAGES[k].map(s => s === '@PP' ? lcOp.pp : s);
+  // official phase icons: reuse the exact SVGs from the main navigation (filled variant, same as phase chips)
+  function lcPhaseIcon(k) {
+    const el = document.querySelector('.nav-item[data-screen="' + k + '"] .ic-filled svg');
+    return el ? el.outerHTML : '';
+  }
+  const LC_MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function lcDateObj(doneIdx, doneTotal) {
+    // deterministic per op: completed stages spaced backwards from ~2 weeks ago, varied step per interval
+    const h = lcHash(lcOp.code);
+    const end = new Date(2026, 7, 12 - (h % 10));
+    let t = end.getTime();
+    for (let j = doneTotal - 1; j > doneIdx; j--) t -= (28 + ((h + j * 7) % 38)) * 86400000;
+    return new Date(t);
+  }
+  const lcFmt = d => String(d.getDate()).padStart(2, '0') + ' ' + LC_MON[d.getMonth()] + ' ' + d.getFullYear();
+  function lcDate(doneIdx, doneTotal) { return lcFmt(lcDateObj(doneIdx, doneTotal)); }
+  const LC_TODAY = new Date(2026, 7, 26);
+  const lcDays = ms => Math.max(1, Math.round(ms / 86400000));
+  // Draft stage definitions for tooltips. Placeholder copy: validate with business before production.
+  const LC_DEFS = {
+    'Registered': 'Registration of the operation in the Bank pipeline.',
+    'Started': 'Formal start of preparation work by the project team.',
+    'PP Distributed': 'Distribution of the Project Profile for review.',
+    'PP Approved': 'Approval of the Project Profile.',
+    'PP Not Required': 'A Project Profile is not required for this operation type.',
+    'QRR Approved': 'Approval of the Quality and Risk Review.',
+    'POD Approved': 'Approval of the Proposal for Operation Development.',
+    'OPC Approved': 'Approval by the Operations Policy Committee.',
+    'DLP Approved': 'Approval of the Draft Loan Proposal.',
+    'Approved': 'Approval of the operation by the Board of Executive Directors.',
+    'Pending Signature': 'The loan contract awaits signature by the parties.',
+    'Pending Ratification': 'The signed contract awaits ratification.',
+    'Pending Eligibility': 'The operation awaits eligibility for first disbursement.',
+    'Disbursing': 'Active disbursement of funds to the operation.',
+    'Fully Disbursed': 'All approved funds have been disbursed.',
+    'Fully Justified': 'All disbursements have been justified.',
+    'Operational Closure': 'Formal closure of operational activities.',
+    'PCR Approved': 'Approval of the Project Completion Report.'
+  };
+  function lcRender() {
+    const track = document.getElementById('lc-track');
+    if (!lcOp) { track.innerHTML = ''; return; }
+    const curPhaseR = LC_ORDER.indexOf(lcOp.phase);
+    const curStageI = lcStagesOf(lcOp.phase).indexOf(lcOp.current);
+    const phaseDoneN = k => {
+      const r = LC_ORDER.indexOf(k);
+      return r < curPhaseR ? lcStagesOf(k).length : r > curPhaseR ? 0 : curStageI;
+    };
+    // caption: global lifecycle progress in every view (bands own the per phase counts)
+    const totalAll = LC_ORDER.reduce((a, k) => a + lcStagesOf(k).length, 0);
+    const doneAll = LC_ORDER.reduce((a, k) => a + phaseDoneN(k), 0);
+    const sum = document.getElementById('lc-sum');
+    if (sum) sum.textContent = doneAll === totalAll ? 'Lifecycle completed' : doneAll + ' complete · ' + lcOp.current + ' is current · ' + LC_META[lcOp.phase].label + ' phase';
+    // chronological dates for completed stages across the full lifecycle
+    const flatDone = [];
+    LC_ORDER.forEach(k => lcStagesOf(k).forEach((s, i) => {
+      const r = LC_ORDER.indexOf(k);
+      if (r < curPhaseR || (r === curPhaseR && i < curStageI)) flatDone.push(k + ':' + s);
+    }));
+    const stateAt = (rank, i) => rank < curPhaseR ? 'done' : rank > curPhaseR ? 'todo'
+      : i < curStageI ? 'done' : i === curStageI ? 'current' : 'todo';
+    track.setAttribute('aria-label', 'Full operation lifecycle');
+    track.innerHTML = LC_ORDER.map((k, rank) => {
+      const stages = lcStagesOf(k), dN = phaseDoneN(k), isCur = rank === curPhaseR;
+      const phaseState = rank < curPhaseR ? 'complete' : isCur ? 'active' : 'upcoming';
+      const phaseCount = rank < curPhaseR ? stages.length + ' completed'
+        : isCur ? 'Current phase · ' + dN + ' of ' + stages.length + ' complete'
+        : 'Upcoming · ' + stages.length + ' stages';
+      const nodes = stages.map((s, i) => {
+        const st = stateAt(rank, i);
+        const isFirst = rank === 0 && i === 0;
+        const isLast = rank === LC_ORDER.length - 1 && i === stages.length - 1;
+        const nextState = i < stages.length - 1 ? stateAt(rank, i + 1)
+          : rank < LC_ORDER.length - 1 ? stateAt(rank + 1, 0) : 'todo';
+        const lCls = isFirst ? 'sg hide' : 'sg' + (st !== 'todo' ? ' on' : '');
+        const rCls = isLast ? 'sg hide' : 'sg' + (nextState !== 'todo' ? ' on' : '');
+        const def = LC_DEFS[s] || '';
+        let meta = '', body = '';
+        if (st === 'done') {
+          const di = flatDone.indexOf(k + ':' + s);
+          const dur = di > 0 ? lcDays(lcDateObj(di, flatDone.length) - lcDateObj(di - 1, flatDone.length)) : null;
+          meta = 'Completed · ' + lcDate(di, flatDone.length) + (dur ? ' · ' + dur + ' days in stage' : '');
+          body = '<div class="lb">' + s + '</div><div class="sub">' + lcDate(di, flatDone.length) + '</div>';
+        } else if (st === 'current') {
+          const since = flatDone.length ? lcDays(LC_TODAY - lcDateObj(flatDone.length - 1, flatDone.length)) : null;
+          meta = 'Current stage' + (since ? ' · Active for ' + since + ' days' : '');
+          body = '<div class="pill"><span class="lb2">' + s + '</span><span class="dt2">Current stage</span></div>';
+        } else if (s === 'Approved' && lcOp.estApproval) {
+          meta = 'Upcoming · Estimated ' + lcOp.estApproval;
+          body = '<div class="lb">' + s + '</div><div class="sub est">Est. ' + lcOp.estApproval + '</div>';
+        } else {
+          meta = 'Upcoming · ' + LC_META[k].label;
+          body = '<div class="lb">' + s + '</div>';
+        }
+        const aria = LC_META[k].label + ', stage ' + (i + 1) + ' of ' + stages.length + ': ' + s + '. ' + meta;
+        return '<div class="lcn ' + st + '" role="listitem" tabindex="0"' + (st === 'current' ? ' aria-current="step"' : '')
+          + ' aria-label="' + aria + '" data-t2h="' + s + '" data-t2m="' + meta + '" data-t2b="' + def + '">'
+          + '<div class="trk"><span class="' + lCls + '"></span><span class="dot">'
+          + (st === 'done' ? '<span class="msr">check</span>' : '') + '</span><span class="' + rCls + '"></span></div>' + body + '</div>';
+      }).join('');
+      // CED milestone: contract date between Fully Justified and Operational Closure (implementation ops only)
+      let ced = '';
+      if (k === 'implementation' && lcOp.ced) {
+        const nxt = stateAt(rank + 1, 0);
+        const on = nxt !== 'todo';
+        ced = '<div class="lcm' + (on ? ' done' : '') + '" role="listitem" tabindex="0"'
+          + ' aria-label="CED, Current Last Disbursement Expiration Date: ' + lcOp.ced + '"'
+          + ' data-t2h="CED · ' + lcOp.ced + '" data-t2m="Contract milestone"'
+          + ' data-t2b="Current Last Disbursement Expiration Date: the deadline for the last disbursement under the current contract.">'
+          + '<div class="trk"><span class="sg' + (on ? ' on' : '') + '"></span><span class="mk"></span><span class="sg' + (on ? ' on' : '') + '"></span></div>'
+          + '<div class="lb">CED</div><div class="sub">' + lcOp.ced + '</div></div>';
+      }
+      return '<div class="lc-band ' + phaseState + '"><div class="bh">' + lcPhaseIcon(k) + LC_META[k].label
+        + '<span class="cnt">· ' + phaseCount + '</span></div><div class="lc-brow">' + nodes + ced + '</div></div>';
+    }).join('');
+    track.classList.remove('entering');
+    requestAnimationFrame(() => track.classList.add('entering'));
+  }
+  function lcArrows() {
+    const st = document.getElementById('ws-stages');
+    const over = st.scrollWidth > st.clientWidth + 4;
+    const prev = document.getElementById('ws-st-prev'), next = document.getElementById('ws-st-next');
+    prev.style.display = over ? '' : 'none';
+    next.style.display = over ? '' : 'none';
+    st.classList.toggle('can-drag', over);
+    lcFades();
+  }
+  function lcFades() {
+    // edge fades signal more content to each side; only on the side that actually overflows
+    const st = document.getElementById('ws-stages');
+    const max = st.scrollWidth - st.clientWidth;
+    st.style.setProperty('--fadeL', st.scrollLeft > 4 ? '48px' : '0px');
+    st.style.setProperty('--fadeR', st.scrollLeft < max - 4 ? '48px' : '0px');
+    document.getElementById('ws-st-prev').disabled = st.scrollLeft <= 4;
+    document.getElementById('ws-st-next').disabled = st.scrollLeft >= max - 4;
+  }
+  document.getElementById('ws-stages').addEventListener('scroll', lcFades);
+  // drag to scroll (5px threshold keeps clicks and tooltips intact)
+  (function () {
+    const st = document.getElementById('ws-stages');
+    let down = false, moved = false, sx = 0, sl = 0;
+    st.addEventListener('mousedown', e => {
+      if (st.scrollWidth <= st.clientWidth) return;
+      down = true; moved = false; sx = e.pageX; sl = st.scrollLeft;
+    });
+    window.addEventListener('mousemove', e => {
+      if (!down) return;
+      const dx = e.pageX - sx;
+      if (Math.abs(dx) > 5 && !moved) { moved = true; st.classList.add('dragging'); }
+      if (moved) { st.scrollLeft = sl - dx; e.preventDefault(); }
+    });
+    window.addEventListener('mouseup', () => { down = false; st.classList.remove('dragging'); });
+    st.addEventListener('click', e => { if (moved) { e.stopPropagation(); moved = false; } }, true);
+  })();
+  function lcCenterCurrent() {
+    // position the viewport so the current stage pill lands centered
+    const st = document.getElementById('ws-stages');
+    const cur = st.querySelector('.lcn.current');
+    if (!cur) { st.scrollLeft = 0; return; }
+    const sRect = st.getBoundingClientRect();
+    const cRect = cur.getBoundingClientRect();
+    st.scrollLeft += (cRect.left + cRect.width / 2) - (sRect.left + sRect.width / 2);
+  }
+  function lcRefresh() {
+    const flag = FLAGS.lcTimeline;
+    document.getElementById('lc-shell').classList.toggle('enhanced', flag);
+    document.getElementById('ws-stages').classList.toggle('bare', flag);
+    document.getElementById('ws-stages-legacy').style.display = flag ? 'none' : '';
+    document.getElementById('lc-track').style.display = flag ? '' : 'none';
+    document.getElementById('lc-sum').style.display = 'none'; // progress caption retired
+    if (flag) lcRender();
+    requestAnimationFrame(() => { lcArrows(); if (lcOp) lcCenterCurrent(); });
+  }
+  function lcInit(phase, row) {
+    const code = row[0];
+    const ex = LC_OPS[code] || {};
+    const phaseKey = ex.phase || phase;
+    let current = ex.current;
+    if (!current) {
+      if (phase === 'implementation') current = LC_STAGES.implementation.includes(row[3]) ? row[3] : 'Disbursing';
+      else current = 'QRR Approved';
+    }
+    lcOp = {
+      code, phase: phaseKey, current,
+      pp: ex.pp || (lcHash(code) % 3 === 0 ? 'PP Not Required' : 'PP Approved'),
+      // estimated dates the business actually has today (extend once Naty confirms the full list)
+      estApproval: phaseKey === 'preparation' ? (row[8] || null) : null,
+      ced: phaseKey === 'implementation' ? (row[13] || null) : null
+    };
+    lcRefresh();
+    requestAnimationFrame(lcCenterCurrent);
+  }
+  window.addEventListener('resize', () => lcArrows());
 
   // ===== Operation Data freshness indicator (daily warehouse refresh at 6:00 AM) =====
   (function () {
@@ -3712,7 +4150,7 @@
     if (now.getHours() < 6) d.setDate(d.getDate() - 1); // before today's refresh, show yesterday's
     const stamp =
       `${String(d.getDate()).padStart(2, '0')} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
-    document.getElementById('ws-ai-time').textContent = stamp + ', 6:15 AM';
+    window.AI_LAST_UPDATED = stamp + ', 6:15 AM'; // summaries regenerate daily, so Last updated applies
     document.getElementById('od-updated-at').textContent =
       `${String(d.getDate()).padStart(2, '0')} ${MONTHS[d.getMonth()]} ${d.getFullYear()}, 6:00 AM`;
     document.getElementById('fd-updated-at').textContent =
@@ -3782,7 +4220,7 @@
     document.getElementById('ws-con-disb').textContent = usd(wsFin.disb);
     document.getElementById('ws-con-pct').textContent = wsFin.pct.toFixed(2) + '%';
     document.getElementById('ws-donut').style.background =
-      `conic-gradient(#00854D 0 ${wsFin.pct}%, #E7E7E9 ${wsFin.pct}% 100%)`;
+      `conic-gradient(#004F26 0 ${wsFin.pct}%, #E7E7E9 ${wsFin.pct}% 100%)`;
   }
   document.getElementById('ws-con-prev').addEventListener('click', () => { if (wsConIdx > 0) { wsConIdx--; renderContractCard(); } });
   document.getElementById('ws-con-next').addEventListener('click', () => { if (wsConIdx < wsConList.length - 1) { wsConIdx++; renderContractCard(); } });
@@ -3805,36 +4243,92 @@
 
   // ===== AI summary feedback =====
   document.getElementById('ws-ai-fb').addEventListener('click', e => {
-    const btn = e.target.closest('.fb-btn');
+    const btn = e.target.closest('.fb-btn[data-fb]');
     if (!btn) return;
     const was = btn.classList.contains('sel');
-    document.querySelectorAll('#ws-ai-fb .fb-btn').forEach(b => b.classList.remove('sel'));
+    document.querySelectorAll('#ws-ai-fb .fb-btn[data-fb]').forEach(b => b.classList.remove('sel'));
     if (was) return; // clicking the selected thumb clears it silently
     btn.classList.add('sel');
+    if (btn.dataset.fb === 'down') {
+      // optional structured feedback dialog (OP-1275)
+      document.getElementById('aifb-reason').value = '';
+      document.getElementById('aifb-details').value = '';
+      document.getElementById('aifb').classList.add('open');
+      document.getElementById('aifb-scrim').classList.add('open');
+      return;
+    }
     showSnackbar('Thanks. Your feedback helps improve these summaries', () =>
-      document.querySelectorAll('#ws-ai-fb .fb-btn').forEach(b => b.classList.remove('sel')));
+      document.querySelectorAll('#ws-ai-fb .fb-btn[data-fb]').forEach(b => b.classList.remove('sel')));
+  });
+  function aifbClose() {
+    document.getElementById('aifb').classList.remove('open');
+    document.getElementById('aifb-scrim').classList.remove('open');
+  }
+  document.getElementById('aifb-cancel').addEventListener('click', aifbClose);
+  document.getElementById('aifb-scrim').addEventListener('click', aifbClose);
+  document.getElementById('aifb-submit').addEventListener('click', () => {
+    aifbClose();
+    showSnackbar('Thanks. Your feedback helps improve these summaries');
+  });
+  document.getElementById('ai-copy').addEventListener('click', () => {
+    const clean = (window.aiPlainText || document.getElementById('ws-ai-text').textContent).trim();
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(clean);
+    showSnackbar('Summary copied to clipboard');
+  });
+  document.getElementById('ai-regen').addEventListener('click', () => {
+    if (!aiPendingHTML) return;
+    showAiSkeleton();
+    clearTimeout(aiTimer);
+    aiTimer = setTimeout(() => showAiContent(aiPendingHTML), 1600);
+  });
+  document.getElementById('ai-srcbtn').addEventListener('click', () => {
+    const list = document.getElementById('ai-srclist');
+    const btn = document.getElementById('ai-srcbtn');
+    const open = list.style.display === 'none';
+    list.style.display = open ? '' : 'none';
+    btn.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
 
-  // ===== AI summary: dynamic per operation, inline link to the Activity Feed =====
+  // ===== AI Summary (OP-1275): inline source refs, sources list, scope label =====
+  const aiRef = (n, ev) => '<sup class="ai-ref" data-t2h="' + ev[0] + '" data-t2b="' + ev[1] + '">[' + n + ']</sup>';
+  const AI_INF_TIP = ' data-t2h="Inferred" data-t2b="No direct event in the Activity Feed. Inferred from recent activity, verify before relying on it."';
   function renderAiSummary(phase, row) {
     const isImpl = phase === 'implementation';
-    const code = row[0], cc = row[6];
-    const country = COUNTRY_NAME[cc] || cc;
+    const code = row[0];
     const title = isImpl ? row[14] : (row[9] || OP_TITLE);
-    const money = n => '$' + fmt(n);
+    // build the summary from the SAME deterministic event set the Activity Feed renders,
+    // so every citation is traceable to a real feed entry
+    const feed = fdGen(code, phase);
+    const N = isImpl ? 5 : 3;
+    let cited = feed.slice(0, N); // newest first, matches the top of the feed
+    const fmtD = d => d.getDate() + ' ' + FD_MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+    let events = cited.map(e => [e.name, fmtD(e.date)]);
+    let range = fmtD(cited[cited.length - 1].date) + ' - ' + fmtD(cited[0].date);
     let text;
-    if (isImpl) {
-      const base = parseInt(row[11].replace(/[^0-9]/g, ''), 10);
-      const c0 = (row[8] && row[8][0]) || ('5385/OC-' + cc + '-1');
-      text = `In the last 180 days, ${code} (${title}) recorded multiple execution events: on Mar 5, an Advance of Funds of ${money(base * 0.025)} was completed under contract ${c0}; an additional ${money(base * 0.0057)} transaction (ANJ) was completed the same day, following a Local Counter/Cofinancing Adjustment completed on Mar 4. Procurement advanced with awards and starts between late Feb and mid Mar: a works contract for priority infrastructure in ${country} (${money(base * 0.0047)}) was signed Mar 13; a demand based consulting contract (${money(12000)}) was signed Feb 21; and a ${money(34000)} contract began Mar 9.`;
+    if (code === 'BR-L1587' && !isImpl) {
+      // demo operation: rich narrative citing the curated feed events, in narrative order
+      const find = n => feed.find(e => e.name === n);
+      cited = [find('Project Profile Approved'), find('Technical Mission Completed'), find('Results Matrix Agreement Logged')];
+      events = cited.map(e => [e.name, fmtD(e.date)]);
+      range = fmtD(cited[0].date) + ' - ' + fmtD(cited[2].date);
+      const prepBase = parseInt((row[10] || '$95,000,000').replace(/[^0-9]/g, ''), 10);
+      text = `In the last 180 days, ${code} (${title}) advanced through its preparation milestones: the Project Profile was approved${aiRef(1, events[0])} and the operation currently stands at ${row[3]}. The team, led by ${row[7]}, completed a technical mission with the executing agency${aiRef(2, events[1])} and agreed the results matrix${aiRef(3, events[2])}, with an IDB envelope of $${fmt(prepBase)} under discussion with the authorities of Brazil. <span class="ai-inf"${AI_INF_TIP}>The sgDELTA questionnaire and the QRR readiness checks are expected to follow ahead of POD distribution</span>.`;
+    } else if (isImpl) {
+      text = `In the last 180 days, ${code} (${title}) recorded steady activity across its execution systems. The most recent events are ${events[0][0]} on ${events[0][1]}${aiRef(1, events[0])} and ${events[1][0]}${aiRef(2, events[1])}. Earlier in the period, the feed also logged ${events[2][0]}${aiRef(3, events[2])}, ${events[3][0]}${aiRef(4, events[3])}, and ${events[4][0]}${aiRef(5, events[4])}. <span class="ai-inf"${AI_INF_TIP}>Based on this pace, execution activity is expected to continue at a similar rhythm in the coming weeks</span>.`;
     } else {
-      const est = row[8] || '10 Jun 2025';
-      const lead = row[7];
-      const prepBase = parseInt((row[10] || '$320,000,000').replace(/[^0-9]/g, ''), 10);
-      text = `In the last 180 days, ${code} (${title}) advanced through its preparation milestones: the Project Profile was distributed and approved, and the operation currently stands at ${row[3]}. The estimated approval date is ${est}, with an IDB envelope of ${money(prepBase)} under discussion with the authorities of ${country}. The team, led by ${lead}, completed two technical missions, agreed the results matrix with the executing agency, and launched the environmental and social screening; the sgDELTA questionnaire and the QRR readiness checks are scheduled ahead of POD distribution.`;
+      text = `In the last 180 days, ${code} (${title}) continued moving through preparation. The most recent activity is ${events[0][0]} on ${events[0][1]}${aiRef(1, events[0])}, preceded by ${events[1][0]}${aiRef(2, events[1])} and ${events[2][0]}${aiRef(3, events[2])}. The operation currently stands at ${row[3]}, led by ${row[7]}. <span class="ai-inf"${AI_INF_TIP}>The next preparation checkpoints are expected to follow shortly</span>.`;
     }
-    document.getElementById('ws-ai-fb').style.display = code === 'BR-L1587' ? '' : 'none';
-    const finalHTML = text + ' <button class="ws-ai-link" id="ws-ai-feed"><span class="txt">View all updates</span></button>';
+    // sources list, scope label and clean text for Copy
+    aiEvents = events;
+    document.getElementById('ai-srcn').textContent = events.length;
+    document.getElementById('ai-srclist').innerHTML = events.map((ev, i) =>
+      '<div class="row"><span class="n">[' + (i + 1) + ']</span><span>' + ev[0] + ' <span class="d">&middot; ' + ev[1] + '</span></span></div>').join('');
+    document.getElementById('ai-caption').innerHTML =
+      'AI Generated. May contain errors. &middot; Based on ' + events.length + ' events from the Activity Feed, ' + range
+      + (window.AI_LAST_UPDATED ? ' &middot; Last updated ' + window.AI_LAST_UPDATED : '');
+    const finalHTML = text;
+    window.aiPlainText = text.replace(/<sup[^>]*>\[\d+\]<\/sup>/g, '').replace(/<[^>]+>/g, '');
     clearTimeout(aiTimer);
     if (code === 'BR-L1587') {
       // demo sequence: skeleton, failure after 3s, retry, then success
@@ -3842,11 +4336,23 @@
       showAiSkeleton();
       aiTimer = setTimeout(showAiError, 3000);
     } else {
+      aiPendingHTML = finalHTML;
       showAiContent(finalHTML);
     }
   }
+  var aiEvents = [];
   var aiTimer = null, aiPendingHTML = '';
-  function aiFoot(show) { document.querySelector('.ws-ai-foot').style.display = show ? '' : 'none'; }
+  function aiFoot(show) {
+    document.querySelector('.ws-ai-foot').style.display = show ? '' : 'none';
+    document.getElementById('ai-srcwrap').style.display = show ? '' : 'none';
+    document.getElementById('ai-sep').style.display = show ? '' : 'none';
+    if (!show) {
+      document.getElementById('ai-more').style.display = 'none';
+      document.getElementById('ai-srclist').style.display = 'none';
+      const b = document.getElementById('ai-srcbtn');
+      b.classList.remove('open'); b.setAttribute('aria-expanded', 'false');
+    }
+  }
   function showAiSkeleton() {
     aiFoot(false);
     document.getElementById('ws-ai-text').innerHTML =
@@ -3859,18 +4365,45 @@
   }
   function showAiContent(htmlStr) {
     aiFoot(true);
-    document.getElementById('ws-ai-text').innerHTML = htmlStr;
+    const p = document.getElementById('ws-ai-text');
+    p.innerHTML = htmlStr;
+    // default view clamps to 4 lines (~420 characters at typical widths); Show more reveals the rest
+    p.classList.add('clamp');
+    document.getElementById('ai-more').textContent = 'Show more';
+    requestAnimationFrame(aiMeasure);
   }
+  function aiMeasure() {
+    // re-evaluated on render and resize: the button only exists while the clamp actually hides content
+    const p = document.getElementById('ws-ai-text');
+    const more = document.getElementById('ai-more');
+    if (document.querySelector('.ws-ai-foot').style.display === 'none') { more.style.display = 'none'; return; }
+    const expanded = !p.classList.contains('clamp');
+    if (expanded) p.classList.add('clamp');
+    const over = p.scrollHeight > p.clientHeight + 2;
+    if (expanded) p.classList.remove('clamp');
+    if (!over) {
+      // everything fits: collapse back to the default state and remove the control
+      p.classList.add('clamp');
+      more.textContent = 'Show more';
+      more.style.display = 'none';
+    } else {
+      more.style.display = '';
+    }
+  }
+  window.addEventListener('resize', aiMeasure);
+  document.getElementById('ai-more').addEventListener('click', () => {
+    const p = document.getElementById('ws-ai-text');
+    const more = document.getElementById('ai-more');
+    const expand = p.classList.contains('clamp');
+    p.classList.toggle('clamp', !expand);
+    more.textContent = expand ? 'Show less' : 'Show more';
+  });
   document.querySelector('.ws-ai').addEventListener('click', e => {
     if (e.target.closest('#ai-retry')) {
       showAiSkeleton();
       clearTimeout(aiTimer);
       aiTimer = setTimeout(() => showAiContent(aiPendingHTML), 2000);
-      return;
     }
-    if (!e.target.closest('.ws-ai-link')) return;
-    const feed = [...document.querySelectorAll('.ws-item')].find(i => i.textContent.includes('Activity Feed'));
-    if (feed) feed.click();
   });
 
   // ===== Country Strategies timeline =====
@@ -4212,15 +4745,29 @@
     ]}
   };
   let tmSel = 'default', tmQuery = '', tmOpen = new Set();
+  // Fictional organizational units, assigned deterministically per person
+  const TM_UNITS = [
+    'INE/ENE - Energy',
+    'CSD/CCS - Climate Change Solutions Division',
+    'VPC/FMP - Ops Fin Mgmt & Procurement Svc',
+    'CSC/CBR - Country Office Brazil',
+    'LEG/SGO - Sovereign Guaranteed Ops',
+    'ESG/SEN - Environmental and Social Solutions'
+  ];
+  function tmUnit(name) {
+    let h = 0;
+    for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
+    return TM_UNITS[h % TM_UNITS.length];
+  }
   function tmSetLead(name) {
     tmEdgeCount = 0;
     document.getElementById('tm-edge').classList.remove('show');
     TM_SETS.default.roles[0][1] = [name];
-    tmSel = 'default'; tmQuery = ''; tmOpen = new Set();
+    tmSel = 'default'; tmQuery = ''; tmOpen = new Set(); tmAcc = new Map(); tmMore = new Set();
     const inp = document.getElementById('tm-search');
     if (inp) inp.value = '';
     document.querySelectorAll('#tm-edge .tm-chip').forEach(c => c.classList.toggle('on', c.dataset.tmset === 'default'));
-    tmRender();
+    tmRefresh();
   }
   function tmHl(text) {
     if (!tmQuery) return text;
@@ -4263,18 +4810,101 @@
         + chip + '</div>';
     }).join('');
   }
+  // ===== Team cards: every role always visible and open; one rule inside a card
+  // (7 or fewer people show all; 8 or more show 5 + Show more). Caret = manual collapse only. =====
+  const TMT_MAX_INLINE = 7, TMT_PREVIEW = 5;
+  let tmAcc = new Map(), tmMore = new Set();
+  function tmtInitials(name) {
+    const p = name.trim().split(/\s+/);
+    return (p[0][0] + p[p.length - 1][0]).toUpperCase();
+  }
+  function tmtIsOpen(role) {
+    const key = tmSel + ':' + role;
+    return tmAcc.has(key) ? tmAcc.get(key) : true;
+  }
+  function tmtRender() {
+    const el = document.getElementById('tm-table');
+    if (!el) return;
+    const roles = tmOrderedRoles();
+    const total = roles.reduce((a, r) => a + r[1].length, 0);
+    document.getElementById('tm-count').textContent = total + ' team members · ' + roles.length + ' roles';
+    document.getElementById('tm-searchbox').style.display = total > 10 ? '' : 'none';
+    const q = tmQuery.toLowerCase();
+    // filter people per role by query (name, unit, email or the whole role)
+    const groups = [];
+    roles.forEach(([role, names]) => {
+      const roleHit = q && role.toLowerCase().includes(q);
+      const people = q
+        ? (roleHit ? names : names.filter(n => (n + ' ' + tmUnit(n)).toLowerCase().includes(q)))
+        : names;
+      if (people.length) groups.push([role, people]);
+    });
+    let html = '';
+    groups.forEach(([role, people]) => {
+      const open = q ? true : tmtIsOpen(role);
+      const expandable = !q && people.length > TMT_MAX_INLINE;
+      const expanded = tmMore.has(tmSel + ':' + role);
+      const shown = (expandable && !expanded) ? people.slice(0, TMT_PREVIEW) : people;
+      html += '<div class="tmc' + (open ? ' open' : '') + '">'
+        + '<button class="tmc-h" data-tmrole="' + role + '" aria-expanded="' + open + '">'
+        + '<span class="msr car">expand_more</span>'
+        + '<span class="r">' + tmHl(role) + '</span><span class="c">' + people.length + '</span>'
+        + '</button>';
+      if (open) {
+        shown.forEach(n => {
+          html += '<div class="tmc-row">'
+            + '<span class="nmw"><span class="tmt-av">' + tmtInitials(n) + '</span><span class="nm">' + tmHl(n) + '</span></span>'
+            + '<span class="ou">' + tmHl(tmUnit(n)) + '</span>'
+            + '</div>';
+        });
+        if (expandable) {
+          html += '<div class="tmc-more"><button class="od3-more" data-tmmore="' + role + '">'
+            + (expanded ? 'Show less' : '+' + (people.length - TMT_PREVIEW) + ' Show more') + '</button></div>';
+        }
+      }
+      html += '</div>';
+    });
+    if (!groups.length) html += '<div class="tm-empty">No one matches "' + tmQuery + '". Check the spelling or try the last name.</div>';
+    el.innerHTML = html;
+  }
+  function tmRefresh() {
+    const flag = FLAGS.teamTableV2;
+    const grid = document.getElementById('tm-grid');
+    const table = document.getElementById('tm-table');
+    const divider = document.querySelector('.tm-divider');
+    if (grid) grid.style.display = flag ? 'none' : '';
+    if (table) table.style.display = flag ? '' : 'none';
+    if (divider) divider.style.display = flag ? 'none' : '';
+    const inp = document.getElementById('tm-search');
+    if (inp) inp.placeholder = flag ? 'Search by name, role or unit' : 'Search by name or role';
+    if (flag) tmtRender(); else tmRender();
+  }
   document.getElementById('tm-grid').addEventListener('click', e => {
     const btn = e.target.closest('.od3-more');
     if (!btn) return;
     const key = tmSel + ':' + btn.dataset.tmrole;
     if (tmOpen.has(key)) tmOpen.delete(key); else tmOpen.add(key);
-    tmRender();
+    tmRefresh();
   });
-  // Edge case preview unlock: press H five times while viewing BR-L1587
+  document.getElementById('tm-table').addEventListener('click', e => {
+    const more = e.target.closest('[data-tmmore]');
+    if (more) {
+      const key = tmSel + ':' + more.dataset.tmmore;
+      if (tmMore.has(key)) tmMore.delete(key); else tmMore.add(key);
+      tmRefresh();
+      return;
+    }
+    const band = e.target.closest('.tmc-h');
+    if (band && !tmQuery) {
+      tmAcc.set(tmSel + ':' + band.dataset.tmrole, !tmtIsOpen(band.dataset.tmrole));
+      tmRefresh();
+    }
+  });
+  // Edge case preview unlock: press T five times while viewing BR-L1587
   let tmEdgeCount = 0;
   document.addEventListener('keydown', e => {
     if (e.target.closest('input, textarea')) return;
-    if (e.key.toLowerCase() === 'h') {
+    if (e.key.toLowerCase() === 't') {
       if (wsScreen.dataset.code !== 'BR-L1587') { tmEdgeCount = 0; return; }
       tmEdgeCount++;
       if (tmEdgeCount >= 5) {
@@ -4285,15 +4915,33 @@
       tmEdgeCount = 0;
     }
   });
+  // Home loading state preview: press L five times while on Home
+  let homeSkelCount = 0;
+  document.addEventListener('keydown', e => {
+    if (e.target.closest('input, textarea')) return;
+    if (e.key.toLowerCase() === 'l') {
+      const home = document.getElementById('screen-home');
+      if (!home.classList.contains('visible') || wsScreen.classList.contains('open')) { homeSkelCount = 0; return; }
+      homeSkelCount++;
+      if (homeSkelCount >= 5) {
+        homeSkelCount = 0;
+        const on = home.classList.toggle('skel');
+        home.setAttribute('aria-busy', on ? 'true' : 'false');
+        showSnackbar(on ? 'Loading state preview. Press L five times to exit' : 'Loading state preview off');
+      }
+    } else {
+      homeSkelCount = 0;
+    }
+  });
   document.getElementById('tm-edge').addEventListener('click', e => {
     const chip = e.target.closest('.tm-chip');
     if (!chip) return;
     tmSel = chip.dataset.tmset;
-    tmQuery = ''; tmOpen = new Set();
+    tmQuery = ''; tmOpen = new Set(); tmAcc = new Map(); tmMore = new Set();
     document.getElementById('tm-search').value = '';
     document.getElementById('tm-search-clear').style.display = 'none';
     document.querySelectorAll('#tm-edge .tm-chip').forEach(c => c.classList.toggle('on', c === chip));
-    tmRender();
+    tmRefresh();
   });
   (function () {
     const inp = document.getElementById('tm-search');
@@ -4304,14 +4952,14 @@
       t = setTimeout(() => {
         tmQuery = inp.value.trim();
         clr.style.display = tmQuery ? '' : 'none';
-        tmRender();
+        tmRefresh();
       }, 150);
     });
     clr.addEventListener('click', () => {
-      inp.value = ''; tmQuery = ''; clr.style.display = 'none'; tmRender(); inp.focus();
+      inp.value = ''; tmQuery = ''; clr.style.display = 'none'; tmRefresh(); inp.focus();
     });
   })();
-  tmRender();
+  // initial team render happens via applyFlags() once FLAGS exists
 
   // ===== Operation search dialog (pin from empty state) =====
   const osd = document.getElementById('osd');
@@ -4527,7 +5175,8 @@
   // ===== Feature flags =====
   // false = feature not launched: elements with data-flag are hidden, elements with data-flag-off are shown.
   // Toggle from the browser console: OPO_FLAGS.set('upcomingPending', true)
-  const FLAGS = { upcomingPending: false, executingAgencyTeam: false, pinCarouselHybrid: false };
+  // reformBanner and finModules are hidden for MVP1; business wants them back later, flip the flag
+  const FLAGS = { upcomingPending: false, executingAgencyTeam: false, pinCarouselHybrid: false, teamTableV2: true, lcTimeline: true, reformBanner: false, finModules: false };
   function applyFlags() {
     document.querySelectorAll('[data-flag]').forEach(el => {
       el.style.display = FLAGS[el.dataset.flag] ? '' : 'none';
@@ -4536,6 +5185,8 @@
       el.style.display = FLAGS[el.dataset.flagOff] ? 'none' : '';
     });
     if (typeof updatePinGrid === 'function') updatePinGrid();
+    if (typeof tmRefresh === 'function') tmRefresh();
+    if (typeof lcRefresh === 'function') lcRefresh();
   }
   window.OPO_FLAGS = {
     list: () => ({ ...FLAGS }),
@@ -4640,13 +5291,14 @@
   // initial route: runs last so every module's state is ready
 
   // ===== Activity Feed: catalog, generator, filters =====
-  const EVENT_DEFS = [["Financial Transactions","Authorized Disbursement","Convergencia","A disbursement was authorized and became effective",["Transaction ID","Value Date","Type (ANT/DPB/DPS)","Amount","Status"]],["Financial Transactions","Authorized Component Transfer","Convergencia","Funds transferred between components",["Transaction ID","Amount","Source Component","Target Component"]],["Financial Transactions","Partial Cancellation","Convergencia","Portion of financing cancelled",["Transaction ID","Amount","Component","Status"]],["Financial Transactions","Total Cancellation","Convergencia","Financing cancelled in full",["Transaction ID","Amount","Components","Status"]],["Financial Transactions","Justification approved","Convergencia","Justification approved",["Transaction ID","Amount","Component","Status"]],["Lifecycle","Milestone Completed","Convergencia","Lifecycle milestone achieved",["Milestone ID","Milestone Name","Completion Date"]],["Lifecycle","Board Approval Date Changed","Convergencia","Board approval estimate changed",["Milestone Name","Previous Date","New Date"]],["Procurement","Procurement Plan Approved","Fiduciary Interface","Procurement plan approved",["Total Loan Amount","Planned Procurement Amount","Previous Approval Date"]],["Procurement","No Objection Issued (Ex-Ante Review)","Fiduciary Interface","Bank issues no objection",["Process ID","Description","Method","Amount","Milestone","Next Milestone"]],["Procurement","Contract Awarded","Fiduciary Interface","Procurement contract awarded",["Process ID","Contract ID","Description","Method","Amount"]],["Contract Clauses","Loan Contract Signed","Convergencia","Loan contract signed",["Contract Reference","Signature Date"]],["Contract Clauses","Loan Signature Deadline Extended","Convergencia","Signature deadline extended",["Previous Date","New Date","Months Extended"]],["Contract Clauses","Loan Ratified","Convergencia","Contract ratified",["Ratification Date"]],["Contract Clauses","Eligibility Clause Extended","Convergencia","Eligibility clause deadline extended",["Clause Name","Clause Type","Previous Date","New Date"]],["Contract Clauses","First Disbursement Condition Completed/Waived","Convergencia","Condition fulfilled or waived",["Clause Name","Clause Type","Action Type"]],["Contract Clauses","Eligibility Achieved","Convergencia","Eligibility achieved",["Eligibility Details"]],["Contract Clauses","Audited Financial Statement Clause Fulfilled/Waived","Convergencia","EFA-related clause fulfilled or waived",["Clause Name","Action Type"]],["Contract Clauses","Other Clause Fulfilled/Waived","Convergencia","Other contractual clause fulfilled or waived",["Clause Name","Clause Category","Action Type"]],["Contract Clauses","Disbursement Deadline Extended","Convergencia","Disbursement deadline extended",["Previous Date","New Date","Months Extended"]],["Contract Clauses","Disbursement Period Closed","Convergencia","Disbursement period completed",["Completion Date","Original Date","Extensions"]],["Operation Data","Core Operation Data Changed","Convergencia","Core operation attribute modified",["Field Name","Previous Value","New Value"]],["External Audit","EFA Approved","Convergencia","External financial audit approved",["Fiscal Year","Auditor","Opinion","Observations"]],["Disbursement Forecast","Projection Changed","Convergencia","Forecast modified",["Projection Total","YTD Disbursement","Undisbursed Balance","Expiration Date"]],["Portfolio Review","Portfolio Review Created","Smart Portfolio","Portfolio review initiated",["Review Start Date","End Date"]],["Portfolio Review","Review Agreement Created","Smart Portfolio","Agreement recorded",["Agreement","Critical Topic","Due Date","Status"]],["Portfolio Review","Review Agreement Status Changed","Smart Portfolio","Agreement status changed",["Previous Status","New Status"]],["Portfolio Review","Aide Memoire Confirmed","Smart Portfolio","Aide Memoire confirmed",["Review Details"]],["PMR","PMR Validation Completed","Convergencia","PMR validation finalized",["Original Classification","Validated Classification"]],["PMR","PMR Cycle Started","Convergencia","PMR cycle started",["Cycle Identifier"]],["PMR","Validation Flow Started","Convergencia","Validation workflow started",["Original Classification","Proposed Classification"]],["PMR","PMR Cycle Closed","Convergencia","PMR cycle completed",["Cycle Identifier"]],["ESG","ESRR Rating Changed","ESG Compass","ESG risk rating changed",["Previous Rating","New Rating","Classification Attributes"]],["ESG","SPR Rating Changed","ESG Compass","ESG performance rating changed",["Previous Rating","New Rating","Classification Attributes"]],["ESG","ICAS Created/Updated","ESG Compass","New ICAS/action plan became active",["Environmental Classification","ESRR","SPR","Catastrophe Risk Rating"]],["Project Team","Team Leader Assigned","Convergencia","Team Leader assignment changed",["Person","Role","Unit","Replaced Person"]],["Project Team","Fiduciary Specialist Assigned","Convergencia","Fiduciary specialist assignment changed",["Person","Role","Unit","Replaced Person"]],["Project Team","ESG Specialist Assigned","Convergencia","ESG specialist assignment changed",["Person","Role","Unit","Replaced Person"]],["Project Team","Lawyer Assigned","Convergencia","Lawyer assignment changed",["Person","Role","Unit","Replaced Person"]],["Project Team","Operations Analyst Assigned","Convergencia","Operations analyst assignment changed",["Person","Role","Unit","Replaced Person"]],["Missions","Mission Approved","Convergencia","Mission approved",["Mission Type","Location","Members"]],["Alerts","SPD Alert Activated","Smart Portfolio / Early Warning System","Alert became active",["Alert Type","Traffic Light Color"]],["Alerts","CT Alert Activated","Convergencia","Alert became active",["Alert Type","Traffic Light Color"]]];
-  const FD_SRC_ICON = { 'Convergencia': 'hub', 'Fiduciary Interface': 'webhook', 'Smart Portfolio': 'workspaces', 'Smart Portfolio / Early Warning System': 'radar', 'ESG Compass': 'explore' };
-  const FD_SRC_LABEL = { 'Smart Portfolio / Early Warning System': 'Smart Portfolio / EWS' };
+  const EVENT_DEFS = [["Financial Transactions", "Authorized Disbursement", "Convergencia", "A disbursement was authorized and became effective", ["Transaction ID", "Value Date", "Type (ANT/DPB/DPS)", "Amount", "Status"]], ["Financial Transactions", "Authorized Component Transfer", "Convergencia", "Funds transferred between components", ["Transaction ID", "Amount", "Source Component", "Target Component"]], ["Financial Transactions", "Partial Cancellation", "Convergencia", "Portion of financing cancelled", ["Transaction ID", "Amount", "Component", "Status"]], ["Financial Transactions", "Total Cancellation", "Convergencia", "Financing cancelled in full", ["Transaction ID", "Amount", "Components", "Status"]], ["Financial Transactions", "Justification approved", "Convergencia", "Justification approved", ["Transaction ID", "Amount", "Component", "Status"]], ["Lifecycle Events", "Milestone Completed", "Convergencia", "Lifecycle milestone achieved", ["Milestone ID", "Milestone Name", "Completion Date"]], ["Lifecycle Events", "Board Approval Date Changed", "Convergencia", "Board approval estimate changed", ["Milestone Name", "Previous Date", "New Date"]], ["Contracts related to Procurement", "Procurement Plan Approved", "Client Portal", "Procurement plan approved", ["Total Loan Amount", "Planned Procurement Amount", "Previous Approval Date"]], ["Contracts related to Procurement", "No Objection Issued (Ex-Ante Review)", "Client Portal", "Bank issues no objection", ["Process ID", "Description", "Method", "Amount", "Milestone", "Next Milestone"]], ["Contracts related to Procurement", "Contract Awarded", "Client Portal", "Procurement contract awarded", ["Process ID", "Contract ID", "Description", "Method", "Amount"]], ["Contractual Clauses Processed", "Loan Contract Signed", "Convergencia", "Loan contract signed", ["Contract Reference", "Signature Date"]], ["Contractual Clauses Extensions", "Loan Signature Deadline Extended", "Convergencia", "Signature deadline extended", ["Previous Date", "New Date", "Months Extended"]], ["Contractual Clauses Processed", "Loan Ratified", "Convergencia", "Contract ratified", ["Ratification Date"]], ["Contractual Clauses Extensions", "Eligibility Clause Extended", "Convergencia", "Eligibility clause deadline extended", ["Clause Name", "Clause Type", "Previous Date", "New Date"]], ["Contractual Clauses Processed", "First Disbursement Condition Completed/Waived", "Convergencia", "Condition fulfilled or waived", ["Clause Name", "Clause Type", "Action Type"]], ["Contractual Clauses Processed", "Eligibility Achieved", "Convergencia", "Eligibility achieved", ["Eligibility Details"]], ["Contractual Clauses Processed", "Audited Financial Statement Clause Fulfilled/Waived", "Convergencia", "EFA-related clause fulfilled or waived", ["Clause Name", "Action Type"]], ["Contractual Clauses Processed", "Other Clause Fulfilled/Waived", "Convergencia", "Other contractual clause fulfilled or waived", ["Clause Name", "Clause Category", "Action Type"]], ["Contractual Clauses Extensions", "Disbursement Deadline Extended", "Convergencia", "Disbursement deadline extended", ["Previous Date", "New Date", "Months Extended"]], ["Contractual Clauses Processed", "Disbursement Period Closed", "Convergencia", "Disbursement period completed", ["Completion Date", "Original Date", "Extensions"]], ["PMR Classification", "PMR Validation Completed", "Convergencia", "PMR validation finalized", ["Original Classification", "Validated Classification"]], ["PMR Classification", "PMR Cycle Started", "Convergencia", "PMR cycle started", ["Cycle Identifier"]], ["PMR Classification", "Validation Flow Started", "Convergencia", "Validation workflow started", ["Original Classification", "Proposed Classification"]], ["PMR Classification", "PMR Cycle Closed", "Convergencia", "PMR cycle completed", ["Cycle Identifier"]], ["ESG ESSR Classification", "ESRR Rating Changed", "ESG Compass", "ESG risk rating changed", ["Previous Rating", "New Rating", "Classification Attributes"]], ["ESG ESSR Classification", "SPR Rating Changed", "ESG Compass", "ESG performance rating changed", ["Previous Rating", "New Rating", "Classification Attributes"]], ["ESG Screening", "ICAS Created/Updated", "ESG Compass", "New ICAS/action plan became active", ["Environmental Classification", "ESRR", "SPR", "Catastrophe Risk Rating"]], ["Missions", "Mission Approved", "Convergencia", "Mission approved", ["Mission Type", "Location", "Members"]]];
+  const FD_SRC_ICON = { 'Convergencia': 'hub', 'Client Portal': 'webhook', 'ESG Compass': 'explore' };
+  const FD_SRC_LABEL = {};
   const FD_SOURCES_LIST = Object.keys(FD_SRC_ICON);
-  const FD_TYPE_LIST = [...new Set(EVENT_DEFS.map(d => d[0]))].sort();
-  const FD_CHIP_TYPES = { financial: ['Financial Transactions', 'Disbursement Forecast'], contracts: ['Contract Clauses', 'Procurement'] };
-  const FD_PREP_TYPES = new Set(['Lifecycle', 'Operation Data', 'Project Team', 'ESG', 'Missions']);
+  // official Types order from business (not alphabetical)
+  const FD_TYPE_LIST = ['Lifecycle Events', 'Financial Transactions', 'Contractual Clauses Processed', 'Contractual Clauses Extensions', 'Contracts related to Procurement', 'Missions', 'ESG ESSR Classification', 'ESG Screening', 'PMR Classification'];
+  const FD_CHIP_TYPES = { financial: ['Financial Transactions'], contracts: ['Contractual Clauses Processed', 'Contractual Clauses Extensions', 'Contracts related to Procurement'] };
+  const FD_PREP_TYPES = new Set(['Lifecycle Events', 'ESG ESSR Classification', 'ESG Screening', 'Missions']);
   const FD_RANGES = [['30', 'Last 30 days'], ['90', 'Last 90 days'], ['180', 'Last 6 months'], ['365', 'Last 12 months'], ['all', 'All time'], ['custom', 'Custom dates']];
   const FD_MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const FD_MONTHS_FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -4736,7 +5388,7 @@
     const rng = fdRngFactory(fdHash(code));
     const pool = phase === 'preparation' ? EVENT_DEFS.filter(d => FD_PREP_TYPES.has(d[0])) : EVENT_DEFS;
     // key business types get guaranteed presence: every second draw comes from them
-    const FD_KEY_TYPES = new Set(['Financial Transactions', 'Procurement', 'Contract Clauses']);
+    const FD_KEY_TYPES = new Set(['Financial Transactions', 'Contracts related to Procurement', 'Contractual Clauses Processed']);
     const keyPool = pool.filter(d => FD_KEY_TYPES.has(d[0]));
     const now = new Date();
     const evs = [];
@@ -4750,16 +5402,31 @@
       const attrs = def[4].map(a => [a, fdVal(a, rng, dt, def)]);
       evs.push({ type: def[0], name: def[1], source: def[2], date: dt, attrs, desc: fdDesc(def, attrs) });
     }
+    // curated demo events for BR-L1587: the AI Summary cites these, so they must exist (and lead) in the feed
+    if (code === 'BR-L1587' && phase === 'preparation') {
+      const day = 864e5;
+      evs.forEach(e => { if (now - e.date < 4 * day) e.date = new Date(e.date.getTime() - 6 * day); });
+      evs.push(
+        { type: 'Lifecycle Events', name: 'Project Profile Approved', source: 'Convergencia', date: new Date(now - 3 * day),
+          attrs: [['Milestone', 'Project Profile Approved'], ['Registered by', 'Ana Lucia Paredes']],
+          desc: 'Milestone approved and registered in Convergencia.' },
+        { type: 'Missions', name: 'Technical Mission Completed', source: 'Convergencia', date: new Date(now - 2 * day),
+          attrs: [['Mission Type', 'Technical'], ['Location', 'Brasilia, Brazil']],
+          desc: 'Technical mission completed with the executing agency.' },
+        { type: 'Lifecycle Events', name: 'Results Matrix Agreement Logged', source: 'Convergencia', date: new Date(now - 1 * day),
+          attrs: [['Section', 'Results Matrix'], ['Updated by', 'Lucas Andrade']],
+          desc: 'Results matrix agreed with the executing agency and logged in the operation record.' }
+      );
+    }
     evs.sort((a, b) => b.date - a.date);
     return evs;
   }
 
-  const FD_TYPE_ICON = { 'Financial Transactions': 'paid', 'Disbursement Forecast': 'paid', 'Contract Clauses': 'contract', 'Procurement': 'inventory', 'Lifecycle': 'flag', 'Operation Data': 'description', 'External Audit': 'task', 'Portfolio Review': 'list_alt', 'PMR': 'checklist', 'ESG': 'eco', 'Project Team': 'groups_2', 'Missions': 'flight', 'Alerts': 'warning' };
+  const FD_TYPE_ICON = { 'Financial Transactions': 'paid', 'Contractual Clauses Processed': 'contract', 'Contractual Clauses Extensions': 'schedule', 'Contracts related to Procurement': 'inventory', 'Lifecycle Events': 'flag', 'PMR Classification': 'checklist', 'ESG ESSR Classification': 'eco', 'ESG Screening': 'eco', 'Missions': 'flight' };
   function fdFamily(e) {
     const n = e.name.toLowerCase();
     if (n.includes('cancellation')) return 'r';
-    if (e.type === 'Alerts') return 'a';
-    if (e.type === 'Financial Transactions' || e.type === 'Disbursement Forecast') return 'b';
+    if (e.type === 'Financial Transactions') return 'b';
     if (/approved|completed|fulfilled|achieved|signed|ratified|confirmed|closed|issued|awarded|eligibility achieved/.test(n)) return 'g';
     return 'n';
   }
@@ -4984,13 +5651,17 @@
   // ===== Rich tooltip: uppercase field header + value body =====
   const richtip = document.createElement('div');
   richtip.id = 'richtip';
-  richtip.innerHTML = '<div class="h"></div><div class="b"></div>';
+  richtip.setAttribute('role', 'tooltip');
+  richtip.innerHTML = '<div class="h"></div><div class="m"></div><div class="b"></div>';
   document.body.appendChild(richtip);
   let rtTimer = null, rtEl = null;
   function rtShow(el) {
     const h = richtip.querySelector('.h');
     h.textContent = el.dataset.t2h;
     h.style.display = el.dataset.t2h ? '' : 'none';
+    const m = richtip.querySelector('.m');
+    m.textContent = el.dataset.t2m || '';
+    m.style.display = el.dataset.t2m ? '' : 'none';
     const b = richtip.querySelector('.b');
     b.textContent = el.dataset.t2b || '';
     b.style.marginTop = el.dataset.t2h ? '' : '0';
