@@ -1587,8 +1587,23 @@
     width:328px;border:1px solid var(--border-default);border-radius:8px;background:var(--color-surface);
     padding:20px 24px;display:flex;flex-direction:column;gap:6px;
   }
-  .ws-qa-card 
   .ws-qa-card h3{font-size:16px;font-weight:700;color:#272626;margin-top:4px;}
+  /* hover parity with Pinned operations cards on Home */
+  .ws-qa .ws-qa-card{transition:box-shadow 0.2s ease, border-color 0.2s ease, opacity 0.15s ease;}
+  .ws-qa:hover .ws-qa-card{opacity:0.7;}
+  .ws-qa .ws-qa-card:hover{
+    opacity:1;
+    border-color:transparent;
+    background:linear-gradient(var(--color-surface),var(--color-surface)) padding-box,
+               linear-gradient(135deg,#00629D 0%,#3E86BC 25%,#A8D1ED 50%,#3E86BC 75%,#00629D 100%) border-box;
+    background-size:100% 100%, 300% 300%;
+    background-position:0 0, 0% 0%;
+    animation:cardFlow 7s ease-in-out infinite;
+    box-shadow:0 0 0 4px rgba(168,209,237,0.18);
+  }
+  @media (prefers-reduced-motion: reduce){
+    .ws-qa-card:hover{animation:none;}
+  }
   .ws-qa-card p{font-size:12px;line-height:16px;color:#5C5A5A;}
   .ws-qa-card .start{
     margin-top:10px;height:32px;padding:0 16px;border-radius:80px;align-self:flex-start;
