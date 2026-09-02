@@ -660,7 +660,7 @@
   /* Pinned empty state */
   .pin-empty{
     border:1px solid var(--border-default);border-radius:8px;
-    background:linear-gradient(105deg,#FFFFFF 45%,#F5F5F6 100%);
+    background:var(--color-surface);
     padding:44px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;
   }
   .pin-empty .pe-ic{font-size:34px;color:var(--icon-default);}
@@ -918,7 +918,7 @@
   .pagination .range{color:var(--color-text-default);}
 
 
-  /* ============ More Filters drawer ============ */
+  /* ============ More filters drawer ============ */
   .scrim{
     position:fixed;inset:0;background:rgba(35,34,34,0.32);
     opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:40;
@@ -1226,11 +1226,11 @@
   }
   .ws-back{
     display:flex;align-items:center;gap:8px;height:60px;padding:0 16px;
-    color:var(--link-default);font-size:14px;font-weight:600;
+    color:var(--link-default);font-size:12px;font-weight:600;
     background:none;border:none;cursor:pointer;font-family:var(--font-ui);
     border-bottom:1px solid var(--border-default);flex:0 0 auto;text-align:left;
   }
-  .ws-back .msr{font-size:20px;}
+  .ws-back .msr{font-size:18px;}
   .ws-back:hover{background:var(--color-surface-cont-lowest);}
   .ws-nav .grp{padding:16px 12px 4px 12px;}
   .ws-nav .grp-title{font-size:10px;font-weight:700;letter-spacing:.5px;color:var(--color-text-placeholder);padding:8px 8px;text-transform:uppercase;}
@@ -1240,6 +1240,11 @@
     background:transparent;border:none;cursor:pointer;width:100%;text-align:left;
   }
   .ws-nav .ws-item .msr{font-size:20px;color:var(--icon-default);}
+  .ws-nav .ws-item .mi{width:20px;height:20px;fill:var(--icon-default);flex-shrink:0;}
+  .ws-nav .ws-item.active .mi{fill:var(--link-default);}
+  .ws-nav .ws-item .mi-f{display:none;}
+  .ws-nav .ws-item.active .mi-o{display:none;}
+  .ws-nav .ws-item.active .mi-f{display:block;}
   .ws-nav .ws-item:hover{background:var(--color-surface-cont-lowest);}
   .ws-nav .ws-item.active{background:var(--color-surface-cont-low);color:var(--link-default);font-weight:600;}
   .ws-nav .ws-item.active .msr{color:var(--link-default);}
@@ -1270,9 +1275,7 @@
   .ws-code-row{display:flex;align-items:center;gap:10px;}
   .ws-code-row .code{
     font-size:14px;font-weight:700;color:#272626;font-family:var(--font-ui);
-    background:var(--color-surface);border-radius:4px;
-    height:24px;padding:0 8px;display:inline-flex;align-items:center;
-    margin-left:-8px; /* chip padding compensated so the ID text left-aligns with the title */
+    height:24px;display:inline-flex;align-items:center;
   }
   .ws-code-row .pin{
     background:none;border:none;padding:2px;margin:-2px;cursor:pointer;
@@ -1284,6 +1287,19 @@
   .ws-details{display:flex;align-items:center;gap:24px;margin-top:2px;}
   .ws-details .ib{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#272626;}
   .ws-details .ib .msr{font-size:16px;color:var(--icon-default);}
+  /* header contracts pill (implementation ops): label + IDs with dividers, +N overflow via DS tooltip */
+  .ws-conchip{
+    display:inline-flex;align-items:center;gap:14px;align-self:flex-start;
+    margin-top:14px;height:36px;padding:0 16px;
+    background:var(--color-surface);border:1px solid #DADADB;border-radius:8px;
+  }
+  .ws-conchip .lb{font-size:12px;color:#5C5A5A;}
+  .ws-conchip .d{width:1px;height:14px;background:var(--border-default);}
+  .ws-conchip .cid{font-family:var(--font-chip);font-size:12px;font-weight:600;color:#272626;}
+  .ws-conchip .more{
+    font-family:var(--font-chip);font-size:11px;font-weight:600;color:#5C5A5A;
+    background:#F2F1F1;border-radius:10px;padding:2px 8px;cursor:default;
+  }
   .ws-round{height:32px;background:#FCFCFC;border-top-right-radius:16px;}
 
   .ws-wrap{padding:0 32px 48px 32px;display:flex;flex-direction:column;gap:56px;}
@@ -1382,10 +1398,20 @@
   @media (prefers-reduced-motion:reduce){.lct.entering,.lcn.current .dot{animation:none;}.lcn,.lcn .dot,.lcn .pill,.lcn .lb,.lcn .sub{transition:none;}.lcn:hover .dot,.lcn:hover .lb,.lcn:hover .sub,.lcn.current:hover .pill{transform:none;}}
 
   /* ===== Home loading state preview (press L five times on Home) ===== */
-  #screen-home.skel > .section{display:none;}
-  /* same vertical rhythm as .main (40px between sections) so toggling causes no jump */
+  #screen-home.skel > .section, #screen-home.skel > .page-header{display:none;}
+  /* same vertical rhythm as .main so toggling causes no jump */
   #screen-home.skel #home-skel{display:flex;flex-direction:column;gap:56px;}
   #home-skel{display:none;}
+  /* pinned section variant follows the real state: cards when there are pins, empty state shape when none */
+  #home-skel.nopin .skel-pin-has{display:none;}
+  #home-skel:not(.nopin) .skel-pin-none{display:none;}
+  .skel-ph{display:flex;flex-direction:column;align-items:flex-start;}
+  .skel-ghost,.skel-pinempty{
+    border:1px solid var(--border-default);border-radius:8px;box-sizing:border-box;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+  }
+  .skel-ghost{min-height:204px;background:linear-gradient(180deg,#FFFFFF 0%,#F6F6F7 100%);}
+  .skel-pinempty{min-height:238px;background:var(--color-surface);}
   .bone{
     background:linear-gradient(90deg,#ECECEE 25%,#F6F6F7 37%,#ECECEE 63%);
     background-size:400% 100%;
@@ -1395,10 +1421,9 @@
   @keyframes skel-sweep{0%{background-position:100% 0;}100%{background-position:0% 0;}}
   @media (prefers-reduced-motion:reduce){.bone{animation:none;background:#ECECEE;}}
   /* geometry mirrors the loaded components: same paddings, gaps and fixed card width */
-  .skel-upcoming{border:1px solid #E3E1E1;border-radius:8px;background:#FFFFFF;min-height:207px;box-sizing:border-box;padding:24px;display:flex;align-items:center;justify-content:space-between;gap:24px;}
-  .skel-upcoming .tx{flex:1;display:flex;flex-direction:column;gap:10px;}
-  .skel-cards{display:flex;gap:32px;overflow:hidden;}
-  .skel-card{flex:0 0 261px;width:261px;height:168px;box-sizing:border-box;border:1px solid var(--border-default);border-radius:8px;background:#FFFFFF;padding:16px 20px;display:flex;flex-direction:column;gap:12px;}
+  /* same responsive grid as #pin-carousel so skeleton cards match production widths at any viewport */
+  .skel-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(261px,1fr));gap:32px;padding:12px 6px;margin:-12px -6px;}
+  .skel-card{height:168px;box-sizing:border-box;border:1px solid var(--border-default);border-radius:8px;background:#FFFFFF;padding:16px 20px;display:flex;flex-direction:column;gap:12px;}
   .skel-card .bone:last-child{margin-top:auto;}
   .skel-card .top{display:flex;justify-content:space-between;align-items:flex-start;}
   .skel-rows{border:1px solid var(--color-outline-variant);border-radius:8px;background:#FFFFFF;overflow:hidden;}
@@ -1428,6 +1453,7 @@
   .ai-more:hover{text-decoration:underline;color:#004575;}
   .ai-sep{height:1px;background:var(--border-default);margin-top:16px;}
   .ws-ai-foot{margin-top:12px;}
+  .ai-meta{font-size:12px;line-height:17px;color:#8A8888;margin-top:8px;}
   .ai-srcwrap{margin-top:12px;}
   .ai-srcbtn{
     display:inline-flex;align-items:center;gap:4px;height:28px;padding:0 12px;
@@ -1484,7 +1510,7 @@
   .ai-retry:hover{background:var(--color-surface-cont-lowest);}
   .ws-ai-foot{display:flex;align-items:center;justify-content:flex-start;gap:10px;margin-top:10px;flex-wrap:wrap;}
   .ws-ai-caption{font-size:12px;color:#8A8888;}
-  .ws-ai-fb{display:inline-flex;gap:4px;}
+  .ws-ai-fb{display:inline-flex;gap:4px;margin-left:auto;}
   .fb-btn{
     position:relative;width:26px;height:26px;border:0;background:none;border-radius:50%;cursor:pointer;
     display:inline-flex;align-items:center;justify-content:center;color:#8A8888;
@@ -1609,7 +1635,7 @@
   #richtip .b{font-size:13px;line-height:18px;color:#fff;font-weight:400;margin-top:5px;}
   [data-t2h]{cursor:default;}
 
-  /* ============ Activity Feed ============ */
+  /* ============ Activity feed ============ */
   .fd-filtercard{background:#fff;border:1px solid var(--border-default);border-radius:8px;padding:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:24px;}
   .fd-chip{height:32px;border:1px solid var(--color-outline-variant);border-radius:999px;background:#fff;display:inline-flex;align-items:center;gap:6px;padding:0 14px;cursor:pointer;font-family:var(--font-ui);font-size:12px;font-weight:600;color:#272626;transition:background 0.13s ease,border-color 0.13s ease;}
   .fd-chip .msr{font-size:16px;color:#5C5A5A;}
@@ -1701,7 +1727,7 @@
   .fd-apply:hover{background:#00629D;}
 
 
-  /* ============ Operation Data — dossier layout ============ */
+  /* ============ Operation data — dossier layout ============ */
   .od-reform{
     display:flex;align-items:center;gap:12px;
     background:#F1F4F7;border:1px solid #DBE5EC;border-radius:8px;
@@ -1794,7 +1820,7 @@
   .od3-co-row .od3-tag{width:50px;padding:0;flex:0 0 auto;}
   .od3-co-row .flag{font-size:15px;line-height:1;}
   .od3-teamsec{margin-top:0;padding-top:0;}
-  /* Responsibility units: uniform Key Facts kv grid (3 cols x 2 rows), no chips */
+  /* Responsibility units: uniform Key facts kv grid (3 cols x 2 rows), no chips */
   .ru-card{margin-bottom:32px;}
   .ru-sub{font-size:12px;line-height:17px;color:#5C5A5A;margin-top:4px;}
   .ru-list{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px 32px;padding-top:24px;}
@@ -1876,6 +1902,15 @@
   @media (max-width:1280px){.od3{grid-template-columns:1fr;}}
   @media (max-width:900px){.od3-teams{flex-direction:column;}.od3-esa{gap:48px;}}
 
+  /* ============ Page not found ============ */
+  .nf-card{background:var(--color-surface);border:1px solid #E4E4E4;border-radius:8px;min-height:calc(100vh - 190px);display:flex;align-items:center;justify-content:center;padding:48px 24px;}
+  .nf-wrap{display:flex;flex-direction:column;align-items:center;text-align:center;max-width:480px;margin:0 auto;}
+  .nf-illus{width:256px;max-width:100%;display:block;margin:0 auto;}
+  .nf-t{font-size:24px;line-height:32px;font-weight:700;color:#272626;margin-top:20px;}
+  .nf-s{font-size:14px;line-height:20px;color:#5C5A5A;margin-top:8px;}
+  .nf-back{margin-top:24px;display:inline-flex;align-items:center;gap:8px;}
+  .nf-back .msr{font-size:18px;}
+
   /* ============ Placeholder screens (nav targets) ============ */
   .screen{display:none;}
   .screen.visible{display:flex;}
@@ -1909,7 +1944,7 @@
 </clipPath>
 </defs>
 </svg></span>
-      <span class="product">Ops Portal</span>
+      <span class="product">Operational Portal</span>
     </div>
     <nav class="nav">
       <button class="nav-item active" data-screen="home">
@@ -1944,7 +1979,7 @@
     <div class="page-header">
       <span class="date" id="home-date">Monday 11, May 2026</span>
       <h1 id="home-greeting">Good morning, Alejandro.</h1>
-      <span class="welcome">Welcome to Operations Portal, the new access to your operational work.</span>
+      <span class="welcome">Welcome to Operational Portal, the new access point to your daily work.</span>
     </div>
 
     <!-- Upcoming & pending (live version, behind feature flag) -->
@@ -1965,7 +2000,7 @@
           </div>
           <div class="row-2"><span class="op-code" id="up-code">AR-L1372</span><span id="up-desc"> · Programa de Agua Potable y Saneamiento Rural para Comunidades del Norte Argentino</span></div>
         </div>
-        <button class="btn-filled" id="up-action">Review Docs</button>
+        <button class="btn-filled" id="up-action">Review docs</button>
       </div>
     </section>
 
@@ -1984,7 +2019,7 @@
               </div>
               <div class="row-2"><span class="op-code">AR-L1372</span><span> · Programa de Agua Potable y Saneamiento Rural para Comunidades del Norte Argentino</span></div>
             </div>
-            <button class="btn-filled" tabindex="-1">Review Docs</button>
+            <button class="btn-filled" tabindex="-1">Review docs</button>
           </div>
         </div>
         <div class="ghost-fade" aria-hidden="true"></div>
@@ -2139,35 +2174,115 @@
     </section>
 
 
-    <!-- Loading state preview (toggle: press L five times on Home). Skeleton mirrors the loaded layout so nothing jumps. -->
+    <!-- Loading state preview (toggle: press L five times on Home). Skeleton mirrors the loaded layout so nothing jumps.
+         Two variants: with pinned operations (cards) and without (empty state shape). -->
     <div id="home-skel" aria-hidden="true">
+      <div class="skel-ph">
+        <span class="bone" style="width:170px;height:16px;"></span>
+        <span class="bone" style="width:650px;height:28px;margin-top:6px;"></span>
+        <span class="bone" style="width:410px;height:19px;margin-top:4px;"></span>
+      </div>
       <section class="section">
-        <div class="section-head">
-          <div class="left"><h2>What needs your attention</h2></div>
-        </div>
-        <div class="skel-upcoming">
-          <div class="tx">
-            <span style="display:flex;gap:12px;align-items:center;">
-              <span class="bone" style="width:230px;height:20px;"></span>
-              <span class="bone" style="width:104px;height:24px;border-radius:12px;"></span>
-            </span>
-            <span class="bone" style="width:58%;height:15px;"></span>
-          </div>
-          <span class="bone" style="width:122px;height:40px;border-radius:80px;"></span>
+        <div class="section-head"><div class="left"><span class="bone" style="width:250px;height:20px;"></span></div></div>
+        <div class="skel-ghost">
+          <span class="bone" style="width:44px;height:44px;border-radius:50%;"></span>
+          <span class="bone" style="width:300px;height:20px;margin-top:12px;"></span>
+          <span class="bone" style="width:680px;height:18px;margin-top:10px;"></span>
         </div>
       </section>
-      <section class="section">
-        <div class="section-head">
-          <div class="left"><h2>Pinned operations</h2><span class="bone" style="width:28px;height:20px;border-radius:10px;"></span></div>
-        </div>
-        <div class="skel-cards">
-          <div class="skel-card"><div class="top"><span class="bone" style="width:132px;height:24px;border-radius:12px;"></span><span class="bone" style="width:20px;height:20px;border-radius:50%;"></span></div><div style="display:flex;flex-direction:column;gap:8px;"><span class="bone" style="width:96px;height:22px;"></span><span class="bone" style="width:100%;height:14px;"></span><span class="bone" style="width:92%;height:14px;"></span></div><span class="bone" style="width:96px;height:15px;"></span></div>
-          <div class="skel-card"><div class="top"><span class="bone" style="width:118px;height:24px;border-radius:12px;"></span><span class="bone" style="width:20px;height:20px;border-radius:50%;"></span></div><div style="display:flex;flex-direction:column;gap:8px;"><span class="bone" style="width:96px;height:22px;"></span><span class="bone" style="width:96%;height:14px;"></span><span class="bone" style="width:85%;height:14px;"></span></div><span class="bone" style="width:96px;height:15px;"></span></div>
-          <div class="skel-card"><div class="top"><span class="bone" style="width:132px;height:24px;border-radius:12px;"></span><span class="bone" style="width:20px;height:20px;border-radius:50%;"></span></div><div style="display:flex;flex-direction:column;gap:8px;"><span class="bone" style="width:96px;height:22px;"></span><span class="bone" style="width:100%;height:14px;"></span><span class="bone" style="width:88%;height:14px;"></span></div><span class="bone" style="width:96px;height:15px;"></span></div>
-          <div class="skel-card"><div class="top"><span class="bone" style="width:124px;height:24px;border-radius:12px;"></span><span class="bone" style="width:20px;height:20px;border-radius:50%;"></span></div><div style="display:flex;flex-direction:column;gap:8px;"><span class="bone" style="width:96px;height:22px;"></span><span class="bone" style="width:94%;height:14px;"></span><span class="bone" style="width:90%;height:14px;"></span></div><span class="bone" style="width:96px;height:15px;"></span></div>
+      <section class="section skel-pin-has">
+        <div class="section-head"><div class="left"><span class="bone" style="width:220px;height:20px;"></span></div></div>
+        <div class="skel-cards" id="skel-cards"></div>
+      </section>
+      <section class="section skel-pin-none">
+        <div class="section-head"><div class="left"><span class="bone" style="width:220px;height:20px;"></span></div></div>
+        <div class="skel-pinempty">
+          <span class="bone" style="width:44px;height:44px;border-radius:50%;"></span>
+          <span class="bone" style="width:300px;height:20px;margin-top:12px;"></span>
+          <span class="bone" style="width:680px;height:18px;margin-top:10px;"></span>
         </div>
       </section>
-          </div>
+    </div>
+  </main>
+
+  <!-- ============ Page not found (generic; reached via #/not-found or any invalid route) ============ -->
+  <main class="main screen" id="screen-notfound">
+    <div class="nf-card">
+    <div class="nf-wrap">
+      <svg class="nf-illus" viewBox="0 0 256 189" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of a browser window with empty dashed content">
+<g id="nf-illus-src">
+<g opacity="0.6">
+<g opacity="0.5" filter="url(#filter0_f_1648_1544)">
+<path d="M245 27.8H211C205.477 27.8 201 32.2772 201 37.8V83.8C201 89.3229 205.477 93.8 211 93.8H245C250.523 93.8 255 89.3229 255 83.8V37.8C255 32.2772 250.523 27.8 245 27.8Z" fill="url(#paint0_linear_1648_1544)"/>
+<path d="M211 28.3H245C250.247 28.3 254.5 32.5533 254.5 37.8V83.8C254.5 89.0468 250.247 93.3 245 93.3H211C205.753 93.3 201.5 89.0468 201.5 83.8V37.8C201.5 32.5533 205.753 28.3 211 28.3Z" stroke="url(#paint1_linear_1648_1544)"/>
+</g>
+<path d="M240.5 39.8H215.5C213.567 39.8 212 41.3671 212 43.3C212 45.233 213.567 46.8 215.5 46.8H240.5C242.433 46.8 244 45.233 244 43.3C244 41.3671 242.433 39.8 240.5 39.8Z" fill="#F1F0F1"/>
+<path d="M233 53.8H215C213.343 53.8 212 55.1432 212 56.8C212 58.4569 213.343 59.8 215 59.8H233C234.657 59.8 236 58.4569 236 56.8C236 55.1432 234.657 53.8 233 53.8Z" fill="#F4F3F4"/>
+</g>
+<g opacity="0.45">
+<g opacity="0.5" filter="url(#filter1_f_1648_1544)">
+<path d="M49 99.8H11C5.47715 99.8 1 104.277 1 109.8V145.8C1 151.323 5.47715 155.8 11 155.8H49C54.5228 155.8 59 151.323 59 145.8V109.8C59 104.277 54.5228 99.8 49 99.8Z" fill="url(#paint2_linear_1648_1544)"/>
+<path d="M11 100.3H49C54.2467 100.3 58.5 104.553 58.5 109.8V145.8C58.5 151.047 54.2467 155.3 49 155.3H11C5.75329 155.3 1.5 151.047 1.5 145.8V109.8C1.5 104.553 5.75329 100.3 11 100.3Z" stroke="url(#paint3_linear_1648_1544)"/>
+</g>
+<path d="M42.5 111.8H15.5C13.567 111.8 12 113.367 12 115.3C12 117.233 13.567 118.8 15.5 118.8H42.5C44.433 118.8 46 117.233 46 115.3C46 113.367 44.433 111.8 42.5 111.8Z" fill="#F2F1F2"/>
+<path d="M35 125.8H15C13.3431 125.8 12 127.143 12 128.8C12 130.457 13.3431 131.8 15 131.8H35C36.6569 131.8 38 130.457 38 128.8C38 127.143 36.6569 125.8 35 125.8Z" fill="#F5F4F5"/>
+</g>
+<path d="M23 49.3C24.933 49.3 26.5 47.733 26.5 45.8C26.5 43.8671 24.933 42.3 23 42.3C21.067 42.3 19.5 43.8671 19.5 45.8C19.5 47.733 21.067 49.3 23 49.3Z" fill="#E2E1E2"/>
+<path d="M237 137.8C239.209 137.8 241 136.009 241 133.8C241 131.591 239.209 129.8 237 129.8C234.791 129.8 233 131.591 233 133.8C233 136.009 234.791 137.8 237 137.8Z" fill="#E6E5E6"/>
+<g filter="url(#filter2_d_1648_1544)">
+<path d="M209 19.8H45C42.7909 19.8 41 21.5909 41 23.8V151.8C41 154.009 42.7909 155.8 45 155.8H209C211.209 155.8 213 154.009 213 151.8V23.8C213 21.5909 211.209 19.8 209 19.8Z" fill="white"/>
+<path d="M45 20.3H209C210.933 20.3 212.5 21.8671 212.5 23.8V151.8C212.5 153.733 210.933 155.3 209 155.3H45C43.067 155.3 41.5 153.733 41.5 151.8V23.8C41.5 21.8671 43.067 20.3 45 20.3Z" stroke="#E4E4E4"/>
+</g>
+<path d="M41 51.8H213" stroke="#ECEBEC" stroke-width="2.5"/>
+<path d="M61 39.8C63.2091 39.8 65 38.0092 65 35.8C65 33.5909 63.2091 31.8 61 31.8C58.7909 31.8 57 33.5909 57 35.8C57 38.0092 58.7909 39.8 61 39.8Z" fill="#D9D8D9"/>
+<path d="M75 39.8C77.2091 39.8 79 38.0092 79 35.8C79 33.5909 77.2091 31.8 75 31.8C72.7909 31.8 71 33.5909 71 35.8C71 38.0092 72.7909 39.8 75 39.8Z" fill="#E2E1E2"/>
+<path d="M89 39.8C91.2091 39.8 93 38.0092 93 35.8C93 33.5909 91.2091 31.8 89 31.8C86.7909 31.8 85 33.5909 85 35.8C85 38.0092 86.7909 39.8 89 39.8Z" fill="#EBEAEB"/>
+<path d="M191 29.8H119C115.686 29.8 113 32.4863 113 35.8C113 39.1138 115.686 41.8 119 41.8H191C194.314 41.8 197 39.1138 197 35.8C197 32.4863 194.314 29.8 191 29.8Z" fill="#F1F0F1"/>
+<path d="M181 71.8H73C67.4772 71.8 63 76.2772 63 81.8V123.8C63 129.323 67.4772 133.8 73 133.8H181C186.523 133.8 191 129.323 191 123.8V81.8C191 76.2772 186.523 71.8 181 71.8Z" stroke="#D2D1D2" stroke-width="2.5" stroke-dasharray="7 7"/>
+</g>
+<defs>
+<filter id="filter0_f_1648_1544" x="200" y="26.8" width="56" height="68" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="0.5" result="effect1_foregroundBlur_1648_1544"/>
+</filter>
+<filter id="filter1_f_1648_1544" x="0" y="98.8" width="60" height="58" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="0.5" result="effect1_foregroundBlur_1648_1544"/>
+</filter>
+<filter id="filter2_d_1648_1544" x="14.9" y="5.00679e-05" width="224.2" height="188.2" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="6.3"/>
+<feGaussianBlur stdDeviation="13.05"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.392157 0 0 0 0 0.392157 0 0 0 0 0.435294 0 0 0 0.2 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1648_1544"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1648_1544" result="shape"/>
+</filter>
+<linearGradient id="paint0_linear_1648_1544" x1="206.1" y1="50.9078" x2="173.699" y2="50.9199" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="#F3F3F3"/>
+</linearGradient>
+<linearGradient id="paint1_linear_1648_1544" x1="222.6" y1="-8.19995" x2="170.089" y2="35.6231" gradientUnits="userSpaceOnUse">
+<stop stop-color="#F2F2F2"/>
+<stop offset="1" stop-color="#FEFEFE"/>
+</linearGradient>
+<linearGradient id="paint2_linear_1648_1544" x1="6.47778" y1="119.407" x2="-28.3229" y2="119.423" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="#F3F3F3"/>
+</linearGradient>
+<linearGradient id="paint3_linear_1648_1544" x1="24.2" y1="69.2546" x2="-21.0177" y2="117.024" gradientUnits="userSpaceOnUse">
+<stop stop-color="#F2F2F2"/>
+<stop offset="1" stop-color="#FEFEFE"/>
+</linearGradient>
+</defs>
+      </svg>
+      <h1 class="nf-t">We cannot find this page</h1>
+      <p class="nf-s">The link may be broken or the page may have moved. Try going back to where you were.</p>
+      <button class="btn-filled nf-back" id="nf-back">Visit homepage</button>
+    </div>
+    </div>
   </main>
 
   <!-- ============ Placeholder screens ============ -->
@@ -2191,18 +2306,18 @@
       <div class="cs-legend">
         <div class="lread">
           <div class="cap">How to read this timeline</div>
-          <div class="b">Each bar shows the full Validity Period of an Active Country Strategy/ Country Engagement Note</div>
+          <div class="b">Each bar shows the full Validity period of an Active Country Strategy/ Country Engagement Note</div>
         </div>
         <div class="ldiv"></div>
         <div class="lmid">
-          <div class="lseg"><span class="lbar">Coverage Period</span><span class="lcap">Original agreed period (e.g 2022-2025)</span></div>
+          <div class="lseg"><span class="lbar">Coverage period</span><span class="lcap">Original agreed period (e.g 2022-2025)</span></div>
           <span class="plus">+</span>
           <div class="lseg"><span class="lbar sm">Transition +1 yr</span><span class="lcap">Until Dec 31 of following year</span></div>
           <span class="plus">+</span>
           <div class="lseg"><span class="lbar sm hatch">Extension</span></div>
         </div>
         <div class="lval">
-          <div class="b">Validity Period</div>
+          <div class="b">Validity period</div>
           <div class="t">The entire green bar is the valid formally approved period before expiration</div>
         </div>
       </div>
@@ -2225,20 +2340,20 @@
     <div class="prep-body">
       <div class="filters-bar">
         <div class="segmented">
-          <button class="on" id="seg-all">Show All</button>
-          <button id="seg-my">My Operations</button>
+          <button class="on" id="seg-all">Show all</button>
+          <button id="seg-my">My operations</button>
         </div>
         <div class="filters-group">
           <div class="dd-wrap">
-            <button class="filter-dd" data-menu="pipeline-menu"><span id="pipeline-label">All Pipeline</span> <span class="msr">expand_more</span></button>
-            <div class="menu" id="pipeline-menu" data-kind="single-label" data-default="All Pipeline">
-              <button class="menu-item selected" data-val="All Pipeline">All Pipeline<span class="mcheck"><span class="msr">check</span></span></button>
+            <button class="filter-dd" data-menu="pipeline-menu"><span id="pipeline-label">All pipeline</span> <span class="msr">expand_more</span></button>
+            <div class="menu" id="pipeline-menu" data-kind="single-label" data-default="All pipeline">
+              <button class="menu-item selected" data-val="All pipeline">All pipeline<span class="mcheck"><span class="msr">check</span></span></button>
               <button class="menu-item" data-val="Pipeline A">Pipeline A<span class="mcheck"><span class="msr">check</span></span></button>
               <button class="menu-item" data-val="Pipeline B">Pipeline B<span class="mcheck"><span class="msr">check</span></span></button>
             </div>
           </div>
           <div class="dd-wrap">
-            <button class="filter-dd" data-menu="products-menu">All Products <span class="msr">expand_more</span></button>
+            <button class="filter-dd" data-menu="products-menu">All products <span class="msr">expand_more</span></button>
             <div class="menu" id="products-menu" data-kind="single-chip" data-group="products">
               <button class="menu-item" data-chip="LON"><span class="mcode">LON</span>Loan<span class="mcheck"><span class="msr">check</span></span></button>
               <button class="menu-item" data-chip="GUA"><span class="mcode">GUA</span>Guarantee<span class="mcheck"><span class="msr">check</span></span></button>
@@ -2256,10 +2371,10 @@
             <div class="menu" id="modalities-menu"></div>
           </div>
           <div class="dd-wrap collapsible">
-            <button class="filter-dd" data-menu="stages-menu">All Stages <span class="cnt" data-count="stages">0</span> <span class="msr">expand_more</span></button>
+            <button class="filter-dd" data-menu="stages-menu">All stages <span class="cnt" data-count="stages">0</span> <span class="msr">expand_more</span></button>
             <div class="menu right" id="stages-menu"></div>
           </div>
-          <button class="filter-dd" id="btn-more-filters">More Filters <span class="cnt js-drawer-count">0</span></button>
+          <button class="filter-dd" id="btn-more-filters">More filters <span class="cnt js-drawer-count">0</span></button>
           <button class="filter-toggle-btn" id="btn-filters-toggle"><span class="msr">filter_list</span> Filters <span class="cnt js-drawer-count">0</span></button>
         </div>
         <div class="active-chips" id="active-chips"></div>
@@ -2268,7 +2383,7 @@
       <div class="count-row">
         <span class="count"><span id="ops-count">15</span> Operations</span>
         <div class="dd-wrap">
-          <button class="sort-dd" data-menu="sort-menu"><span class="msr">sort</span> Sort by: <b id="sort-label">Pinned First</b> <span class="msr">expand_more</span></button>
+          <button class="sort-dd" data-menu="sort-menu"><span class="msr">sort</span> Sort by: <b id="sort-label">Pinned first</b> <span class="msr">expand_more</span></button>
           <div class="menu right" id="sort-menu" style="min-width:280px;"></div>
         </div>
       </div>
@@ -2333,16 +2448,17 @@
     <div class="avatar" title="Alejandro Romero">AR</div>
   </div>
   <nav class="ws-nav">
-    <button class="ws-back" id="ws-back"><span class="msr">west</span> <span id="ws-back-lbl">Go Back</span></button>
+    <button class="ws-back" id="ws-back"><span class="msr">west</span> <span id="ws-back-lbl">Go back</span></button>
     <div class="grp">
       <div class="grp-title">Information</div>
-      <button class="ws-item active" data-wsview="dashboard"><span class="msr">space_dashboard</span> Dashboard</button>
-      <button class="ws-item" data-wsview="feed"><span class="msr">checklist</span> Activity Feed</button>
-      <button class="ws-item" data-wsview="opdata"><span class="msr">description</span> Operation Data</button>
+      <button class="ws-item active" data-wsview="dashboard"><svg class="mi mi-o" viewBox="0 -960 960 960" aria-hidden="true"><path d="M180-120q-24 0-42-18t-18-42v-600q0-24 18-42t42-18h600q24 0 42 18t18 42v600q0 24-18 42t-42 18H180Zm0-60h270v-600H180v600Zm330 0h270v-301H510v301Zm0-361h270v-239H510v239Z"/></svg><svg class="mi mi-f" viewBox="0 -960 960 960" aria-hidden="true"><path d="M180-120q-24.75 0-42.37-17.63Q120-155.25 120-180v-600q0-24.75 17.63-42.38Q155.25-840 180-840h210q24.75 0 42.38 17.62Q450-804.75 450-780v600q0 24.75-17.62 42.37Q414.75-120 390-120H180Zm390 0q-24.75 0-42.37-17.63Q510-155.25 510-180v-241q0-24.75 17.63-42.38Q545.25-481 570-481h210q24.75 0 42.38 17.62Q840-445.75 840-421v241q0 24.75-17.62 42.37Q804.75-120 780-120H570Zm0-421q-24.75 0-42.37-17.63Q510-576.25 510-601v-179q0-24.75 17.63-42.38Q545.25-840 570-840h210q24.75 0 42.38 17.62Q840-804.75 840-780v179q0 24.75-17.62 42.37Q804.75-541 780-541H570Z"/></svg> Dashboard</button>
+      <button class="ws-item" data-wsview="feed"><svg class="mi mi-o" viewBox="0 -960 960 960" aria-hidden="true"><path d="M180-510q-24 0-42-18t-18-42v-210q0-24 18-42t42-18h600q24 0 42 18t18 42v210q0 24-18 42t-42 18H180Zm0-60h600v-210H180v210Zm0 450q-24 0-42-18t-18-42v-210q0-24 18-42t42-18h600q24 0 42 18t18 42v210q0 24-18 42t-42 18H180Zm0-60h600v-210H180v210Zm0-600v210-210Zm0 390v210-210Z"/></svg><svg class="mi mi-f" viewBox="0 -960 960 960" aria-hidden="true"><path d="M180-510q-24 0-42-18t-18-42v-210q0-24 18-42t42-18h600q24 0 42 18t18 42v210q0 24-18 42t-42 18H180Zm0 390q-24 0-42-18t-18-42v-210q0-24 18-42t42-18h600q24 0 42 18t18 42v210q0 24-18 42t-42 18H180Z"/></svg> Activity feed</button>
+      <button class="ws-item" data-wsview="opdata"><svg class="mi mi-o" viewBox="0 -960 960 960" aria-hidden="true"><path d="M350-490q-12.75 0-21.37-8.68-8.63-8.67-8.63-21.5 0-12.82 8.63-21.32 8.62-8.5 21.37-8.5h260q12.75 0 21.38 8.68 8.62 8.67 8.62 21.5 0 12.82-8.62 21.32-8.63 8.5-21.38 8.5H350Zm0-160q-12.75 0-21.37-8.68-8.63-8.67-8.63-21.5 0-12.82 8.63-21.32 8.62-8.5 21.37-8.5h260q12.75 0 21.38 8.68 8.62 8.67 8.62 21.5 0 12.82-8.62 21.32-8.63 8.5-21.38 8.5H350ZM220-390h320q26.43 0 49.22 12Q612-366 628-346l112 146v-620H220v430Zm0 250h490L581-309q-7.57-9.88-18.28-15.44Q552-330 540-330H220v190Zm520 60H220q-24 0-42-18t-18-42v-680q0-24 18-42t42-18h520q24 0 42 18t18 42v680q0 24-18 42t-42 18Zm-520-60v-680 680Zm0-190v-60 60Z"/></svg><svg class="mi mi-f" viewBox="0 -960 960 960" aria-hidden="true"><path d="M350-490h260q13 0 21.5-8.5T640-520q0-13-8.5-21.5T610-550H350q-13 0-21.5 8.5T320-520q0 13 8.5 21.5T350-490Zm0-160h260q13 0 21.5-8.5T640-680q0-13-8.5-21.5T610-710H350q-13 0-21.5 8.5T320-680q0 13 8.5 21.5T350-650Zm448 526L628-346q-16-20-39-32t-49-12H160v-430q0-24 18-42t42-18h520q24 0 42 18t18 42v680q0 4-.5 8t-1.5 8ZM220-80q-24 0-42-18t-18-42v-190h380q12 0 22.5 5.5T581-309L755-82q-4 1-7.5 1.5t-7.5.5H220Z"/></svg> Operation data</button>
     </div>
     <div class="grp">
       <div class="grp-title">Tools</div>
-      <button class="ws-item"><span class="msr">science</span> sgDELTA</button>
+      <button class="ws-item" data-wsview="tool"><svg class="mi mi-o" viewBox="0 -960 960 960" aria-hidden="true"><path d="M450-110v-170q0-48-16-79t-49-64l43-43q13 11 27.5 30t24.5 35q17-26 33.5-45t31.5-32q58-47 83.5-113.5T648-766l-69 69q-9 9-21 9t-21-9q-9-9-9-21t9-21l120-120q5-5 10-7t11-2q6 0 11 2t10 7l120 120q9 9 9 21t-9 21q-9 9-21 9t-21-9l-69-69q5 126-24.5 198.5T585-432q-44 40-59.5 73T510-280v170q0 13-8.5 21.5T480-80q-13 0-21.5-8.5T450-110ZM258-636q-4-18-6.5-52.5T251-765l-68 68q-9 9-21 9t-21-9q-9-9-9-21t9-21l120-120q5-5 10-7t11-2q6 0 11 2t10 7l120 120q9 9 9 21t-9 21q-9 9-21 9t-21-9l-69-69q-2 38-1 66.5t5 49.5l-58 14Zm84 171q-17-18-37.5-47.5T273-577l59-15q9 25 24 48t28 37l-42 42Z"/></svg><svg class="mi mi-f" viewBox="0 -960 960 960" aria-hidden="true"><path d="M450-110v-170q0-48-16-79t-49-64l43-43q13 11 27.5 30t24.5 35q17-26 33.5-45t31.5-32q58-47 83.5-113.5T648-766l-69 69q-9 9-21 9t-21-9q-9-9-9-21t9-21l120-120q5-5 10-7t11-2q6 0 11 2t10 7l120 120q9 9 9 21t-9 21q-9 9-21 9t-21-9l-69-69q5 126-24.5 198.5T585-432q-44 40-59.5 73T510-280v170q0 13-8.5 21.5T480-80q-13 0-21.5-8.5T450-110ZM258-636q-4-18-6.5-52.5T251-765l-68 68q-9 9-21 9t-21-9q-9-9-9-21t9-21l120-120q5-5 10-7t11-2q6 0 11 2t10 7l120 120q9 9 9 21t-9 21q-9 9-21 9t-21-9l-69-69q-2 38-1 66.5t5 49.5l-58 14Zm84 171q-17-18-37.5-47.5T273-577l59-15q9 25 24 48t28 37l-42 42Z"/></svg> sgDELTA</button>
+      <button class="ws-item" data-wsview="rst"><svg class="mi mi-o" viewBox="0 -960 960 960" aria-hidden="true"><path d="M390-320h180q12.75 0 21.38-8.63Q600-337.25 600-350v-140q0-12.75-8.62-21.38Q582.75-520 570-520h-10v-40q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560v40h-10q-12.75 0-21.37 8.62Q360-502.75 360-490v140q0 12.75 8.63 21.37Q377.25-320 390-320Zm40-200v-40q0-20 15-33.5t35-13.5q20 0 35 13.51 15 13.52 15 33.49v40H430Zm40.12 435q-4.56-1-9.12-3-139-47-220-168.5t-81-266.61V-719q0-19.26 10.88-34.66Q181.75-769.07 199-776l260-97q11-4 21-4t21 4l260 97q17.25 6.93 28.13 22.34Q800-738.26 800-719v195.89Q800-378 719-256.5T499-88q-4.56 2-9.12 3T480-84q-5.32 0-9.88-1Zm9.88-58q115-38 187.5-143.5T740-523v-196l-260-98-260 98v196q0 131 72.5 236.5T480-143Zm0-337Z"/></svg><svg class="mi mi-f" viewBox="0 -960 960 960" aria-hidden="true"><path d="M390-320h180q13 0 21.5-8.5T600-350v-140q0-13-8.5-21.5T570-520h-10v-40q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560v40h-10q-13 0-21.5 8.5T360-490v140q0 13 8.5 21.5T390-320Zm40-200v-40q0-20 15-33.5t35-13.5q20 0 35 13.5t15 33.5v40H430Zm40.5 435q-4.5-1-9.5-3-139-47-220-168.5T160-523v-196q0-19 11-34.5t28-22.5l260-97q11-4 21-4t21 4l260 97q17 7 28 22.5t11 34.5v196q0 145-81 266.5T499-88q-5 2-9.5 3t-9.5 1q-5 0-9.5-1Z"/></svg> Risk Screening Tool</button>
     </div>
   </nav>
   <main class="ws-main">
@@ -2359,8 +2475,8 @@
         </div>
         <div class="right">
           <div class="info">
-            <span class="ws-meta"><span class="l" id="ws-mini-date-label">Current Exp.</span><span class="d"></span><span class="v" id="ws-mini-date">05 Jul 2030</span></span>
-            <span class="ws-meta"><span class="l">IDB Amount</span><span class="d"></span><span class="v" id="ws-mini-amount">USD $25M</span></span>
+            <span class="ws-meta"><span class="l" id="ws-mini-date-label">Current exp.</span><span class="d"></span><span class="v" id="ws-mini-date">05 Jul 2030</span></span>
+            <span class="ws-meta"><span class="l">IDB amount</span><span class="d"></span><span class="v" id="ws-mini-amount">USD $25M</span></span>
             <span class="ws-meta"><span class="l">TL</span><span class="d"></span><span class="v" id="ws-mini-lead">Alejandro Romero</span></span>
           </div>
           <div class="icons">
@@ -2369,13 +2485,25 @@
           </div>
         </div>
       </div>
+    <div id="ws-view-tool" style="display:none;">
+      <div class="nf-card">
+        <div class="nf-wrap">
+          <svg class="nf-illus" viewBox="0 0 256 189" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+            <use href="#nf-illus-src"/>
+          </svg>
+          <h1 class="nf-t">We cannot open this section</h1>
+          <p class="nf-s">This tool is not available for this operation.</p>
+          <button class="btn-filled nf-back" id="nf2-back"><span class="msr">west</span> Go back</button>
+        </div>
+      </div>
+    </div>
     <div id="ws-view-dashboard">
     <div class="ws-hero">
       <div class="ws-hero-top">
         <div class="info">
           <span class="ws-status-chip"><span class="chip-icon-slot" id="ws-status-icon"></span><span id="ws-status">Disbursing</span></span>
-          <span class="ws-meta"><span class="l" id="ws-date-label">Current Exp.</span><span class="d"></span><span class="v" id="ws-date">05 Jul 2030</span></span>
-          <span class="ws-meta"><span class="l">IDB Amount</span><span class="d"></span><span class="v" id="ws-amount">USD $25M</span></span>
+          <span class="ws-meta"><span class="l" id="ws-date-label">Current exp.</span><span class="d"></span><span class="v" id="ws-date">05 Jul 2030</span></span>
+          <span class="ws-meta"><span class="l">IDB amount</span><span class="d"></span><span class="v" id="ws-amount">USD $25M</span></span>
           <span class="ws-meta"><span class="l">TL</span><span class="d"></span><span class="v" id="ws-lead">Alejandro Romero</span></span>
         </div>
         <button class="icon-btn ops-more" aria-label="More options"><span class="msr">more_vert</span></button>
@@ -2392,28 +2520,30 @@
           <span class="ib"><span class="msr">lan</span><span id="ws-org">SCL / EDU</span></span>
           <span class="ib"><span class="msr">today</span><span id="ws-pipe">2025 / A</span></span>
         </div>
+        <div class="ws-conchip" id="ws-conchip" style="display:none;"></div>
       </div>
       <div class="ws-round"></div>
     </div>
     <div class="ws-wrap">
       <section>
-        <div class="ws-sec-title"><h2 class="ai-h"><span class="msr ai-spark">auto_awesome</span>AI Summary</h2></div>
+        <div class="ws-sec-title"><h2 class="ai-h"><span class="msr ai-spark">auto_awesome</span>AI summary</h2></div>
         <div class="ws-ai">
           <p id="ws-ai-text"></p>
         </div>
         <button class="ai-more" id="ai-more" style="display:none;">Show more</button>
+        <div class="ai-meta" id="ai-meta" style="display:none;"></div>
         <div class="ai-srcwrap" id="ai-srcwrap" style="display:none;">
           <button class="ai-srcbtn" id="ai-srcbtn" aria-expanded="false">Sources (<span id="ai-srcn">0</span>) <span class="msr">expand_more</span></button>
           <div class="ai-srclist" id="ai-srclist" style="display:none;"></div>
         </div>
         <div class="ai-sep" id="ai-sep" style="display:none;"></div>
         <div class="ws-ai-foot">
-          <span class="ws-ai-caption" id="ai-caption">AI Generated. May contain errors.</span>
+          <span class="ws-ai-caption" id="ai-caption">AI generated. May contain errors.</span>
           <span class="ws-ai-fb" id="ws-ai-fb">
             <button class="fb-btn" id="ai-copy" data-tip="Copy summary" aria-label="Copy summary"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg></button>
             <button class="fb-btn" id="ai-regen" data-tip="Regenerate" aria-label="Regenerate summary"><span class="msr">autorenew</span></button>
             <button class="fb-btn" data-fb="up" data-tip="Good Response" aria-label="Good Response"><span class="msr">thumb_up</span></button>
-            <button class="fb-btn" data-fb="down" data-tip="Bad Response" aria-label="Bad Response"><span class="msr">thumb_down</span></button>
+            <button class="fb-btn" data-fb="down" data-tip="Bad response" aria-label="Bad response"><span class="msr">thumb_down</span></button>
           </span>
         </div>
         <div class="aifb-scrim" id="aifb-scrim"></div>
@@ -2438,7 +2568,7 @@
       </section>
       <section>
         <div class="ws-sec-title">
-          <div class="lc-titlegrp"><h2>Overall Stages</h2><span class="lc-sum" id="lc-sum"></span></div>
+          <div class="lc-titlegrp"><h2>Overall stages</h2><span class="lc-sum" id="lc-sum"></span></div>
           <div class="ctrl">
             <button class="icon-btn outlined" id="ws-st-prev" aria-label="Scroll stages left"><span class="msr">chevron_left</span></button>
             <button class="icon-btn outlined" id="ws-st-next" aria-label="Scroll stages right"><span class="msr">chevron_right</span></button>
@@ -2466,18 +2596,18 @@
         <div class="ws-amounts">
           <div class="ws-fin">
             <div class="hrow">
-              <div><div class="lbl">Total Operation Amount</div><div class="big" id="ws-fin-total">$89,000,000.00 USD</div></div>
+              <div><div class="lbl">Total operation amount</div><div class="big" id="ws-fin-total">$89,000,000.00 USD</div></div>
               <div class="right" id="ws-fin-disbwrap"><div class="lbl">Disbursed</div><div class="big" id="ws-fin-pct">90.53%</div></div>
             </div>
             <div class="bar-labels">
-              <span><span class="l">Disbursed Amount</span><span class="v" id="ws-fin-disb">$85,000,000.00 USD</span></span>
+              <span><span class="l">Disbursed amount</span><span class="v" id="ws-fin-disb">$85,000,000.00 USD</span></span>
               <span><span class="l">Pending</span><span class="v" id="ws-fin-pending">$4,000,000.00 USD</span></span>
             </div>
             <div class="track"><div class="fill" id="ws-fin-fill" style="width:90.53%"></div></div>
             <div class="bdown">
-              <div class="bd"><div class="l">Approved IDB Amount</div><div class="v" id="ws-fin-approved">$75,000,000.00 USD</div></div>
-              <div class="bd"><div class="l">Current IDB Amount</div><div class="v" id="ws-fin-current">$74,000,000.00 USD</div></div>
-              <div class="bd"><div class="l">Counterpart Amount</div><div class="v" id="ws-fin-counter">$15,000,000.00 USD</div></div>
+              <div class="bd"><div class="l">Approved IDB amount</div><div class="v" id="ws-fin-approved">$75,000,000.00 USD</div></div>
+              <div class="bd"><div class="l">Current IDB amount</div><div class="v" id="ws-fin-current">$74,000,000.00 USD</div></div>
+              <div class="bd"><div class="l">Counterpart amount</div><div class="v" id="ws-fin-counter">$15,000,000.00 USD</div></div>
               <div class="bd"><div class="l">Co-financing Amount</div><div class="v" id="ws-fin-cofin">$0.00 USD</div></div>
             </div>
           </div>
@@ -2489,8 +2619,8 @@
             <div class="cbody">
               <div class="cinfo">
                 <div class="bank"><span class="msr">account_balance</span> Ministerio de Desarrollo Social</div>
-                <div class="kv"><div class="l">Total Operation Amount</div><div class="v" id="ws-con-total">$89,000,000.00 USD</div></div>
-                <div class="kv"><div class="l">Disbursed Amount</div><div class="v" id="ws-con-disb">$85,000,000.00 USD</div></div>
+                <div class="kv"><div class="l">Total operation amount</div><div class="v" id="ws-con-total">$89,000,000.00 USD</div></div>
+                <div class="kv"><div class="l">Disbursed amount</div><div class="v" id="ws-con-disb">$85,000,000.00 USD</div></div>
               </div>
               <div class="ws-donut" id="ws-donut"><span id="ws-con-pct">90.53%</span></div>
             </div>
@@ -2498,7 +2628,7 @@
         </div>
       </section>
       <section>
-        <div class="ws-sec-title"><h2>Quick Access</h2></div>
+        <div class="ws-sec-title"><h2>Quick access</h2></div>
         <div class="ws-qa">
           <div class="ws-qa-card">
             <span class="imp-iconbox"><span class="msr">list_alt</span></span>
@@ -2526,7 +2656,7 @@
                 </div>
                 <div class="row-2"><span class="op-code">AR-L1372</span><span> · Programa de Agua Potable y Saneamiento Rural para Comunidades del Norte Argentino</span></div>
               </div>
-              <button class="btn-filled" tabindex="-1">Review Docs</button>
+              <button class="btn-filled" tabindex="-1">Review docs</button>
             </div>
           </div>
           <div class="ghost-fade" aria-hidden="true"></div>
@@ -2542,8 +2672,8 @@
     <div id="ws-view-opdata" style="display:none;">
       <div class="ws-page">
         <div class="od-titlerow">
-          <h1>Operation Data</h1>
-          <span class="od-updated" data-t2h="Data Refresh" data-t2b="Project information is updated from Convergence once a day, so changes will not be instantly reflected in the Operations Portal."><span class="msr">schedule</span>Last updated: <b id="od-updated-at">28 Jul 2026, 6:00 AM</b></span>
+          <h1>Operation data</h1>
+          <span class="od-updated" data-t2h="Data refresh" data-t2b="Project information is updated from Convergence once a day, so changes will not be instantly reflected in the Operational Portal."><span class="msr">schedule</span>Last updated: <b id="od-updated-at">28 Jul 2026, 6:00 AM</b></span>
         </div>
 
         <div class="od-reform" data-flag="reformBanner">
@@ -2553,8 +2683,8 @@
         </div>
 
         <div class="od-tabs">
-          <button class="od-tab active" data-odtab="gi">General Information</button>
-          <button class="od-tab" data-odtab="team">Team &amp; Responsibilities</button>
+          <button class="od-tab active" data-odtab="gi">General information</button>
+          <button class="od-tab" data-odtab="team">Team &amp; responsibilities</button>
         </div>
 
         <div id="od-tab-gi">
@@ -2567,17 +2697,17 @@
                 <p class="od3-objtext" id="od-objective">The general objective of the program is to contribute to making the administrative and technical management of public investment processes more effective, reducing the loss of social benefits caused by delays in the implementation of road, water access, and school infrastructure projects. The specific objectives are: (i) to strengthen the institutional capacity of the executing agencies responsible for planning, procurement, and supervision of public works; (ii) to expand sustainable access to drinking water and basic sanitation services for rural and dispersed communities, prioritizing territories with the highest levels of unmet basic needs; and (iii) to improve the quality and climate resilience of the social infrastructure financed under the program. The program is expected to directly benefit approximately 145,000 people, including indigenous and rural populations, and to consolidate a results based management model that can be replicated in future operations of the sector.</p>
               </div>
               <div class="od3-bottom">
-                <div class="od3-kfhead"><h4 class="od3-kf">Key Facts</h4><span class="od3-tag" id="od-pmr-row">PMR Required</span></div>
+                <div class="od3-kfhead"><h4 class="od3-kf">Key facts</h4><span class="od3-tag" id="od-pmr-row">PMR Required</span></div>
                 <div class="od3-cols">
                   <div class="od3-col">
-                    <div class="od3-kv"><span class="l" id="od-approval-label">Est. Approval Date</span><span class="v" id="od-approval">10 Jun 2025</span></div>
+                    <div class="od3-kv"><span class="l" id="od-approval-label">Est. approval date</span><span class="v" id="od-approval">10 Jun 2025</span></div>
                     <div class="od3-kv"><span class="l">Product</span><span class="v" id="od-product">LON / INV / ESP</span></div>
                     <div class="od3-kv"><span class="l">Responsible</span><span class="v" id="od-responsible">PTI/CTI – Technology &amp; Innovation</span></div>
                     <div class="od3-kv"><span class="l">Borrower</span><span class="v" id="od-borrower">Government of Brazil</span></div>
                     <div class="od3-kv" id="od-contracts-kv"><span class="l">Contracts</span><span class="v od3-contracts" id="od-contracts"></span></div>
                   </div>
                   <div class="od3-col">
-                    <div class="od3-kv"><span class="l">Current Expiration</span><span class="v" id="od-expiration">05 Jul 2030</span></div>
+                    <div class="od3-kv"><span class="l">Current expiration</span><span class="v" id="od-expiration">05 Jul 2030</span></div>
                     <div class="od3-kv"><span class="l">Pipeline</span><span class="v" id="od-pipeline">2026 / A</span></div>
                     <div class="od3-kv"><span class="l">Co-Responsible</span><span class="v" id="od-coresp">SCL/GDI – Gender and Diversity</span></div>
                     <div class="od3-kv"><span class="l">Unit of Disbursement Responsibility</span><span class="v" id="od-udr">CSC/CBR – Brazil Country Office</span></div>
@@ -2591,7 +2721,7 @@
               <h3 class="od3-h3">Environmental &amp; social assessment</h3>
               <div class="od3-esa">
                 <div class="od3-kv"><span class="l">Category</span><span class="v">C</span></div>
-                <div class="od3-kv"><span class="l">Performance</span><span class="v">Not Assigned</span></div>
+                <div class="od3-kv"><span class="l">Performance</span><span class="v">Not assigned</span></div>
                 <div class="od3-kv"><span class="l">Risk</span><span class="v od3-risk"><span class="dot"></span>Low</span></div>
               </div>
             </div>
@@ -2608,7 +2738,7 @@
               <div class="od3-details">
                 <h4>Details</h4>
                 <div class="fr"><span class="l">Original IDB amount</span><span class="v" id="od-original">$320,000,000.00</span></div>
-                <div class="fr"><span class="l">Current IDB Amount</span><span class="v" id="od-current">$313,600,000.00</span></div>
+                <div class="fr"><span class="l">Current IDB amount</span><span class="v" id="od-current">$313,600,000.00</span></div>
                 <div class="fr"><span class="l">Counterpart amount</span><span class="v" id="od-counterpart">$80,000,000.00</span></div>
                 <div class="fr"><span class="l">Co-Financing</span><span class="v" id="od-cofin">$0.00</span></div>
               </div>
@@ -2648,7 +2778,7 @@
               <div class="od3-teamhead">
                 <span class="ic"><span class="msr">groups_2</span></span>
                 <div class="tm-titlewrap">
-                  <div class="tt">IDB Operation Team</div>
+                  <div class="tt">IDB operation team</div>
                   <div class="tm-count" id="tm-count"></div>
                 </div>
                 <div class="fd-search tm-search" id="tm-searchbox" style="display:none;">
@@ -2667,7 +2797,7 @@
               </div>
             </div>
             <div class="od3-card od3-teamcard" data-flag="executingAgencyTeam">
-              <div class="od3-teamhead"><span class="ic"><span class="msr">corporate_fare</span></span>Executing Agency Team</div>
+              <div class="od3-teamhead"><span class="ic"><span class="msr">corporate_fare</span></span>Executing agency team</div>
               <div class="od3-teamgrid">
                 <div class="od3-role"><div class="r">Borrower</div><div class="n" id="od-team-borrower">Government of Brazil</div></div>
                 <div class="od3-role"><div class="r">Executing Agency</div><div class="n">Ministerio de Desarrollo Social</div></div>
@@ -2682,8 +2812,8 @@
     <div id="ws-view-feed" style="display:none;">
       <div class="ws-page">
         <div class="od-titlerow">
-          <h1>Activity Feed</h1>
-          <span class="od-updated" data-t2h="Data Refresh" data-t2b="Project information is updated from Convergence once a day, so changes will not be instantly reflected in the Operations Portal."><span class="msr">schedule</span>Last updated: <b id="fd-updated-at">28 Jul 2026, 6:00 AM</b></span>
+          <h1>Activity feed</h1>
+          <span class="od-updated" data-t2h="Data refresh" data-t2b="Project information is updated from Convergence once a day, so changes will not be instantly reflected in the Operational Portal."><span class="msr">schedule</span>Last updated: <b id="fd-updated-at">28 Jul 2026, 6:00 AM</b></span>
         </div>
         <div class="fd-filtercard" id="fd-filters">
           <div class="fd-fleft">
@@ -2717,10 +2847,10 @@
 <div class="crumb-menu" id="crumb-menu"></div>
 
 <div class="menu opmenu" id="ops-menu">
-  <button class="menu-item"><span class="msr micon">autorenew</span>View Lifecycle</button>
+  <button class="menu-item"><span class="msr micon">autorenew</span>View lifecycle</button>
   <button class="menu-item"><span class="msr micon">arrow_outward</span>Open in EZSHare</button>
   <button class="menu-item" id="ops-conv"><span class="msr micon">arrow_outward</span>Open in Convergence</button>
-  <button class="menu-item" id="ops-share"><span class="msr micon">share</span>Share Operation Link</button>
+  <button class="menu-item" id="ops-share"><span class="msr micon">share</span>Share operation link</button>
 </div>
 
 <div class="av-menu" id="av-menu">
@@ -2773,9 +2903,9 @@
 </div>
 <div class="snackbar" id="snackbar"><span id="snack-msg"></span><button class="undo" id="snack-undo">Undo</button></div>
 <div class="scrim" id="scrim"></div>
-<aside class="drawer" id="drawer" role="dialog" aria-label="More Filters">
+<aside class="drawer" id="drawer" role="dialog" aria-label="More filters">
   <div class="drawer-head">
-    <h3>More Filters</h3>
+    <h3>More filters</h3>
     <button class="icon-btn" id="drawer-close" aria-label="Close"><span class="msr">close</span></button>
   </div>
   <div class="drawer-body">
@@ -2785,7 +2915,7 @@
           <span class="cnt">0</span>
           <span class="msr">expand_more</span>
         </div>
-        <div class="f-section-body"><span class="f-label">Country Departments</span><div class="f-chips" id="dept-chips"><button class="f-chip" data-dept="CAN">CAN</button><button class="f-chip" data-dept="CCB">CCB</button><button class="f-chip" data-dept="CID">CID</button><button class="f-chip" data-dept="CSC">CSC</button></div><div class="f-search-card"><div class="combo" data-group="countries"><div class="f-search combo-trigger"><span class="msr">search</span><span class="ph">Search by Country</span><span class="msr">expand_more</span></div><div class="combo-panel"></div><div class="combo-chips"></div></div></div></div>
+        <div class="f-section-body"><span class="f-label">Country departments</span><div class="f-chips" id="dept-chips"><button class="f-chip" data-dept="CAN">CAN</button><button class="f-chip" data-dept="CCB">CCB</button><button class="f-chip" data-dept="CID">CID</button><button class="f-chip" data-dept="CSC">CSC</button></div><div class="f-search-card"><div class="combo" data-group="countries"><div class="f-search combo-trigger"><span class="msr">search</span><span class="ph">Search by Country</span><span class="msr">expand_more</span></div><div class="combo-panel"></div><div class="combo-chips"></div></div></div></div>
       </div>
       <div class="f-section" data-fsection="sect">
         <div class="f-section-head" data-toggle="sect">
@@ -2801,7 +2931,7 @@
           <span class="cnt">0</span>
           <span class="msr">expand_more</span>
         </div>
-        <div class="f-section-body"><div class="f-search-card"><div class="combo" id="dcombo-pipeline"><div class="f-search combo-trigger"><span class="val" id="dcombo-pipeline-val">All Pipeline</span><span class="msr">expand_more</span></div><div class="combo-panel"></div><div class="combo-chips"></div></div></div></div>
+        <div class="f-section-body"><div class="f-search-card"><div class="combo" id="dcombo-pipeline"><div class="f-search combo-trigger"><span class="val" id="dcombo-pipeline-val">All pipeline</span><span class="msr">expand_more</span></div><div class="combo-panel"></div><div class="combo-chips"></div></div></div></div>
       </div>
       <div class="f-section bar-collapsed-only" data-fsection="products">
         <div class="f-section-head" data-toggle="products">
@@ -2809,7 +2939,7 @@
           <span class="cnt">0</span>
           <span class="msr">expand_more</span>
         </div>
-        <div class="f-section-body"><div class="f-search-card"><div class="combo" id="dcombo-products"><div class="f-search combo-trigger"><span class="val" id="dcombo-products-val">All Products</span><span class="msr">expand_more</span></div><div class="combo-panel"></div><div class="combo-chips"></div></div></div></div>
+        <div class="f-section-body"><div class="f-search-card"><div class="combo" id="dcombo-products"><div class="f-search combo-trigger"><span class="val" id="dcombo-products-val">All products</span><span class="msr">expand_more</span></div><div class="combo-panel"></div><div class="combo-chips"></div></div></div></div>
       </div>
       <div class="f-section bar-collapsed-only" data-fsection="instruments">
         <div class="f-section-head" data-toggle="instruments">
@@ -2833,13 +2963,13 @@
           <span class="cnt">0</span>
           <span class="msr">expand_more</span>
         </div>
-        <div class="f-section-body"><div class="f-search-card"><div class="combo" id="dcombo-stages"><div class="f-search combo-trigger"><span class="val" id="dcombo-stages-val">All Stages</span><span class="msr">expand_more</span></div><div class="combo-panel"></div><div class="combo-chips"></div></div></div></div>
+        <div class="f-section-body"><div class="f-search-card"><div class="combo" id="dcombo-stages"><div class="f-search combo-trigger"><span class="val" id="dcombo-stages-val">All stages</span><span class="msr">expand_more</span></div><div class="combo-panel"></div><div class="combo-chips"></div></div></div></div>
       </div></div>
       </div>
   </div>
   <div class="drawer-foot">
-    <button class="btn-clear" id="btn-clear">Clear Filters</button>
-    <button class="btn-results" id="btn-results">Show Results</button>
+    <button class="btn-clear" id="btn-clear">Clear filters</button>
+    <button class="btn-results" id="btn-results">Show results</button>
   </div>
 </aside>
 
@@ -2869,8 +2999,20 @@
     });
   });
 
+  // ===== Page not found =====
+  function showNotFound() {
+    navItems.forEach(i => i.classList.remove('active'));
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('visible'));
+    document.getElementById('screen-notfound').classList.add('visible');
+  }
+  document.getElementById('nf-back').addEventListener('click', () => { location.hash = '#/home'; });
+  document.getElementById('nf2-back').addEventListener('click', () => {
+    // Go back; direct landings with no history fall back to the operation dashboard
+    if (history.length > 1) history.back(); else setWsView('dashboard');
+  });
 
-  // ===== More Filters drawer =====
+
+  // ===== More filters drawer =====
   const drawer = document.getElementById('drawer');
   const scrim = document.getElementById('scrim');
   const openDrawer = () => { syncDraftFromApplied(); drawer.classList.add('open'); scrim.classList.add('open'); document.body.classList.add('no-scroll'); };
@@ -3000,7 +3142,7 @@
                     sectors: new Set(), divisions: new Set() };
   const draft = { depts: new Set(), countries: new Set(), sectors: new Set(), divisions: new Set(),
                   pipeline: 'all', product: null, instrument: null, modality: null, stages: new Set() };
-  let sortMode = 'Pinned First';   // 'Pinned First' | 'Date' | 'Project ID'
+  let sortMode = 'Pinned first';   // 'Pinned first' | 'Date' | 'Project ID'
   let sortOrder = 'asc';
   let pageSize = 10;
   let page = 1;
@@ -3112,10 +3254,10 @@
       <div class="op-row-meta">
         <div class="meta-item"><span class="meta-box">${cat}</span><span class="meta-texts"><span class="lbl">Pipeline</span><span class="val">${year}</span></span></div>
         <div class="meta-item"><span class="meta-box">LON</span><span class="meta-texts"><span class="lbl">Product</span><span class="val">INV &bull; ESP</span></span></div>
-        <div class="meta-item"><span class="meta-box">USD</span><span class="meta-texts"><span class="lbl">IDB Amount</span><span class="val mono">${c[10]}</span></span></div>
-        <div class="meta-item"><span class="meta-box"><span class="msr">account_tree</span></span><span class="meta-texts"><span class="lbl">Org. Unit</span><span class="val link">${sector}</span></span></div>
+        <div class="meta-item"><span class="meta-box">USD</span><span class="meta-texts"><span class="lbl">IDB amount</span><span class="val mono">${c[10]}</span></span></div>
+        <div class="meta-item"><span class="meta-box"><span class="msr">account_tree</span></span><span class="meta-texts"><span class="lbl">Org. unit</span><span class="val link">${sector}</span></span></div>
         <div class="meta-item"><span class="meta-circle">${initials(lead)}</span><span class="meta-texts"><span class="lbl">Team Lead</span><span class="val link">${lead}</span></span></div>
-        <div class="meta-item"><span class="meta-texts"><span class="lbl">Est. Approval</span><span class="val">${c[8] || '10 Jun 2025'}</span></span></div>
+        <div class="meta-item"><span class="meta-texts"><span class="lbl">Est. approval</span><span class="val">${c[8] || '10 Jun 2025'}</span></span></div>
         <span class="chip-status">${status}</span>
       </div>
     </div>`;
@@ -3157,10 +3299,10 @@
       </div>
       <div class="imp-mid">
         <div class="imp-item"><span class="imp-chip">${prodChip}</span><span class="imp-texts"><span class="lbl">Product</span><span class="val">${prodPair}</span></span></div>
-        <div class="imp-item"><span class="imp-chip">USD</span><span class="imp-texts"><span class="lbl">IDB Amount</span><span class="val mono">${amount}</span></span></div>
-        <div class="imp-item"><span class="imp-iconbox"><span class="msr">lan</span></span><span class="imp-texts"><span class="lbl">Org. Unit</span><span class="val link">${orgUnit}</span></span></div>
+        <div class="imp-item"><span class="imp-chip">USD</span><span class="imp-texts"><span class="lbl">IDB amount</span><span class="val mono">${amount}</span></span></div>
+        <div class="imp-item"><span class="imp-iconbox"><span class="msr">lan</span></span><span class="imp-texts"><span class="lbl">Org. unit</span><span class="val link">${orgUnit}</span></span></div>
         <div class="imp-item"><span class="imp-avatar">${initials(lead)}</span><span class="imp-texts"><span class="lbl">Team Lead</span><span class="val link">${lead.includes(',') ? lead.split(', ').reverse().join(' ') : lead}</span></span></div>
-        <div class="imp-item imp-date"><span class="imp-texts"><span class="lbl">Current Expiration</span><span class="val">${expiration}</span></span></div>
+        <div class="imp-item imp-date"><span class="imp-texts"><span class="lbl">Current expiration</span><span class="val">${expiration}</span></span></div>
         <span class="imp-status">${status}</span>
       </div>
     </div>`;
@@ -3174,7 +3316,7 @@
     const cardDate = r => parseDate(currentPhase === 'implementation' ? r[13] : (r[8] || '10 Jun 2025'));
     if (sortMode === 'Project ID') rows = [...rows].sort((a, b) => (sortOrder === 'asc' ? 1 : -1) * a[0].localeCompare(b[0]));
     if (sortMode === 'Date') rows = [...rows].sort((a, b) => (sortOrder === 'asc' ? 1 : -1) * (cardDate(a) - cardDate(b)));
-    if (sortMode === 'Pinned First') rows = [...rows].sort((a, b) => (pinnedOps.has(b[0]) ? 1 : 0) - (pinnedOps.has(a[0]) ? 1 : 0));
+    if (sortMode === 'Pinned first') rows = [...rows].sort((a, b) => (pinnedOps.has(b[0]) ? 1 : 0) - (pinnedOps.has(a[0]) ? 1 : 0));
     const total = rows.length;
     const pages = Math.max(1, Math.ceil(total / pageSize));
     if (page > pages) page = pages;
@@ -3221,7 +3363,7 @@
   const emptyFilterState = () => ({
     pipeline: 'all', product: null, instrument: null, modality: null,
     stages: new Set(), depts: new Set(), countries: new Set(),
-    sectors: new Set(), divisions: new Set(), sortMode: 'Pinned First'
+    sectors: new Set(), divisions: new Set(), sortMode: 'Pinned first'
   });
   const phaseStates = { preparation: emptyFilterState(), implementation: emptyFilterState() };
 
@@ -3285,7 +3427,7 @@
       document.querySelectorAll('#pipeline-menu .menu-item').forEach(i => i.classList.remove('selected'));
       item.classList.add('selected');
       document.getElementById('pipeline-label').textContent = item.dataset.val;
-      applied.pipeline = item.dataset.val === 'All Pipeline' ? 'all' : item.dataset.val.replace('Pipeline ', '');
+      applied.pipeline = item.dataset.val === 'All pipeline' ? 'all' : item.dataset.val.replace('Pipeline ', '');
       closeMenus();
       refresh();
     });
@@ -3355,25 +3497,25 @@
     });
   });
 
-  // ---------------- Sort (two-group menu: Sort by + Sort Order) ----------------
-  const sortDateLabel = () => currentPhase === 'implementation' ? 'Current Expiration' : 'Estimated Approval Date';
+  // ---------------- Sort (two-group menu: Sort by + Sort order) ----------------
+  const sortDateLabel = () => currentPhase === 'implementation' ? 'Current expiration' : 'Estimated Approval Date';
   const sortDisplayName = () => sortMode === 'Date' ? sortDateLabel() : sortMode;
 
   function renderSortMenu() {
     const menu = document.getElementById('sort-menu');
     const opts = [
-      { key: 'Pinned First', label: 'Pinned First' },
+      { key: 'Pinned first', label: 'Pinned first' },
       { key: 'Date', label: sortDateLabel() },
       { key: 'Project ID', label: 'Project ID' }
     ];
     let html = '<span class="menu-label">Sort by</span>';
     html += opts.map(o =>
       `<button class="menu-item${sortMode === o.key ? ' selected' : ''}" data-sort="${o.key}">${o.label}<span class="mcheck"><span class="msr">check</span></span></button>`).join('');
-    if (sortMode !== 'Pinned First') {
+    if (sortMode !== 'Pinned first') {
       const orders = sortMode === 'Date'
         ? [ { key: 'asc', label: 'Soonest on Top' }, { key: 'desc', label: 'Oldest on Top' } ]
         : [ { key: 'asc', label: 'A to Z' }, { key: 'desc', label: 'Z to A' } ];
-      html += '<span class="menu-label">Sort Order</span>';
+      html += '<span class="menu-label">Sort order</span>';
       html += orders.map(o =>
         `<button class="menu-item${sortOrder === o.key ? ' selected' : ''}" data-order="${o.key}">${o.label}<span class="mcheck"><span class="msr">check</span></span></button>`).join('');
     }
@@ -3515,13 +3657,13 @@
     if (!dcombo('pipeline')) return;
     // Pipeline (single, no initials)
     buildDrawerSingle('pipeline',
-      [{ code: 'all', label: 'All Pipeline', initials: false }, { code: 'A', label: 'Pipeline A', initials: false }, { code: 'B', label: 'Pipeline B', initials: false }],
-      draft.pipeline, code => { draft.pipeline = code || 'all'; }, { allLabel: 'All Pipeline' });
-    dcombo('pipeline').querySelector('.val').textContent = draft.pipeline === 'all' ? 'All Pipeline' : 'Pipeline ' + draft.pipeline;
+      [{ code: 'all', label: 'All pipeline', initials: false }, { code: 'A', label: 'Pipeline A', initials: false }, { code: 'B', label: 'Pipeline B', initials: false }],
+      draft.pipeline, code => { draft.pipeline = code || 'all'; }, { allLabel: 'All pipeline' });
+    dcombo('pipeline').querySelector('.val').textContent = draft.pipeline === 'all' ? 'All pipeline' : 'Pipeline ' + draft.pipeline;
     dsec('pipeline').querySelector('.cnt').textContent = draft.pipeline === 'all' ? 0 : 1;
     // Products (single, initials)
     buildDrawerSingle('products', OPO.products.map(p => ({ code: p.code, label: p.label })), draft.product,
-      code => { draft.product = code; draft.instrument = null; draft.modality = null; }, { allLabel: 'All Products' });
+      code => { draft.product = code; draft.instrument = null; draft.modality = null; }, { allLabel: 'All products' });
     // Instruments (single, initials; needs Loan)
     buildDrawerSingle('instruments', OPO.loanInstruments, draft.instrument,
       code => { draft.instrument = code; draft.modality = null; },
@@ -3534,7 +3676,7 @@
     const combo = dcombo('stages');
     const panel = combo.querySelector('.combo-panel');
     const val = combo.querySelector('.val');
-    val.textContent = draft.stages.size ? draft.stages.size + ' selected' : 'All Stages';
+    val.textContent = draft.stages.size ? draft.stages.size + ' selected' : 'All stages';
     dsec('stages').querySelector('.cnt').textContent = draft.stages.size;
     panel.innerHTML = OPO.stages.map(s =>
       `<button class="combo-item${draft.stages.has(s) ? ' checked' : ''}" data-s="${s}"><span class="cbx"><span class="msr">check</span></span>${s}</button>`).join('');
@@ -3570,7 +3712,7 @@
     if (!wasOpen) combo.classList.add('open');
   }, true);
 
-  // Show Results applies draft (geo/sector + bar filters edited in drawer)
+  // Show results applies draft (geo/sector + bar filters edited in drawer)
   document.getElementById('btn-results').addEventListener('click', () => {
     ['depts','countries','sectors','divisions'].forEach(k => { applied[k] = new Set(draft[k]); });
     applied.pipeline = draft.pipeline;
@@ -3583,9 +3725,9 @@
   });
 
   function syncBarUIFromApplied() {
-    document.getElementById('pipeline-label').textContent = applied.pipeline === 'all' ? 'All Pipeline' : 'Pipeline ' + applied.pipeline;
+    document.getElementById('pipeline-label').textContent = applied.pipeline === 'all' ? 'All pipeline' : 'Pipeline ' + applied.pipeline;
     document.querySelectorAll('#pipeline-menu .menu-item').forEach(i =>
-      i.classList.toggle('selected', (applied.pipeline === 'all' && i.dataset.val === 'All Pipeline') || i.dataset.val === 'Pipeline ' + applied.pipeline));
+      i.classList.toggle('selected', (applied.pipeline === 'all' && i.dataset.val === 'All pipeline') || i.dataset.val === 'Pipeline ' + applied.pipeline));
     document.querySelectorAll('#products-menu .menu-item').forEach(i => i.classList.toggle('selected', i.dataset.chip === applied.product));
     buildSingleMenu('instruments-menu', applied.product === 'LON' ? OPO.loanInstruments : [], code => {
       applied.instrument = code; applied.modality = null; buildModalities(); });
@@ -3595,7 +3737,7 @@
     document.querySelectorAll('#modalities-menu .menu-item').forEach(i => i.classList.toggle('selected', i.dataset.chip === applied.modality));
     stagesMenu.querySelectorAll('.menu-item').forEach(i => i.classList.toggle('checked', applied.stages.has(i.dataset.chip)));
   }
-  // Drawer Clear Filters clears draft and applied drawer filters
+  // Drawer Clear filters clears draft and applied drawer filters
   document.getElementById('btn-clear').addEventListener('click', () => {
     ['depts','countries','sectors','divisions'].forEach(k => { draft[k].clear(); applied[k].clear(); });
     draft.pipeline = 'all'; draft.product = null; draft.instrument = null; draft.modality = null; draft.stages.clear();
@@ -3632,7 +3774,7 @@
     };
     if (applied.pipeline !== 'all') addChip('Pipeline ' + applied.pipeline, () => {
       applied.pipeline = 'all';
-      document.getElementById('pipeline-label').textContent = 'All Pipeline';
+      document.getElementById('pipeline-label').textContent = 'All pipeline';
       document.querySelectorAll('#pipeline-menu .menu-item').forEach((i, idx) => i.classList.toggle('selected', idx === 0));
     });
     if (applied.product) addChip(applied.product, () => {
@@ -3673,7 +3815,7 @@
     applied.pipeline = 'all'; applied.product = null; applied.instrument = null; applied.modality = null;
     applied.stages.clear();
     ['depts','countries','sectors','divisions'].forEach(k => { applied[k].clear(); draft[k].clear(); });
-    document.getElementById('pipeline-label').textContent = 'All Pipeline';
+    document.getElementById('pipeline-label').textContent = 'All pipeline';
     document.querySelectorAll('#pipeline-menu .menu-item').forEach((i, idx) => i.classList.toggle('selected', idx === 0));
     document.querySelectorAll('#products-menu .menu-item, #instruments-menu .menu-item, #modalities-menu .menu-item').forEach(i => i.classList.remove('selected'));
     stagesMenu.querySelectorAll('.menu-item').forEach(i => i.classList.remove('checked'));
@@ -3711,7 +3853,7 @@
       preparation: "<svg class=\"chip-ic\" viewBox=\"98.0 140.0 24 24\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M114 150C114.283 150 114.521 149.904 114.713 149.713C114.904 149.521 115 149.283 115 149C115 148.717 114.904 148.479 114.713 148.288C114.521 148.096 114.283 148 114 148H111C110.717 148 110.479 148.096 110.288 148.288C110.096 148.479 110 148.717 110 149C110 149.283 110.096 149.521 110.288 149.713C110.479 149.904 110.717 150 111 150H114ZM114 156C114.283 156 114.521 155.904 114.713 155.713C114.904 155.521 115 155.283 115 155C115 154.717 114.904 154.479 114.713 154.288C114.521 154.096 114.283 154 114 154H111C110.717 154 110.479 154.096 110.288 154.288C110.096 154.479 110 154.717 110 155C110 155.283 110.096 155.521 110.288 155.713C110.479 155.904 110.717 156 111 156H114ZM108.413 150.413C108.804 150.021 109 149.55 109 149C109 148.45 108.804 147.979 108.413 147.588C108.021 147.196 107.55 147 107 147C106.45 147 105.979 147.196 105.588 147.588C105.196 147.979 105 148.45 105 149C105 149.55 105.196 150.021 105.588 150.413C105.979 150.804 106.45 151 107 151C107.55 151 108.021 150.804 108.413 150.413ZM108.413 156.413C108.804 156.021 109 155.55 109 155C109 154.45 108.804 153.979 108.413 153.588C108.021 153.196 107.55 153 107 153C106.45 153 105.979 153.196 105.588 153.588C105.196 153.979 105 154.45 105 155C105 155.55 105.196 156.021 105.588 156.413C105.979 156.804 106.45 157 107 157C107.55 157 108.021 156.804 108.413 156.413ZM103 161C102.45 161 101.979 160.804 101.588 160.413C101.196 160.021 101 159.55 101 159V145C101 144.45 101.196 143.979 101.588 143.588C101.979 143.196 102.45 143 103 143H117C117.55 143 118.021 143.196 118.413 143.588C118.804 143.979 119 144.45 119 145V159C119 159.55 118.804 160.021 118.413 160.413C118.021 160.804 117.55 161 117 161H103Z\"/><path d=\"M114 150C114.283 150 114.521 149.904 114.713 149.713C114.904 149.521 115 149.283 115 149C115 148.717 114.904 148.479 114.713 148.288C114.521 148.096 114.283 148 114 148H111C110.717 148 110.479 148.096 110.288 148.288C110.096 148.479 110 148.717 110 149C110 149.283 110.096 149.521 110.288 149.713C110.479 149.904 110.717 150 111 150H114ZM114 156C114.283 156 114.521 155.904 114.713 155.713C114.904 155.521 115 155.283 115 155C115 154.717 114.904 154.479 114.713 154.288C114.521 154.096 114.283 154 114 154H111C110.717 154 110.479 154.096 110.288 154.288C110.096 154.479 110 154.717 110 155C110 155.283 110.096 155.521 110.288 155.713C110.479 155.904 110.717 156 111 156H114ZM108.413 150.413C108.804 150.021 109 149.55 109 149C109 148.45 108.804 147.979 108.413 147.588C108.021 147.196 107.55 147 107 147C106.45 147 105.979 147.196 105.588 147.588C105.196 147.979 105 148.45 105 149C105 149.55 105.196 150.021 105.588 150.413C105.979 150.804 106.45 151 107 151C107.55 151 108.021 150.804 108.413 150.413ZM108.413 156.413C108.804 156.021 109 155.55 109 155C109 154.45 108.804 153.979 108.413 153.588C108.021 153.196 107.55 153 107 153C106.45 153 105.979 153.196 105.588 153.588C105.196 153.979 105 154.45 105 155C105 155.55 105.196 156.021 105.588 156.413C105.979 156.804 106.45 157 107 157C107.55 157 108.021 156.804 108.413 156.413ZM103 161C102.45 161 101.979 160.804 101.588 160.413C101.196 160.021 101 159.55 101 159V145C101 144.45 101.196 143.979 101.588 143.588C101.979 143.196 102.45 143 103 143H117C117.55 143 118.021 143.196 118.413 143.588C118.804 143.979 119 144.45 119 145V159C119 159.55 118.804 160.021 118.413 160.413C118.021 160.804 117.55 161 117 161H103Z\"/></svg>"
     };
     document.getElementById('ws-status-icon').innerHTML = PHASE_ICON_SVG[phase];
-    document.getElementById('ws-date-label').textContent = isImpl ? 'Current Exp.' : 'Est. Approval';
+    document.getElementById('ws-date-label').textContent = isImpl ? 'Current exp.' : 'Est. approval';
     document.getElementById('ws-date').textContent = isImpl ? row[13] : (row[8] || '10 Jun 2025');
     document.getElementById('ws-amount').textContent = 'USD ' + shortMoney(finFor(phase, row).base);
     document.getElementById('ws-lead').textContent = row[7];
@@ -3723,6 +3865,9 @@
     document.getElementById('ws-pin').classList.toggle('pinned', pinnedOps.has(code));
     wsScreen.dataset.code = code;
     wsRow = row; wsPhase = phase;
+    // header contracts pill renders at open (populateOpData only runs when entering Operation data)
+    wsContracts = phase === 'implementation' ? (row[8] || []) : [];
+    renderHeaderContracts();
     // architectural back: label and destination follow the operation's phase hub
     document.getElementById('ws-back-lbl').textContent =
       'Back to ' + (phase === 'implementation' ? 'Implementation' : phase === 'closing' ? 'Closing' : 'Preparation');
@@ -3737,14 +3882,15 @@
     setHash('#/op/' + code + '/dashboard');
   }
 
-  // workspace inner views (Dashboard / Operation Data)
+  // workspace inner views (Dashboard / Operation data)
   let wsRow = null, wsPhase = 'implementation';
   function setWsView(view) {
     if (wsScreen.classList.contains('open') && wsScreen.dataset.code)
-      setHash('#/op/' + wsScreen.dataset.code + '/' + (view === 'opdata' ? 'data' : view === 'feed' ? 'feed' : 'dashboard'));
+      setHash('#/op/' + wsScreen.dataset.code + '/' + (view === 'opdata' ? 'data' : view === 'feed' ? 'feed' : view === 'tool' ? 'sgdelta' : view === 'rst' ? 'risk' : 'dashboard'));
     document.getElementById('ws-view-dashboard').style.display = view === 'dashboard' ? '' : 'none';
     document.getElementById('ws-view-opdata').style.display = view === 'opdata' ? '' : 'none';
     document.getElementById('ws-view-feed').style.display = view === 'feed' ? '' : 'none';
+    document.getElementById('ws-view-tool').style.display = (view === 'tool' || view === 'rst') ? '' : 'none';
     document.getElementById('ws-mini').style.display = view === 'dashboard' ? 'none' : '';
     document.querySelectorAll('.ws-item[data-wsview]').forEach(i => i.classList.toggle('active', i.dataset.wsview === view));
     if (view !== 'dashboard' && wsRow) {
@@ -3817,7 +3963,7 @@
     const pair = isImpl ? (row[10] || 'INV \u2022 ESP') : 'INV \u2022 ESP';
     document.getElementById('od-product').textContent = (isImpl ? row[9] : 'LON') + ' / ' + pair.replace(' \u2022 ', ' / ');
     document.getElementById('od-pipeline').textContent = row[2] + ' / ' + row[1];
-    document.getElementById('od-approval-label').textContent = isImpl ? 'Approval Date' : 'Est. Approval Date';
+    document.getElementById('od-approval-label').textContent = isImpl ? 'Approval Date' : 'Est. approval date';
     document.getElementById('od-approval').textContent = isImpl ? '10 Jun 2025' : (row[8] || '10 Jun 2025');
     document.getElementById('od-expiration').textContent = isImpl ? row[13] : '\u2014';
     document.getElementById('od-pmr-row').style.display = isImpl ? '' : 'none';
@@ -3830,7 +3976,7 @@
       : `${parts[0]} \u2013 ${SECTOR_NAME[parts[0]] || parts[0]}`;
     document.getElementById('od-responsible').textContent = respText;
     document.getElementById('od-udr').textContent = `${dept}/C${cc} \u2013 ${country} Country Office`;
-    // co-responsible + participants: deterministic per op, one source for Key Facts and Responsibility units
+    // co-responsible + participants: deterministic per op, one source for Key facts and Responsibility units
     const RU_CO = ['SCL/GDI \u2013 Gender and Diversity', 'CSD/CCS \u2013 Climate Change Solutions Division', 'IFD/ICS \u2013 Innovation in Citizen Services', 'SCL/SPH \u2013 Social Protection and Health'];
     const RU_PART = ['CSC/CSC \u2013 Southern Cone', 'LEG/LEG \u2013 Legal', 'VPC/FMP \u2013 Ops Fin Mgmt & Procurement Svc', 'ESG/SEN \u2013 Environmental and Social Solutions', 'KIC/KLD \u2013 Knowledge, Innovation and Communication'];
     const rh = fdHash(row[0]);
@@ -3872,6 +4018,22 @@
     // all contract IDs visible as links, wrapping to new lines (no +N collapse)
     const holder = document.getElementById('od-contracts');
     holder.innerHTML = wsContracts.map(c => `<span class="contract">${c}</span>`).join('');
+    renderHeaderContracts();
+  }
+  function renderHeaderContracts() {
+    // header pill: first 3 IDs inline, the rest behind +N with a DS tooltip; hidden when no contracts
+    const el = document.getElementById('ws-conchip');
+    if (!el) return;
+    if (!wsContracts.length) { el.style.display = 'none'; return; }
+    const MAX = 3;
+    const shown = wsContracts.slice(0, MAX);
+    const rest = wsContracts.slice(MAX);
+    el.innerHTML = '<span class="lb">Contracts</span>'
+      + shown.map(c => '<span class="d"></span><span class="cid">' + c + '</span>').join('')
+      + (rest.length
+        ? '<span class="d"></span><span class="more" data-t2h="More contracts" data-t2b="' + rest.join(' · ') + '">+' + rest.length + '</span>'
+        : '');
+    el.style.display = '';
   }
   const OD_OBJ_FULL = document.getElementById('od-objective').textContent.trim();
   const OD_OBJ_CUT = (() => { const i = OD_OBJ_FULL.indexOf(' are: (i)'); return i > 0 ? i : 320; })();
@@ -3929,7 +4091,7 @@
   document.getElementById('ws-st-prev').addEventListener('click', () => document.getElementById('ws-stages').scrollBy({left: -240, behavior: lcScrollBehavior()}));
   document.getElementById('ws-st-next').addEventListener('click', () => document.getElementById('ws-stages').scrollBy({left: 240, behavior: lcScrollBehavior()}));
 
-  // ===== Overall Stages lifecycle timeline (flag lcTimeline) =====
+  // ===== Overall stages lifecycle timeline (flag lcTimeline) =====
   // '@PP' resolves per operation to 'PP Approved' or 'PP Not Required' (mutually exclusive)
   const LC_STAGES = {
     preparation: ['Registered','Started','PP Distributed','@PP','QRR Approved','POD Approved','OPC Approved','DLP Approved','Approved'],
@@ -4142,7 +4304,7 @@
   }
   window.addEventListener('resize', () => lcArrows());
 
-  // ===== Operation Data freshness indicator (daily warehouse refresh at 6:00 AM) =====
+  // ===== Operation data freshness indicator (daily warehouse refresh at 6:00 AM) =====
   (function () {
     const now = new Date();
     const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -4183,13 +4345,13 @@
         let row = OPO.impCards.find(r => r[0] === code);
         if (!row) { const p = OPO.cards.find(r => r[0] === code); if (p) { row = p; phase = 'preparation'; } }
         if (!row) {
-          const cc = code.slice(0, 2);
-          const dept = Object.keys(OPO.countriesByDept).find(d => OPO.countriesByDept[d].some(c => c[0] === cc)) || 'CSC';
-          row = [code, 'A', '2026', 'Disbursing', 'INE', dept, cc, 'James Carter',
-                 ['5385/OC-' + cc + '-1'], 'LON', 'INV \u2022 ESP', '$320,000,000', 'INE \u2022 WSA', '05 Jul 2030', OP_TITLE];
+          // unknown operation: real 404 instead of synthesizing a fake op
+          if (wsScreen.classList.contains('open')) { wsScreen.classList.remove('open'); document.body.classList.remove('no-scroll'); }
+          showNotFound();
+          return;
         }
         openWorkspace(phase, row);
-        setWsView(parts[2] === 'data' ? 'opdata' : parts[2] === 'feed' ? 'feed' : 'dashboard');
+        setWsView(parts[2] === 'data' ? 'opdata' : parts[2] === 'feed' ? 'feed' : parts[2] === 'sgdelta' ? 'tool' : parts[2] === 'risk' ? 'rst' : 'dashboard');
         if (parts[2] === 'data') setOdTab(parts[3] === 'team' ? 'team' : 'gi');
       } else {
         if (wsScreen.classList.contains('open')) {
@@ -4198,7 +4360,8 @@
         }
         const screen = parts[0] || 'home';
         const item = document.querySelector(`.nav-item[data-screen="${screen}"]`);
-        if (item && !item.classList.contains('active')) item.click();
+        if (item) { if (!item.classList.contains('active')) item.click(); }
+        else showNotFound(); // covers #/not-found and any unknown route
       }
     } finally { routing = false; }
   }
@@ -4208,7 +4371,7 @@
   });
 
 
-  // ===== Workspace dashboard financials (same source as Operation Data) =====
+  // ===== Workspace dashboard financials (same source as Operation data) =====
   var wsConList = [], wsConIdx = 0, wsFin = null; // var: hoisted, openWorkspace may run first via deep links
   function usd(n) { return '$' + fmt(n) + ' USD'; }
   function renderContractCard() {
@@ -4290,14 +4453,14 @@
     btn.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
 
-  // ===== AI Summary (OP-1275): inline source refs, sources list, scope label =====
+  // ===== AI summary (OP-1275): inline source refs, sources list, scope label =====
   const aiRef = (n, ev) => '<sup class="ai-ref" data-t2h="' + ev[0] + '" data-t2b="' + ev[1] + '">[' + n + ']</sup>';
-  const AI_INF_TIP = ' data-t2h="Inferred" data-t2b="No direct event in the Activity Feed. Inferred from recent activity, verify before relying on it."';
+  const AI_INF_TIP = ' data-t2h="Inferred" data-t2b="No direct event in the Activity feed. Inferred from recent activity, verify before relying on it."';
   function renderAiSummary(phase, row) {
     const isImpl = phase === 'implementation';
     const code = row[0];
     const title = isImpl ? row[14] : (row[9] || OP_TITLE);
-    // build the summary from the SAME deterministic event set the Activity Feed renders,
+    // build the summary from the SAME deterministic event set the Activity feed renders,
     // so every citation is traceable to a real feed entry
     const feed = fdGen(code, phase);
     const N = isImpl ? 5 : 3;
@@ -4324,9 +4487,10 @@
     document.getElementById('ai-srcn').textContent = events.length;
     document.getElementById('ai-srclist').innerHTML = events.map((ev, i) =>
       '<div class="row"><span class="n">[' + (i + 1) + ']</span><span>' + ev[0] + ' <span class="d">&middot; ' + ev[1] + '</span></span></div>').join('');
-    document.getElementById('ai-caption').innerHTML =
-      'AI Generated. May contain errors. &middot; Based on ' + events.length + ' events from the Activity Feed, ' + range
-      + (window.AI_LAST_UPDATED ? ' &middot; Last updated ' + window.AI_LAST_UPDATED : '');
+    document.getElementById('ai-meta').textContent =
+      'Based on ' + events.length + ' events from the Activity feed · ' + range
+      + (window.AI_LAST_UPDATED ? ' · Updated ' + window.AI_LAST_UPDATED : '');
+    document.getElementById('ai-caption').textContent = 'AI generated. May contain errors.';
     const finalHTML = text;
     window.aiPlainText = text.replace(/<sup[^>]*>\[\d+\]<\/sup>/g, '').replace(/<[^>]+>/g, '');
     clearTimeout(aiTimer);
@@ -4344,6 +4508,7 @@
   var aiTimer = null, aiPendingHTML = '';
   function aiFoot(show) {
     document.querySelector('.ws-ai-foot').style.display = show ? '' : 'none';
+    document.getElementById('ai-meta').style.display = show ? '' : 'none';
     document.getElementById('ai-srcwrap').style.display = show ? '' : 'none';
     document.getElementById('ai-sep').style.display = show ? '' : 'none';
     if (!show) {
@@ -4676,7 +4841,7 @@
     showSnackbar(code + ' removed from Pinned', () => { pinnedOps.add(code); syncAllPins(); renderPinModal(); });
   });
 
-  // ===== Operation Data: scalable team model (core roles, +N expand, search) =====
+  // ===== Operation data: scalable team model (core roles, +N expand, search) =====
   const TM_CORE = ['Team Leader','Alternate Team Leader','Fiduciary Financial Management Specialist','Procurement Fiduciary Specialist','Attorney'];
   const TM_FIRST = ['Maria','Juan','Ana','Carlos','Lucia','Pedro','Sofia','Diego','Valentina','Andres','Camila','Jorge','Isabella','Luis','Gabriela','Miguel','Daniela','Fernando','Paula','Ricardo','Carolina','Alejandro','Mariana','Roberto','Patricia','Eduardo','Veronica','Hernan','Claudia','Nicolas'];
   const TM_LAST = ['Gomez','Rodriguez','Fernandez','Lopez','Martinez','Perez','Sanchez','Ramirez','Torres','Flores','Rivera','Vargas','Castro','Ortiz','Morales','Silva','Rojas','Mendoza','Herrera','Medina','Aguilar','Vega','Campos','Fuentes','Cabrera','Navarro','Reyes','Molina','Paredes','Salazar'];
@@ -4925,7 +5090,19 @@
       homeSkelCount++;
       if (homeSkelCount >= 5) {
         homeSkelCount = 0;
+        // skeleton cards = the cards production shows in its first row (measured before hiding the real grid)
+        const realCards = [...document.querySelectorAll('#pin-carousel .op-card')].filter(c => c.style.display !== 'none');
+        const firstTop = realCards.length ? realCards[0].getBoundingClientRect().top : 0;
+        const nCards = realCards.filter(c => Math.abs(c.getBoundingClientRect().top - firstTop) < 2).length || 4;
+        const W = [[132, 100, 92], [118, 96, 85], [132, 100, 88], [124, 94, 90], [128, 98, 86]];
+        document.getElementById('skel-cards').innerHTML = Array.from({ length: nCards }, (_, i) => {
+          const w = W[i % W.length];
+          return '<div class="skel-card"><div class="top"><span class="bone" style="width:' + w[0] + 'px;height:24px;border-radius:12px;"></span><span class="bone" style="width:20px;height:20px;border-radius:50%;"></span></div>'
+            + '<div style="display:flex;flex-direction:column;gap:8px;"><span class="bone" style="width:96px;height:22px;"></span><span class="bone" style="width:' + w[1] + '%;height:14px;"></span><span class="bone" style="width:' + w[2] + '%;height:14px;"></span></div>'
+            + '<span class="bone" style="width:96px;height:15px;"></span></div>';
+        }).join('');
         const on = home.classList.toggle('skel');
+        document.getElementById('home-skel').classList.toggle('nopin', pinnedOps.size === 0);
         home.setAttribute('aria-busy', on ? 'true' : 'false');
         showSnackbar(on ? 'Loading state preview. Press L five times to exit' : 'Loading state preview off');
       }
@@ -5199,7 +5376,7 @@
 
   // ===== Upcoming pagination (sample content rotation) =====
   const upcomingItems = [
-    {title:'Loan contract signature', chip:'Due in 5 days', code:'AR-L1372', desc:' · Programa de Agua Potable y Saneamiento Rural para Comunidades del Norte Argentino', action:'Review Docs'},
+    {title:'Loan contract signature', chip:'Due in 5 days', code:'AR-L1372', desc:' · Programa de Agua Potable y Saneamiento Rural para Comunidades del Norte Argentino', action:'Review docs'},
     {title:'Disbursement request Tranche 3', chip:'Due in 8 days', code:'CO-L1203', desc:' · Digital Transformation of Public Services', action:'Review Request'},
     {title:'sgDELTA questionnaire validation', chip:'Due in 12 days', code:'BR-L1587', desc:' · Rural Water Supply and Sanitation Program', action:'Open Questionnaire'},
     {title:'Procurement plan Year 3', chip:'Due in 15 days', code:'EC-L1051', desc:' · Rural Water Supply', action:'Review Plan'},
@@ -5290,7 +5467,7 @@
 
   // initial route: runs last so every module's state is ready
 
-  // ===== Activity Feed: catalog, generator, filters =====
+  // ===== Activity feed: catalog, generator, filters =====
   const EVENT_DEFS = [["Financial Transactions", "Authorized Disbursement", "Convergencia", "A disbursement was authorized and became effective", ["Transaction ID", "Value Date", "Type (ANT/DPB/DPS)", "Amount", "Status"]], ["Financial Transactions", "Authorized Component Transfer", "Convergencia", "Funds transferred between components", ["Transaction ID", "Amount", "Source Component", "Target Component"]], ["Financial Transactions", "Partial Cancellation", "Convergencia", "Portion of financing cancelled", ["Transaction ID", "Amount", "Component", "Status"]], ["Financial Transactions", "Total Cancellation", "Convergencia", "Financing cancelled in full", ["Transaction ID", "Amount", "Components", "Status"]], ["Financial Transactions", "Justification approved", "Convergencia", "Justification approved", ["Transaction ID", "Amount", "Component", "Status"]], ["Lifecycle Events", "Milestone Completed", "Convergencia", "Lifecycle milestone achieved", ["Milestone ID", "Milestone Name", "Completion Date"]], ["Lifecycle Events", "Board Approval Date Changed", "Convergencia", "Board approval estimate changed", ["Milestone Name", "Previous Date", "New Date"]], ["Contracts related to Procurement", "Procurement Plan Approved", "Client Portal", "Procurement plan approved", ["Total Loan Amount", "Planned Procurement Amount", "Previous Approval Date"]], ["Contracts related to Procurement", "No Objection Issued (Ex-Ante Review)", "Client Portal", "Bank issues no objection", ["Process ID", "Description", "Method", "Amount", "Milestone", "Next Milestone"]], ["Contracts related to Procurement", "Contract Awarded", "Client Portal", "Procurement contract awarded", ["Process ID", "Contract ID", "Description", "Method", "Amount"]], ["Contractual Clauses Processed", "Loan Contract Signed", "Convergencia", "Loan contract signed", ["Contract Reference", "Signature Date"]], ["Contractual Clauses Extensions", "Loan Signature Deadline Extended", "Convergencia", "Signature deadline extended", ["Previous Date", "New Date", "Months Extended"]], ["Contractual Clauses Processed", "Loan Ratified", "Convergencia", "Contract ratified", ["Ratification Date"]], ["Contractual Clauses Extensions", "Eligibility Clause Extended", "Convergencia", "Eligibility clause deadline extended", ["Clause Name", "Clause Type", "Previous Date", "New Date"]], ["Contractual Clauses Processed", "First Disbursement Condition Completed/Waived", "Convergencia", "Condition fulfilled or waived", ["Clause Name", "Clause Type", "Action Type"]], ["Contractual Clauses Processed", "Eligibility Achieved", "Convergencia", "Eligibility achieved", ["Eligibility Details"]], ["Contractual Clauses Processed", "Audited Financial Statement Clause Fulfilled/Waived", "Convergencia", "EFA-related clause fulfilled or waived", ["Clause Name", "Action Type"]], ["Contractual Clauses Processed", "Other Clause Fulfilled/Waived", "Convergencia", "Other contractual clause fulfilled or waived", ["Clause Name", "Clause Category", "Action Type"]], ["Contractual Clauses Extensions", "Disbursement Deadline Extended", "Convergencia", "Disbursement deadline extended", ["Previous Date", "New Date", "Months Extended"]], ["Contractual Clauses Processed", "Disbursement Period Closed", "Convergencia", "Disbursement period completed", ["Completion Date", "Original Date", "Extensions"]], ["PMR Classification", "PMR Validation Completed", "Convergencia", "PMR validation finalized", ["Original Classification", "Validated Classification"]], ["PMR Classification", "PMR Cycle Started", "Convergencia", "PMR cycle started", ["Cycle Identifier"]], ["PMR Classification", "Validation Flow Started", "Convergencia", "Validation workflow started", ["Original Classification", "Proposed Classification"]], ["PMR Classification", "PMR Cycle Closed", "Convergencia", "PMR cycle completed", ["Cycle Identifier"]], ["ESG ESSR Classification", "ESRR Rating Changed", "ESG Compass", "ESG risk rating changed", ["Previous Rating", "New Rating", "Classification Attributes"]], ["ESG ESSR Classification", "SPR Rating Changed", "ESG Compass", "ESG performance rating changed", ["Previous Rating", "New Rating", "Classification Attributes"]], ["ESG Screening", "ICAS Created/Updated", "ESG Compass", "New ICAS/action plan became active", ["Environmental Classification", "ESRR", "SPR", "Catastrophe Risk Rating"]], ["Missions", "Mission Approved", "Convergencia", "Mission approved", ["Mission Type", "Location", "Members"]]];
   const FD_SRC_ICON = { 'Convergencia': 'hub', 'Client Portal': 'webhook', 'ESG Compass': 'explore' };
   const FD_SRC_LABEL = {};
@@ -5402,7 +5579,7 @@
       const attrs = def[4].map(a => [a, fdVal(a, rng, dt, def)]);
       evs.push({ type: def[0], name: def[1], source: def[2], date: dt, attrs, desc: fdDesc(def, attrs) });
     }
-    // curated demo events for BR-L1587: the AI Summary cites these, so they must exist (and lead) in the feed
+    // curated demo events for BR-L1587: the AI summary cites these, so they must exist (and lead) in the feed
     if (code === 'BR-L1587' && phase === 'preparation') {
       const day = 864e5;
       evs.forEach(e => { if (now - e.date < 4 * day) e.date = new Date(e.date.getTime() - 6 * day); });
@@ -5446,11 +5623,34 @@
       `<button class="menu-item${fdSel.range === v ? ' selected' : ''}" data-v="${v}">${l}<span class="mcheck"><span class="msr">check</span></span></button>`).join('')
       + `<div class="fd-custom" id="fd-custom"><label>From</label><input type="date" id="fd-from"><label>To</label><input type="date" id="fd-to"><button class="fd-apply" id="fd-apply">Apply</button></div>`;
   }
+  function fdBuildMenu(menu, key) {
+    if (key === 'type') {
+      menu.classList.add('has-search');
+      menu.innerHTML = `<div class="menu-search"><span class="msr">search</span><input type="text" placeholder="Search type" aria-label="Search type"></div><div class="menu-scroll">${fdMenuHTML(key)}</div>`;
+      const inp = menu.querySelector('.menu-search input');
+      inp.addEventListener('click', e => e.stopPropagation());
+      inp.addEventListener('input', () => {
+        const q = inp.value.trim().toLowerCase();
+        let any = false;
+        menu.querySelectorAll('.menu-item').forEach(it => {
+          const hit = !q || it.textContent.toLowerCase().includes(q);
+          it.style.display = hit ? '' : 'none';
+          any = any || hit;
+        });
+        const prev = menu.querySelector('.menu-empty');
+        if (prev) prev.remove();
+        if (!any) menu.querySelector('.menu-scroll').insertAdjacentHTML('beforeend',
+          `<div class="menu-empty">No type matches "${inp.value.trim()}"</div>`);
+      });
+    } else {
+      menu.innerHTML = fdMenuHTML(key);
+    }
+  }
   function fdResetFilters() {
     fdSel.source.clear(); fdSel.type.clear(); fdSel.chip = null; fdSel.range = '30'; fdSel.from = null; fdSel.to = null; fdShown = 15;
     fdQuery = ''; const si = document.getElementById('fd-search'); if (si) { si.value = ''; document.getElementById('fd-search-clear').style.display = 'none'; }
     document.querySelectorAll('#fd-seg button').forEach(b => b.classList.toggle('on', b.dataset.seg === 'all'));
-    document.querySelectorAll('#fd-filters .menu').forEach(m => { m.classList.remove('open'); m.innerHTML = fdMenuHTML(m.dataset.fdm); });
+    document.querySelectorAll('#fd-filters .menu').forEach(m => { m.classList.remove('open'); fdBuildMenu(m, m.dataset.fdm); });
     fdSyncBadge('source'); fdSyncBadge('type');
     document.getElementById('fd-range-label').textContent = 'Last 30 days';
   }
@@ -5599,12 +5799,22 @@
     const btn = wrap.querySelector('.cs-filter');
     const menu = wrap.querySelector('.menu');
     const key = btn.dataset.fdf;
-    menu.innerHTML = fdMenuHTML(key);
+    fdBuildMenu(menu, key);
     btn.addEventListener('click', e => {
       e.stopPropagation();
       const wasOpen = menu.classList.contains('open');
       document.querySelectorAll('#fd-filters .menu').forEach(m => m.classList.remove('open'));
-      if (!wasOpen) menu.classList.add('open');
+      if (!wasOpen) {
+        menu.classList.add('open');
+        const inp = menu.querySelector('.menu-search input');
+        if (inp) {
+          inp.value = '';
+          menu.querySelectorAll('.menu-item').forEach(it => it.style.display = '');
+          const prev = menu.querySelector('.menu-empty');
+          if (prev) prev.remove();
+          setTimeout(() => inp.focus(), 30);
+        }
+      }
     });
     menu.addEventListener('click', e => {
       const item = e.target.closest('.menu-item');
@@ -5730,7 +5940,7 @@
   document.querySelectorAll('.filter-dd .cnt, .cs-filter .cnt0').forEach(b => badgeObs.observe(b, { childList: true, characterData: true, subtree: true }));
   syncBadgeHas();
 
-  // ===== Activity Feed: applied filter chips row (same pattern as the lists) =====
+  // ===== Activity feed: applied filter chips row (same pattern as the lists) =====
   function fdRenderChips() {
     const row = document.getElementById('fd-chips');
     const chips = [];
