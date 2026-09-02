@@ -1454,6 +1454,12 @@
   .ai-sep{height:1px;background:var(--border-default);margin-top:16px;}
   .ws-ai-foot{margin-top:12px;}
   .ai-meta{font-size:12px;line-height:17px;color:#8A8888;margin-top:8px;}
+  /* AI text reveal: words stream in chunks with a soft blur (capped total duration) */
+  #ws-ai-text .aiw{opacity:0;filter:blur(5px);display:inline-block;transition:opacity .28s ease-out,filter .4s ease-out;}
+  #ws-ai-text.ai-reveal-play .aiw{opacity:1;filter:blur(0);}
+  @media (prefers-reduced-motion: reduce){
+    #ws-ai-text .aiw{opacity:1 !important;filter:none !important;transition:none !important;}
+  }
   .ai-srcwrap{margin-top:12px;}
   .ai-srcbtn{
     display:inline-flex;align-items:center;gap:4px;height:28px;padding:0 12px;
@@ -4535,7 +4541,42 @@
     // default view clamps to 4 lines (~420 characters at typical widths); Show more reveals the rest
     p.classList.add('clamp');
     document.getElementById('ai-more').textContent = 'Show more';
+    if (wsScreen.dataset.code !== 'BR-L1587') aiReveal(p); // BR-L1587 keeps its loading/error demo untouched
     requestAnimationFrame(aiMeasure);
+  }
+  // Streaming reveal: wraps words in spans and staggers them in chunks of 2-4,
+  // total duration capped so long summaries never feel slow.
+  function aiReveal(p) {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    p.classList.remove('ai-reveal-play');
+    const walker = document.createTreeWalker(p, NodeFilter.SHOW_TEXT);
+    const textNodes = [];
+    while (walker.nextNode()) textNodes.push(walker.currentNode);
+    const words = [];
+    textNodes.forEach(node => {
+      const parts = node.nodeValue.split(/(\s+)/);
+      if (!parts.some(t => t.trim())) return;
+      const frag = document.createDocumentFragment();
+      parts.forEach(t => {
+        if (!t) return;
+        if (/^\s+$/.test(t)) { frag.appendChild(document.createTextNode(t)); return; }
+        const s = document.createElement('span');
+        s.className = 'aiw';
+        s.textContent = t;
+        frag.appendChild(s);
+        words.push(s);
+      });
+      node.parentNode.replaceChild(frag, node);
+    });
+    if (!words.length) return;
+    const CAP = 1600;
+    let i = 0;
+    while (i < words.length) {
+      const chunk = 2 + Math.floor(Math.random() * 3); // 2-4 words per chunk, like LLM output
+      const d = Math.round(i / words.length * CAP);
+      for (let j = 0; j < chunk && i < words.length; j++, i++) words[i].style.transitionDelay = d + 'ms';
+    }
+    requestAnimationFrame(() => requestAnimationFrame(() => p.classList.add('ai-reveal-play')));
   }
   function aiMeasure() {
     // re-evaluated on render and resize: the button only exists while the clamp actually hides content
