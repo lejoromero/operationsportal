@@ -197,7 +197,7 @@
   .nav{padding:12px 10px;display:flex;flex-direction:column;gap:4px;}
   .nav-item{
     display:flex;align-items:center;gap:12px;
-    height:44px;padding:0 14px;border-radius:8px;
+    min-height:44px;padding:10px 14px;border-radius:8px;line-height:19px;
     font-size:14px;font-weight:400;color:var(--color-text-default);
     text-decoration:none;cursor:pointer;border:none;background:transparent;
     font-family:var(--font-ui);text-align:left;width:100%;
@@ -238,6 +238,57 @@
     font-family:var(--font-ui);font-size:12px;font-weight:600;color:#FFFFFF;
   }
   .global-search input::placeholder{color:rgba(255,255,255,0.85);font-weight:600;}
+  /* ===== Global search dropdown ===== */
+  .global-search{position:relative;}
+  .gs-clear{display:none;border:0;background:none;padding:2px;margin:-2px;cursor:pointer;color:#FFFFFF;opacity:.85;border-radius:50%;line-height:0;}
+  .gs-clear:hover{opacity:1;}
+  .gs-clear .msr{font-size:16px;}
+  .global-search.has-text .gs-clear{display:inline-flex;}
+  .gs-drop{
+    display:none;position:absolute;top:calc(100% + 8px);right:0;left:auto;width:520px;
+    background:var(--color-surface);border:1px solid #DADADB;border-radius:12px;
+    box-shadow:0 12px 32px rgba(31,30,30,0.18);padding:8px;z-index:300;cursor:default;
+  }
+  .gs-drop.open{display:block;}
+  .gs-hint{padding:14px 12px;font-size:12.5px;color:#8A8888;}
+  .gs-group{font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#9B999A;padding:8px 12px 4px;}
+  .gs-row{
+    display:flex;align-items:center;gap:16px;width:100%;padding:11px 14px;border-radius:8px;
+    border:0;background:none;cursor:pointer;font-family:var(--font-ui);text-align:left;
+  }
+  .gs-row:hover,.gs-row.sel{background:#EAF3FA;}
+  .gs-row .code{font-family:var(--font-chip,ui-monospace,monospace);font-size:13px;font-weight:700;color:#272626;flex:0 0 84px;letter-spacing:.2px;}
+  .gs-row .nm{flex:1;min-width:0;font-size:13.5px;color:#5C5A5A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .gs-row .nm b{font-weight:700;color:#272626;}
+  .gs-chip{display:inline-flex;align-items:center;gap:8px;background:#F2F1F1;border-radius:8px;padding:6px 12px;font-size:12.5px;font-weight:500;color:#272626;flex:0 0 auto;white-space:nowrap;}
+  .gs-chip svg{width:16px;height:16px;color:#3A3939;}
+  .gs-chip .msr{font-size:16px;color:#3A3939;}
+  /* scroll rule: up to 8 rows visible; from the 9th the list scrolls internally */
+  .gs-drop{max-height:440px;overflow-y:auto;}
+  .gs-drop::-webkit-scrollbar{width:8px;}
+  .gs-drop::-webkit-scrollbar-thumb{background:#D7D6D9;border-radius:8px;}
+  .gs-drop::-webkit-scrollbar-track{background:transparent;}
+  .gs-foot{padding:8px 12px 6px;font-size:11.5px;color:#9B999A;border-top:1px solid #F1F0F1;margin-top:4px;}
+  .gs-empty{padding:26px 16px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;}
+  .gs-empty .t{font-size:13px;font-weight:600;color:#272626;margin-top:10px;}
+  .gs-empty .s{font-size:12px;color:#8A8888;margin-top:3px;line-height:16px;max-width:320px;}
+  .gs-ic{width:44px;height:44px;border-radius:50%;background:#F2F1F1;display:flex;align-items:center;justify-content:center;}
+  .gs-ic svg{width:22px;height:22px;fill:#6F6D6E;}
+  .gs-error{padding:22px 16px;display:flex;align-items:center;gap:14px;text-align:left;}
+  .gs-error .gs-ic{flex:0 0 auto;}
+  .gs-error .tx .t{font-size:13px;font-weight:600;color:#272626;}
+  .gs-error .tx .s{font-size:12px;color:#8A8888;margin-top:3px;line-height:16px;}
+  .gs-retry{
+    margin-left:auto;height:30px;padding:0 14px;border-radius:80px;flex:0 0 auto;
+    border:1px solid var(--color-outline-variant);background:var(--color-surface);
+    font-family:var(--font-ui);font-size:12.5px;font-weight:600;color:var(--link-default);cursor:pointer;
+  }
+  .gs-retry:hover{background:var(--color-surface-cont-lowest);}
+  .gs-skel{padding:4px 0;}
+  .gs-skel .r{display:flex;align-items:center;gap:10px;padding:9px 12px;}
+  .gs-skel .b{height:12px;border-radius:6px;background:linear-gradient(90deg,#EFEEEF 25%,#F7F6F7 50%,#EFEEEF 75%);background-size:200% 100%;animation:gsSh 1.1s linear infinite;}
+  @keyframes gsSh{0%{background-position:200% 0;}100%{background-position:0 0;}}
+  @media (prefers-reduced-motion: reduce){.gs-skel .b{animation:none;}}
   .avatar{
     width:32px;height:32px;border-radius:50%;
     background:#E6F6FC;color:var(--color-secondary);
@@ -1235,12 +1286,14 @@
   .ws-nav .grp{padding:16px 12px 4px 12px;}
   .ws-nav .grp-title{font-size:10px;font-weight:700;letter-spacing:.5px;color:var(--color-text-placeholder);padding:8px 8px;text-transform:uppercase;}
   .ws-nav .ws-item{
-    display:flex;align-items:center;gap:12px;height:44px;padding:0 14px;border-radius:8px;
+    display:flex;align-items:center;gap:12px;min-height:44px;padding:10px 14px;border-radius:8px;line-height:19px;
     font-family:var(--font-ui);font-size:14px;color:var(--color-text-default);
     background:transparent;border:none;cursor:pointer;width:100%;text-align:left;
   }
   .ws-nav .ws-item .msr{font-size:20px;color:var(--icon-default);}
   .ws-nav .ws-item .mi{width:20px;height:20px;fill:var(--icon-default);flex-shrink:0;}
+  /* nav label rule: wrap up to 2 lines; beyond that, ellipsis + tooltip (set by navClampCheck) */
+  .nav-item .lb,.ws-nav .ws-item .lb{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-width:0;}
   .ws-nav .ws-item.active .mi{fill:var(--link-default);}
   .ws-nav .ws-item .mi-f{display:none;}
   .ws-nav .ws-item.active .mi-o{display:none;}
@@ -1516,7 +1569,7 @@
   .ai-retry:hover{background:var(--color-surface-cont-lowest);}
   .ws-ai-foot{display:flex;align-items:center;justify-content:flex-start;gap:10px;margin-top:10px;flex-wrap:wrap;}
   .ws-ai-caption{font-size:12px;color:#8A8888;}
-  .ws-ai-fb{display:inline-flex;gap:4px;margin-left:auto;}
+  .ws-ai-fb{display:inline-flex;gap:4px;}
   .fb-btn{
     position:relative;width:26px;height:26px;border:0;background:none;border-radius:50%;cursor:pointer;
     display:inline-flex;align-items:center;justify-content:center;color:#8A8888;
@@ -1605,7 +1658,10 @@
     .ws-qa-card:hover{animation:none;}
   }
   .ws-qa-card p{font-size:12px;line-height:16px;color:#5C5A5A;}
+  .ws-qa-card{cursor:pointer;}
+  .ws-qa-card:focus-visible{outline:2px solid #00629D;outline-offset:2px;}
   .ws-qa-card .start{
+    display:inline-flex;align-items:center;justify-content:center;
     margin-top:10px;height:32px;padding:0 16px;border-radius:80px;align-self:flex-start;
     border:1px solid var(--color-outline-variant);background:var(--color-surface);
     font-family:var(--font-ui);font-size:13px;font-weight:600;color:var(--link-default);cursor:pointer;
@@ -1988,9 +2044,11 @@
 
   <!-- Header -->
   <header class="header">
-    <div class="global-search">
+    <div class="global-search" id="gs-wrap">
       <span class="msr">search</span>
-      <input type="text" placeholder="Search by operation ID or country strategy code" aria-label="Global search">
+      <input type="text" id="gs-input" placeholder="Search by operation ID or country strategy code" aria-label="Global search" role="combobox" aria-expanded="false" aria-controls="gs-drop" autocomplete="off">
+      <button class="gs-clear" id="gs-clear" aria-label="Clear search"><span class="msr">close</span></button>
+      <div class="gs-drop" id="gs-drop" role="listbox" aria-label="Search results"></div>
     </div>
     <div class="avatar" title="Alejandro Romero">AR</div>
   </header>
@@ -2472,14 +2530,14 @@
     <button class="ws-back" id="ws-back"><span class="msr">west</span> <span id="ws-back-lbl">Go back</span></button>
     <div class="grp">
       <div class="grp-title">Information</div>
-      <button class="ws-item active" data-wsview="dashboard"><svg class="mi mi-o" viewBox="0 -960 960 960" aria-hidden="true"><path d="M180-120q-24 0-42-18t-18-42v-600q0-24 18-42t42-18h600q24 0 42 18t18 42v600q0 24-18 42t-42 18H180Zm0-60h270v-600H180v600Zm330 0h270v-301H510v301Zm0-361h270v-239H510v239Z"/></svg><svg class="mi mi-f" viewBox="0 -960 960 960" aria-hidden="true"><path d="M180-120q-24.75 0-42.37-17.63Q120-155.25 120-180v-600q0-24.75 17.63-42.38Q155.25-840 180-840h210q24.75 0 42.38 17.62Q450-804.75 450-780v600q0 24.75-17.62 42.37Q414.75-120 390-120H180Zm390 0q-24.75 0-42.37-17.63Q510-155.25 510-180v-241q0-24.75 17.63-42.38Q545.25-481 570-481h210q24.75 0 42.38 17.62Q840-445.75 840-421v241q0 24.75-17.62 42.37Q804.75-120 780-120H570Zm0-421q-24.75 0-42.37-17.63Q510-576.25 510-601v-179q0-24.75 17.63-42.38Q545.25-840 570-840h210q24.75 0 42.38 17.62Q840-804.75 840-780v179q0 24.75-17.62 42.37Q804.75-541 780-541H570Z"/></svg> Dashboard</button>
-      <button class="ws-item" data-wsview="feed"><svg class="mi mi-o" viewBox="0 -960 960 960" aria-hidden="true"><path d="M180-510q-24 0-42-18t-18-42v-210q0-24 18-42t42-18h600q24 0 42 18t18 42v210q0 24-18 42t-42 18H180Zm0-60h600v-210H180v210Zm0 450q-24 0-42-18t-18-42v-210q0-24 18-42t42-18h600q24 0 42 18t18 42v210q0 24-18 42t-42 18H180Zm0-60h600v-210H180v210Zm0-600v210-210Zm0 390v210-210Z"/></svg><svg class="mi mi-f" viewBox="0 -960 960 960" aria-hidden="true"><path d="M180-510q-24 0-42-18t-18-42v-210q0-24 18-42t42-18h600q24 0 42 18t18 42v210q0 24-18 42t-42 18H180Zm0 390q-24 0-42-18t-18-42v-210q0-24 18-42t42-18h600q24 0 42 18t18 42v210q0 24-18 42t-42 18H180Z"/></svg> Activity feed</button>
-      <button class="ws-item" data-wsview="opdata"><svg class="mi mi-o" viewBox="0 -960 960 960" aria-hidden="true"><path d="M350-490q-12.75 0-21.37-8.68-8.63-8.67-8.63-21.5 0-12.82 8.63-21.32 8.62-8.5 21.37-8.5h260q12.75 0 21.38 8.68 8.62 8.67 8.62 21.5 0 12.82-8.62 21.32-8.63 8.5-21.38 8.5H350Zm0-160q-12.75 0-21.37-8.68-8.63-8.67-8.63-21.5 0-12.82 8.63-21.32 8.62-8.5 21.37-8.5h260q12.75 0 21.38 8.68 8.62 8.67 8.62 21.5 0 12.82-8.62 21.32-8.63 8.5-21.38 8.5H350ZM220-390h320q26.43 0 49.22 12Q612-366 628-346l112 146v-620H220v430Zm0 250h490L581-309q-7.57-9.88-18.28-15.44Q552-330 540-330H220v190Zm520 60H220q-24 0-42-18t-18-42v-680q0-24 18-42t42-18h520q24 0 42 18t18 42v680q0 24-18 42t-42 18Zm-520-60v-680 680Zm0-190v-60 60Z"/></svg><svg class="mi mi-f" viewBox="0 -960 960 960" aria-hidden="true"><path d="M350-490h260q13 0 21.5-8.5T640-520q0-13-8.5-21.5T610-550H350q-13 0-21.5 8.5T320-520q0 13 8.5 21.5T350-490Zm0-160h260q13 0 21.5-8.5T640-680q0-13-8.5-21.5T610-710H350q-13 0-21.5 8.5T320-680q0 13 8.5 21.5T350-650Zm448 526L628-346q-16-20-39-32t-49-12H160v-430q0-24 18-42t42-18h520q24 0 42 18t18 42v680q0 4-.5 8t-1.5 8ZM220-80q-24 0-42-18t-18-42v-190h380q12 0 22.5 5.5T581-309L755-82q-4 1-7.5 1.5t-7.5.5H220Z"/></svg> Operation data</button>
+      <button class="ws-item active" data-wsview="dashboard"><svg class="mi mi-o" viewBox="0 -960 960 960" aria-hidden="true"><path d="M180-120q-24 0-42-18t-18-42v-600q0-24 18-42t42-18h600q24 0 42 18t18 42v600q0 24-18 42t-42 18H180Zm0-60h270v-600H180v600Zm330 0h270v-301H510v301Zm0-361h270v-239H510v239Z"/></svg><svg class="mi mi-f" viewBox="0 -960 960 960" aria-hidden="true"><path d="M180-120q-24.75 0-42.37-17.63Q120-155.25 120-180v-600q0-24.75 17.63-42.38Q155.25-840 180-840h210q24.75 0 42.38 17.62Q450-804.75 450-780v600q0 24.75-17.62 42.37Q414.75-120 390-120H180Zm390 0q-24.75 0-42.37-17.63Q510-155.25 510-180v-241q0-24.75 17.63-42.38Q545.25-481 570-481h210q24.75 0 42.38 17.62Q840-445.75 840-421v241q0 24.75-17.62 42.37Q804.75-120 780-120H570Zm0-421q-24.75 0-42.37-17.63Q510-576.25 510-601v-179q0-24.75 17.63-42.38Q545.25-840 570-840h210q24.75 0 42.38 17.62Q840-804.75 840-780v179q0 24.75-17.62 42.37Q804.75-541 780-541H570Z"/></svg> <span class="lb">Dashboard</span></button>
+      <button class="ws-item" data-wsview="feed"><svg class="mi mi-o" viewBox="0 -960 960 960" aria-hidden="true"><path d="M180-510q-24 0-42-18t-18-42v-210q0-24 18-42t42-18h600q24 0 42 18t18 42v210q0 24-18 42t-42 18H180Zm0-60h600v-210H180v210Zm0 450q-24 0-42-18t-18-42v-210q0-24 18-42t42-18h600q24 0 42 18t18 42v210q0 24-18 42t-42 18H180Zm0-60h600v-210H180v210Zm0-600v210-210Zm0 390v210-210Z"/></svg><svg class="mi mi-f" viewBox="0 -960 960 960" aria-hidden="true"><path d="M180-510q-24 0-42-18t-18-42v-210q0-24 18-42t42-18h600q24 0 42 18t18 42v210q0 24-18 42t-42 18H180Zm0 390q-24 0-42-18t-18-42v-210q0-24 18-42t42-18h600q24 0 42 18t18 42v210q0 24-18 42t-42 18H180Z"/></svg> <span class="lb">Activity feed</span></button>
+      <button class="ws-item" data-wsview="opdata"><svg class="mi mi-o" viewBox="0 -960 960 960" aria-hidden="true"><path d="M350-490q-12.75 0-21.37-8.68-8.63-8.67-8.63-21.5 0-12.82 8.63-21.32 8.62-8.5 21.37-8.5h260q12.75 0 21.38 8.68 8.62 8.67 8.62 21.5 0 12.82-8.62 21.32-8.63 8.5-21.38 8.5H350Zm0-160q-12.75 0-21.37-8.68-8.63-8.67-8.63-21.5 0-12.82 8.63-21.32 8.62-8.5 21.37-8.5h260q12.75 0 21.38 8.68 8.62 8.67 8.62 21.5 0 12.82-8.62 21.32-8.63 8.5-21.38 8.5H350ZM220-390h320q26.43 0 49.22 12Q612-366 628-346l112 146v-620H220v430Zm0 250h490L581-309q-7.57-9.88-18.28-15.44Q552-330 540-330H220v190Zm520 60H220q-24 0-42-18t-18-42v-680q0-24 18-42t42-18h520q24 0 42 18t18 42v680q0 24-18 42t-42 18Zm-520-60v-680 680Zm0-190v-60 60Z"/></svg><svg class="mi mi-f" viewBox="0 -960 960 960" aria-hidden="true"><path d="M350-490h260q13 0 21.5-8.5T640-520q0-13-8.5-21.5T610-550H350q-13 0-21.5 8.5T320-520q0 13 8.5 21.5T350-490Zm0-160h260q13 0 21.5-8.5T640-680q0-13-8.5-21.5T610-710H350q-13 0-21.5 8.5T320-680q0 13 8.5 21.5T350-650Zm448 526L628-346q-16-20-39-32t-49-12H160v-430q0-24 18-42t42-18h520q24 0 42 18t18 42v680q0 4-.5 8t-1.5 8ZM220-80q-24 0-42-18t-18-42v-190h380q12 0 22.5 5.5T581-309L755-82q-4 1-7.5 1.5t-7.5.5H220Z"/></svg> <span class="lb">Operation data</span></button>
     </div>
     <div class="grp">
       <div class="grp-title">Tools</div>
-      <button class="ws-item" data-wsview="tool"><svg class="mi mi-o" viewBox="0 -960 960 960" aria-hidden="true"><path d="M450-110v-170q0-48-16-79t-49-64l43-43q13 11 27.5 30t24.5 35q17-26 33.5-45t31.5-32q58-47 83.5-113.5T648-766l-69 69q-9 9-21 9t-21-9q-9-9-9-21t9-21l120-120q5-5 10-7t11-2q6 0 11 2t10 7l120 120q9 9 9 21t-9 21q-9 9-21 9t-21-9l-69-69q5 126-24.5 198.5T585-432q-44 40-59.5 73T510-280v170q0 13-8.5 21.5T480-80q-13 0-21.5-8.5T450-110ZM258-636q-4-18-6.5-52.5T251-765l-68 68q-9 9-21 9t-21-9q-9-9-9-21t9-21l120-120q5-5 10-7t11-2q6 0 11 2t10 7l120 120q9 9 9 21t-9 21q-9 9-21 9t-21-9l-69-69q-2 38-1 66.5t5 49.5l-58 14Zm84 171q-17-18-37.5-47.5T273-577l59-15q9 25 24 48t28 37l-42 42Z"/></svg><svg class="mi mi-f" viewBox="0 -960 960 960" aria-hidden="true"><path d="M450-110v-170q0-48-16-79t-49-64l43-43q13 11 27.5 30t24.5 35q17-26 33.5-45t31.5-32q58-47 83.5-113.5T648-766l-69 69q-9 9-21 9t-21-9q-9-9-9-21t9-21l120-120q5-5 10-7t11-2q6 0 11 2t10 7l120 120q9 9 9 21t-9 21q-9 9-21 9t-21-9l-69-69q5 126-24.5 198.5T585-432q-44 40-59.5 73T510-280v170q0 13-8.5 21.5T480-80q-13 0-21.5-8.5T450-110ZM258-636q-4-18-6.5-52.5T251-765l-68 68q-9 9-21 9t-21-9q-9-9-9-21t9-21l120-120q5-5 10-7t11-2q6 0 11 2t10 7l120 120q9 9 9 21t-9 21q-9 9-21 9t-21-9l-69-69q-2 38-1 66.5t5 49.5l-58 14Zm84 171q-17-18-37.5-47.5T273-577l59-15q9 25 24 48t28 37l-42 42Z"/></svg> sgDELTA</button>
-      <button class="ws-item" data-wsview="rst"><svg class="mi mi-o" viewBox="0 -960 960 960" aria-hidden="true"><path d="M390-320h180q12.75 0 21.38-8.63Q600-337.25 600-350v-140q0-12.75-8.62-21.38Q582.75-520 570-520h-10v-40q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560v40h-10q-12.75 0-21.37 8.62Q360-502.75 360-490v140q0 12.75 8.63 21.37Q377.25-320 390-320Zm40-200v-40q0-20 15-33.5t35-13.5q20 0 35 13.51 15 13.52 15 33.49v40H430Zm40.12 435q-4.56-1-9.12-3-139-47-220-168.5t-81-266.61V-719q0-19.26 10.88-34.66Q181.75-769.07 199-776l260-97q11-4 21-4t21 4l260 97q17.25 6.93 28.13 22.34Q800-738.26 800-719v195.89Q800-378 719-256.5T499-88q-4.56 2-9.12 3T480-84q-5.32 0-9.88-1Zm9.88-58q115-38 187.5-143.5T740-523v-196l-260-98-260 98v196q0 131 72.5 236.5T480-143Zm0-337Z"/></svg><svg class="mi mi-f" viewBox="0 -960 960 960" aria-hidden="true"><path d="M390-320h180q13 0 21.5-8.5T600-350v-140q0-13-8.5-21.5T570-520h-10v-40q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560v40h-10q-13 0-21.5 8.5T360-490v140q0 13 8.5 21.5T390-320Zm40-200v-40q0-20 15-33.5t35-13.5q20 0 35 13.5t15 33.5v40H430Zm40.5 435q-4.5-1-9.5-3-139-47-220-168.5T160-523v-196q0-19 11-34.5t28-22.5l260-97q11-4 21-4t21 4l260 97q17 7 28 22.5t11 34.5v196q0 145-81 266.5T499-88q-5 2-9.5 3t-9.5 1q-5 0-9.5-1Z"/></svg> Risk Screening Tool</button>
+      <button class="ws-item" data-wsview="tool"><svg class="mi mi-o" viewBox="0 -960 960 960" aria-hidden="true"><path d="M450-110v-170q0-48-16-79t-49-64l43-43q13 11 27.5 30t24.5 35q17-26 33.5-45t31.5-32q58-47 83.5-113.5T648-766l-69 69q-9 9-21 9t-21-9q-9-9-9-21t9-21l120-120q5-5 10-7t11-2q6 0 11 2t10 7l120 120q9 9 9 21t-9 21q-9 9-21 9t-21-9l-69-69q5 126-24.5 198.5T585-432q-44 40-59.5 73T510-280v170q0 13-8.5 21.5T480-80q-13 0-21.5-8.5T450-110ZM258-636q-4-18-6.5-52.5T251-765l-68 68q-9 9-21 9t-21-9q-9-9-9-21t9-21l120-120q5-5 10-7t11-2q6 0 11 2t10 7l120 120q9 9 9 21t-9 21q-9 9-21 9t-21-9l-69-69q-2 38-1 66.5t5 49.5l-58 14Zm84 171q-17-18-37.5-47.5T273-577l59-15q9 25 24 48t28 37l-42 42Z"/></svg><svg class="mi mi-f" viewBox="0 -960 960 960" aria-hidden="true"><path d="M450-110v-170q0-48-16-79t-49-64l43-43q13 11 27.5 30t24.5 35q17-26 33.5-45t31.5-32q58-47 83.5-113.5T648-766l-69 69q-9 9-21 9t-21-9q-9-9-9-21t9-21l120-120q5-5 10-7t11-2q6 0 11 2t10 7l120 120q9 9 9 21t-9 21q-9 9-21 9t-21-9l-69-69q5 126-24.5 198.5T585-432q-44 40-59.5 73T510-280v170q0 13-8.5 21.5T480-80q-13 0-21.5-8.5T450-110ZM258-636q-4-18-6.5-52.5T251-765l-68 68q-9 9-21 9t-21-9q-9-9-9-21t9-21l120-120q5-5 10-7t11-2q6 0 11 2t10 7l120 120q9 9 9 21t-9 21q-9 9-21 9t-21-9l-69-69q-2 38-1 66.5t5 49.5l-58 14Zm84 171q-17-18-37.5-47.5T273-577l59-15q9 25 24 48t28 37l-42 42Z"/></svg> <span class="lb">sgDELTA</span></button>
+      <button class="ws-item" data-wsview="rst"><svg class="mi mi-o" viewBox="0 -960 960 960" aria-hidden="true"><path d="M390-320h180q12.75 0 21.38-8.63Q600-337.25 600-350v-140q0-12.75-8.62-21.38Q582.75-520 570-520h-10v-40q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560v40h-10q-12.75 0-21.37 8.62Q360-502.75 360-490v140q0 12.75 8.63 21.37Q377.25-320 390-320Zm40-200v-40q0-20 15-33.5t35-13.5q20 0 35 13.51 15 13.52 15 33.49v40H430Zm40.12 435q-4.56-1-9.12-3-139-47-220-168.5t-81-266.61V-719q0-19.26 10.88-34.66Q181.75-769.07 199-776l260-97q11-4 21-4t21 4l260 97q17.25 6.93 28.13 22.34Q800-738.26 800-719v195.89Q800-378 719-256.5T499-88q-4.56 2-9.12 3T480-84q-5.32 0-9.88-1Zm9.88-58q115-38 187.5-143.5T740-523v-196l-260-98-260 98v196q0 131 72.5 236.5T480-143Zm0-337Z"/></svg><svg class="mi mi-f" viewBox="0 -960 960 960" aria-hidden="true"><path d="M390-320h180q13 0 21.5-8.5T600-350v-140q0-13-8.5-21.5T570-520h-10v-40q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560v40h-10q-13 0-21.5 8.5T360-490v140q0 13 8.5 21.5T390-320Zm40-200v-40q0-20 15-33.5t35-13.5q20 0 35 13.5t15 33.5v40H430Zm40.5 435q-4.5-1-9.5-3-139-47-220-168.5T160-523v-196q0-19 11-34.5t28-22.5l260-97q11-4 21-4t21 4l260 97q17 7 28 22.5t11 34.5v196q0 145-81 266.5T499-88q-5 2-9.5 3t-9.5 1q-5 0-9.5-1Z"/></svg> <span class="lb">Risk Screening Tool</span></button>
     </div>
   </nav>
   <main class="ws-main">
@@ -2651,17 +2709,23 @@
       <section>
         <div class="ws-sec-title"><h2>Quick access</h2></div>
         <div class="ws-qa">
-          <div class="ws-qa-card">
+          <div class="ws-qa-card" role="button" tabindex="0" aria-label="Open Theory of Change">
+            <span class="imp-iconbox"><span class="msr">lan</span></span>
+            <h3>Theory of Change</h3>
+            <p>Map the operation's objectives and expected results before moving forward.</p>
+            <span class="start" aria-hidden="true">Open</span>
+          </div>
+          <div class="ws-qa-card" role="button" tabindex="0" aria-label="Open sgDELTA Questionnaire">
             <span class="imp-iconbox"><span class="msr">list_alt</span></span>
             <h3>sgDELTA Questionnaire</h3>
             <p>Complete the standardized project eligibility and screening questionnaire.</p>
-            <button class="start">Start</button>
+            <span class="start" aria-hidden="true">Open</span>
           </div>
-          <div class="ws-qa-card">
+          <div class="ws-qa-card" id="qa-rst" role="button" tabindex="0" aria-label="Open Risk Screening Tool">
             <span class="imp-iconbox"><span class="msr">shield</span></span>
             <h3>Risk Screening Tool</h3>
             <p>Identify, assess and screen environmental and social risks associated with this operation.</p>
-            <button class="start">Start</button>
+            <span class="start" aria-hidden="true">Open</span>
           </div>
         </div>
       </section>
@@ -3874,6 +3938,8 @@
       preparation: "<svg class=\"chip-ic\" viewBox=\"98.0 140.0 24 24\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M114 150C114.283 150 114.521 149.904 114.713 149.713C114.904 149.521 115 149.283 115 149C115 148.717 114.904 148.479 114.713 148.288C114.521 148.096 114.283 148 114 148H111C110.717 148 110.479 148.096 110.288 148.288C110.096 148.479 110 148.717 110 149C110 149.283 110.096 149.521 110.288 149.713C110.479 149.904 110.717 150 111 150H114ZM114 156C114.283 156 114.521 155.904 114.713 155.713C114.904 155.521 115 155.283 115 155C115 154.717 114.904 154.479 114.713 154.288C114.521 154.096 114.283 154 114 154H111C110.717 154 110.479 154.096 110.288 154.288C110.096 154.479 110 154.717 110 155C110 155.283 110.096 155.521 110.288 155.713C110.479 155.904 110.717 156 111 156H114ZM108.413 150.413C108.804 150.021 109 149.55 109 149C109 148.45 108.804 147.979 108.413 147.588C108.021 147.196 107.55 147 107 147C106.45 147 105.979 147.196 105.588 147.588C105.196 147.979 105 148.45 105 149C105 149.55 105.196 150.021 105.588 150.413C105.979 150.804 106.45 151 107 151C107.55 151 108.021 150.804 108.413 150.413ZM108.413 156.413C108.804 156.021 109 155.55 109 155C109 154.45 108.804 153.979 108.413 153.588C108.021 153.196 107.55 153 107 153C106.45 153 105.979 153.196 105.588 153.588C105.196 153.979 105 154.45 105 155C105 155.55 105.196 156.021 105.588 156.413C105.979 156.804 106.45 157 107 157C107.55 157 108.021 156.804 108.413 156.413ZM103 161C102.45 161 101.979 160.804 101.588 160.413C101.196 160.021 101 159.55 101 159V145C101 144.45 101.196 143.979 101.588 143.588C101.979 143.196 102.45 143 103 143H117C117.55 143 118.021 143.196 118.413 143.588C118.804 143.979 119 144.45 119 145V159C119 159.55 118.804 160.021 118.413 160.413C118.021 160.804 117.55 161 117 161H103Z\"/><path d=\"M114 150C114.283 150 114.521 149.904 114.713 149.713C114.904 149.521 115 149.283 115 149C115 148.717 114.904 148.479 114.713 148.288C114.521 148.096 114.283 148 114 148H111C110.717 148 110.479 148.096 110.288 148.288C110.096 148.479 110 148.717 110 149C110 149.283 110.096 149.521 110.288 149.713C110.479 149.904 110.717 150 111 150H114ZM114 156C114.283 156 114.521 155.904 114.713 155.713C114.904 155.521 115 155.283 115 155C115 154.717 114.904 154.479 114.713 154.288C114.521 154.096 114.283 154 114 154H111C110.717 154 110.479 154.096 110.288 154.288C110.096 154.479 110 154.717 110 155C110 155.283 110.096 155.521 110.288 155.713C110.479 155.904 110.717 156 111 156H114ZM108.413 150.413C108.804 150.021 109 149.55 109 149C109 148.45 108.804 147.979 108.413 147.588C108.021 147.196 107.55 147 107 147C106.45 147 105.979 147.196 105.588 147.588C105.196 147.979 105 148.45 105 149C105 149.55 105.196 150.021 105.588 150.413C105.979 150.804 106.45 151 107 151C107.55 151 108.021 150.804 108.413 150.413ZM108.413 156.413C108.804 156.021 109 155.55 109 155C109 154.45 108.804 153.979 108.413 153.588C108.021 153.196 107.55 153 107 153C106.45 153 105.979 153.196 105.588 153.588C105.196 153.979 105 154.45 105 155C105 155.55 105.196 156.021 105.588 156.413C105.979 156.804 106.45 157 107 157C107.55 157 108.021 156.804 108.413 156.413ZM103 161C102.45 161 101.979 160.804 101.588 160.413C101.196 160.021 101 159.55 101 159V145C101 144.45 101.196 143.979 101.588 143.588C101.979 143.196 102.45 143 103 143H117C117.55 143 118.021 143.196 118.413 143.588C118.804 143.979 119 144.45 119 145V159C119 159.55 118.804 160.021 118.413 160.413C118.021 160.804 117.55 161 117 161H103Z\"/></svg>"
     };
     document.getElementById('ws-status-icon').innerHTML = PHASE_ICON_SVG[phase];
+    // Quick access per phase: Preparation = ToC + Questionnaire; Implementation adds Risk Screening Tool
+    document.getElementById('qa-rst').style.display = phase === 'implementation' ? '' : 'none';
     document.getElementById('ws-date-label').textContent = isImpl ? 'Current exp.' : 'Est. approval';
     document.getElementById('ws-date').textContent = isImpl ? row[13] : (row[8] || '10 Jun 2025');
     document.getElementById('ws-amount').textContent = 'USD ' + shortMoney(finFor(phase, row).base);
@@ -3914,6 +3980,7 @@
     document.getElementById('ws-view-tool').style.display = (view === 'tool' || view === 'rst') ? '' : 'none';
     document.getElementById('ws-mini').style.display = view === 'dashboard' ? 'none' : '';
     document.querySelectorAll('.ws-item[data-wsview]').forEach(i => i.classList.toggle('active', i.dataset.wsview === view));
+    requestAnimationFrame(navClampCheck);
     if (view !== 'dashboard' && wsRow) {
       const row = wsRow, isImpl = wsPhase === 'implementation';
       const title = isImpl ? row[14] : (row[9] || OP_TITLE);
@@ -4075,6 +4142,11 @@
       setHash('#/op/' + wsScreen.dataset.code + '/data' + (tab === 'team' ? '/team' : ''));
   }
   document.querySelectorAll('.od-tab').forEach(b => b.addEventListener('click', () => setOdTab(b.dataset.odtab)));
+  document.querySelectorAll('.ws-qa-card').forEach(c => {
+    const go = () => setWsView(c.id === 'qa-rst' ? 'rst' : 'tool');
+    c.addEventListener('click', go);
+    c.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+  });
   document.querySelectorAll('.ws-item[data-wsview]').forEach(item => {
     item.addEventListener('click', () => setWsView(item.dataset.wsview));
   });
@@ -4640,53 +4712,53 @@
       { flag: '\uD83C\uDDF5\uD83C\uDDEA', name: 'Peru', type: 'CS',
         bars: [ { k: 'gray', s: 2019, e: 2024, l: 'PE-S1122' }, { k: 'blue', s: 2024.1, e: 2027.8, l: 'PE-S1123' } ] },
       { flag: '\uD83C\uDDFB\uD83C\uDDEA', name: 'Venezuela', type: 'CEN', tag: 'No active CS/CEN',
-        bars: [ { k: 'gray', s: 2019, e: 2021, l: 'VEN-S1122' } ] }
+        bars: [ { k: 'gray', s: 2019, e: 2021, l: 'VE-S1122' } ] }
     ] },
     { title: 'Caribbean Group (CCB)', rows: [
       { flag: '\uD83C\uDDE7\uD83C\uDDF8', name: 'Bahamas', type: 'CS',
-        bars: [ { k: 'gray', s: 2018, e: 2021.9, l: 'BAH-S1122' }, { k: 'green', s: 2022, e: 2026, l: 'BAH-S1123', ext: 1 } ] },
+        bars: [ { k: 'gray', s: 2018, e: 2021.9, l: 'BH-S1122' }, { k: 'green', s: 2022, e: 2026, l: 'BH-S1123', ext: 1 } ] },
       { flag: '\uD83C\uDDE7\uD83C\uDDE7', name: 'Barbados', type: 'CEN',
         bars: [ { k: 'gray', s: 2019, e: 2023.5, l: 'BA-S1123' } ] },
       { flag: '\uD83C\uDDEC\uD83C\uDDFE', name: 'Guyana', type: 'CS',
-        bars: [ { k: 'green', s: 2023, e: 2027.8, l: 'GUY-S1123' } ] },
+        bars: [ { k: 'green', s: 2023, e: 2027.8, l: 'GY-S1123' } ] },
       { flag: '\uD83C\uDDED\uD83C\uDDF9', name: 'Haiti', type: 'CEN', tag: 'Expiring Dec 31st',
-        bars: [ { k: 'blue', s: 2022.5, e: 2026, l: 'HAI-S1123' } ] },
+        bars: [ { k: 'blue', s: 2022.5, e: 2026, l: 'HA-S1123' } ] },
       { flag: '\uD83C\uDDEF\uD83C\uDDF2', name: 'Jamaica', type: 'CS',
-        bars: [ { k: 'green', s: 2022, e: 2026.3, l: 'JAM-S1123' } ] },
+        bars: [ { k: 'green', s: 2022, e: 2026.3, l: 'JA-S1123' } ] },
       { flag: '\uD83C\uDDF8\uD83C\uDDF7', name: 'Suriname', type: 'CS',
-        bars: [ { k: 'blue', s: 2023.5, e: 2027.8, l: 'SUR-S1123' } ] },
+        bars: [ { k: 'blue', s: 2023.5, e: 2027.8, l: 'SU-S1123' } ] },
       { flag: '\uD83C\uDDF9\uD83C\uDDF9', name: 'Trinidad & Tobago', type: 'CS',
-        bars: [ { k: 'blue', s: 2024, e: 2027.8, l: 'TRI-S1123' } ] }
+        bars: [ { k: 'blue', s: 2024, e: 2027.8, l: 'TT-S1123' } ] }
     ] },
     { title: 'Isthmus & DR (CID)', rows: [
       { flag: '\uD83C\uDDE8\uD83C\uDDF7', name: 'Costa Rica', type: 'CS',
-        bars: [ { k: 'gray', s: 2020, e: 2024.5, l: 'CR-S1122' }, { k: 'green', s: 2024.6, e: 2027, l: 'CRI-S1123' } ] },
+        bars: [ { k: 'gray', s: 2020, e: 2024.5, l: 'CR-S1122' }, { k: 'green', s: 2024.6, e: 2027, l: 'CR-S1123' } ] },
       { flag: '\uD83C\uDDE9\uD83C\uDDF4', name: 'Dominican Rep.', type: 'CS',
-        bars: [ { k: 'green', s: 2023, e: 2027, l: 'DOM-S1123', ext: 0.8 } ] },
+        bars: [ { k: 'green', s: 2023, e: 2027, l: 'DR-S1123', ext: 0.8 } ] },
       { flag: '\uD83C\uDDF8\uD83C\uDDFB', name: 'El Salvador', type: 'CS',
-        bars: [ { k: 'green', s: 2022.5, e: 2026, l: 'SAL-S1123', ext: 1 } ] },
+        bars: [ { k: 'green', s: 2022.5, e: 2026, l: 'ES-S1123', ext: 1 } ] },
       { flag: '\uD83C\uDDEC\uD83C\uDDF9', name: 'Guatemala', type: 'CS',
-        bars: [ { k: 'green', s: 2023.8, e: 2027.5, l: 'GUA-S1123' } ] },
+        bars: [ { k: 'green', s: 2023.8, e: 2027.5, l: 'GU-S1123' } ] },
       { flag: '\uD83C\uDDED\uD83C\uDDF3', name: 'Honduras', type: 'CS',
-        bars: [ { k: 'blue', s: 2024.3, e: 2027.8, l: 'HON-S1123' } ] },
+        bars: [ { k: 'blue', s: 2024.3, e: 2027.8, l: 'HO-S1123' } ] },
       { flag: '\uD83C\uDDF3\uD83C\uDDEE', name: 'Nicaragua', type: 'CEN',
-        bars: [ { k: 'gray', s: 2020, e: 2025, l: 'NIC-S1122' } ] },
+        bars: [ { k: 'gray', s: 2020, e: 2025, l: 'NI-S1122' } ] },
       { flag: '\uD83C\uDDF5\uD83C\uDDE6', name: 'Panama', type: 'CS',
-        bars: [ { k: 'blue', s: 2023.5, e: 2027.8, l: 'PAN-S1123' } ] }
+        bars: [ { k: 'blue', s: 2023.5, e: 2027.8, l: 'PN-S1123' } ] }
     ] },
     { title: 'Southern Cone (CSC)', rows: [
       { flag: '\uD83C\uDDE6\uD83C\uDDF7', name: 'Argentina', type: 'CS',
-        bars: [ { k: 'gray', s: 2018, e: 2022.3, l: 'ARG-S1122' }, { k: 'green', s: 2022.4, e: 2026, l: 'ARG-S1123', ext: 1 } ] },
+        bars: [ { k: 'gray', s: 2018, e: 2022.3, l: 'AR-S1122' }, { k: 'green', s: 2022.4, e: 2026, l: 'AR-S1123', ext: 1 } ] },
       { flag: '\uD83C\uDDE7\uD83C\uDDF7', name: 'Brazil', type: 'CS',
-        bars: [ { k: 'gray', s: 2018.5, e: 2022.8, l: 'BRA-S1122' }, { k: 'green', s: 2023, e: 2027, l: 'BRA-S1123' } ] },
+        bars: [ { k: 'gray', s: 2018.5, e: 2022.8, l: 'BR-S1122' }, { k: 'green', s: 2023, e: 2027, l: 'BR-S1123' } ] },
       { flag: '\uD83C\uDDE8\uD83C\uDDF1', name: 'Chile', type: 'CS',
-        bars: [ { k: 'gray', s: 2018, e: 2021, l: 'CHI-S1122' }, { k: 'green', s: 2021.2, e: 2026, l: 'CHI-S1123', ext: 1 } ] },
+        bars: [ { k: 'gray', s: 2018, e: 2021, l: 'CH-S1122' }, { k: 'green', s: 2021.2, e: 2026, l: 'CH-S1123', ext: 1 } ] },
       { flag: '\uD83C\uDDF2\uD83C\uDDFD', name: 'Mexico', type: 'CS',
-        bars: [ { k: 'blue', s: 2023.5, e: 2027.8, l: 'MEX-S1123' } ] },
+        bars: [ { k: 'blue', s: 2023.5, e: 2027.8, l: 'MX-S1123' } ] },
       { flag: '\uD83C\uDDF5\uD83C\uDDFE', name: 'Paraguay', type: 'CS',
-        bars: [ { k: 'green', s: 2023.5, e: 2027, l: 'PAR-S1123' } ] },
+        bars: [ { k: 'green', s: 2023.5, e: 2027, l: 'PR-S1123' } ] },
       { flag: '\uD83C\uDDFA\uD83C\uDDFE', name: 'Uruguay', type: 'CS',
-        bars: [ { k: 'gray', s: 2020, e: 2024.5, l: 'URU-S1123' } ] }
+        bars: [ { k: 'gray', s: 2020, e: 2024.5, l: 'UY-S1123' } ] }
     ] }
   ];
   const CS_FILTERS = {
@@ -6039,6 +6111,175 @@
     fdShown = 15;
     renderFeed();
   });
+  // nav labels: 2-line max; if a label still overflows, add ellipsis (CSS) + tooltip
+  function navClampCheck() {
+    document.querySelectorAll('.nav-item .lb, .ws-nav .ws-item .lb').forEach(l => {
+      if (l.scrollHeight > l.clientHeight + 1) l.closest('button').title = l.textContent.trim();
+      else l.closest('button').removeAttribute('title');
+    });
+  }
+  requestAnimationFrame(navClampCheck);
+
+  // ===== Global search (header): live operation search with full state coverage =====
+  (function () {
+    const wrap = document.getElementById('gs-wrap');
+    const input = document.getElementById('gs-input');
+    const drop = document.getElementById('gs-drop');
+    const clearBtn = document.getElementById('gs-clear');
+    const HINT = 'Type an operation ID (e.g. BR-L1587) or a word from its name.';
+    let gsTimer = null, gsSeq = 0, gsSel = -1, gsRows = [], gsDown = false;
+
+    const INDEX = [
+      ...OPO.cards.map(r => ({ code: r[0], name: r[9], phase: 'preparation', label: 'Preparation' })),
+      ...OPO.impCards.map(r => ({ code: r[0], name: r[14], phase: 'implementation', label: 'Implementation' })),
+    ];
+    // country strategies (searchable; detail page is out of scope, rows are informative only)
+    const INDEX_CS = [];
+    CS_DATA.forEach(g => g.rows.forEach(row => row.bars.forEach(bar => {
+      INDEX_CS.push({ code: bar.l, name: row.name + ' Country Strategy ' + Math.floor(bar.s) + '–' + Math.floor(bar.e) });
+    })));
+
+    function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+    function hi(text, q, trim) {
+      const i = text.toLowerCase().indexOf(q.toLowerCase());
+      if (i < 0) return esc(text);
+      // Vio: if the match sits deep in a long name, open a window around it so the
+      // highlight is not swallowed by the ellipsis
+      let pre = text.slice(0, i), lead = '';
+      if (trim && i > 26) { pre = pre.slice(i - 14); lead = '…'; }
+      return lead + esc(pre) + '<b>' + esc(text.slice(i, i + q.length)) + '</b>' + esc(text.slice(i + q.length));
+    }
+    function open() { drop.classList.add('open'); input.setAttribute('aria-expanded', 'true'); }
+    function close() { drop.classList.remove('open'); input.setAttribute('aria-expanded', 'false'); gsSel = -1; gsRows = []; }
+    function renderHint(msg) { drop.innerHTML = '<div class="gs-hint">' + msg + '</div>'; open(); }
+    function renderLoading() {
+      drop.innerHTML = '<div class="gs-skel">' + [86, 68, 78].map(w =>
+        '<div class="r"><span class="b" style="width:64px;"></span><span class="b" style="width:' + w + '%;"></span></div>').join('') + '</div>';
+      open();
+    }
+    function renderError(q) {
+      drop.innerHTML = '<div class="gs-error"><span class="gs-ic"><svg viewBox="0 -960 960 960" aria-hidden="true"><path d="M248-171q-88 0-148-59T40-377q0-80 50.5-134T217-577q2-14 6.5-31.5T236-640L91-785q-9-9-9-21t9-21q9-9 21-9t21 9l707 707q9 9 9 21t-9 21q-9 9-21.5 9T797-78l-94-93H248Zm0-60h397L285-591q-11 15-14.5 34t-3.5 37h-19q-62 0-105 39.5t-43 101q0 61.5 43 105T248-231Zm216-181Zm390 210-47-47q25-17 39-38t14-50q0-43-31-73.5T755-441h-67v-81q0-88-61-147.5T478.47-729q-28.47 0-60.97 9T358-691l-42-42q36-29 77.5-42.5T478-789q111 0 190.5 79T748-520v21q72-1 122 45t50 117q0 35-16.5 73.5T854-202ZM583-470Z"/></svg></span><span class="tx"><div class="t">We cannot search right now</div><div class="s">Something went wrong on our side. Try again in a moment.</div></span><button class="gs-retry" id="gs-retry">Try again</button></div>';
+      open();
+      document.getElementById('gs-retry').addEventListener('click', () => { gsDown = false; runSearch(q); });
+    }
+    function renderEmpty(q) {
+      drop.innerHTML = '<div class="gs-empty"><span class="gs-ic"><svg viewBox="0 -960 960 960" aria-hidden="true"><path d="m270-245 57 57q5 5 11.5 4.5T350-189q5-5 5-11.5t-5-11.5l-58-57 60-60q5-5 5-11.5t-5-11.5q-5-5-11.5-5t-11.5 5l-59 59-59-59q-5-5-11-5t-11 5q-5 5-5 11.5t5 11.5l58 59-58 58q-5 5-5 12t5 12q5 5 12 5t12-5l57-57ZM136-136q-56-56-56-134t56-134q56-56 134-56t134 56q56 56 56 134t-56 134q-56 56-134 56t-134-56Zm437-247q-14 11-31.5 21.5T508-344q-5-14-11-28.5T483-399q54-21 91.5-69.5T612-584q0-81-57-138.5T417-780q-82 0-139.5 57.5T220-584q0 17 3.5 35.5T232-517q-13 2-29 6.5T174-500q-7-18-10.5-40t-3.5-44q0-107 75-181.5T417-840q106 0 180.5 75T672-584q0 43-15 85t-41 73l242 240q9 9 9 22t-9 22q-9 9-22 9t-22-9L573-383Z"/></svg></span><div class="t">No results for "' + esc(q) + '"</div><div class="s">Check the operation ID or try a different word from the operation or strategy name.</div></div>';
+      open();
+    }
+    const gsIc = k => {
+      const el = document.querySelector('.nav-item[data-screen="' + k + '"] .ic-outline');
+      return el ? el.innerHTML : '';
+    };
+    const GS_CHIP = {
+      Implementation: '<span class="gs-chip">' + gsIc('implementation') + 'Implementation</span>',
+      Preparation: '<span class="gs-chip">' + gsIc('preparation') + 'Preparation</span>',
+      cs: '<span class="gs-chip"><span class="msr">flag</span>Country strategy</span>',
+    };
+    function renderResults(ops, cs, q) {
+      const MAX = 7, CS_MAX = 3, total = ops.length, shown = ops.slice(0, MAX);
+      let html = shown.map(o =>
+        '<button class="gs-row" role="option" aria-selected="false" data-code="' + o.code + '"><span class="code">' + hi(o.code, q) + '</span><span class="nm">' + hi(o.name, q, true) + '</span>' + GS_CHIP[o.label] + '</button>').join('');
+      html += cs.slice(0, CS_MAX).map(o =>
+        '<button class="gs-row cs" role="option" aria-selected="false" data-cs="1"><span class="code">' + hi(o.code, q) + '</span><span class="nm">' + hi(o.name, q, true) + '</span>' + GS_CHIP.cs + '</button>').join('');
+      if (total > MAX) html += '<div class="gs-foot">Showing ' + MAX + ' of ' + total + ' operations. Keep typing to narrow down.</div>';
+      drop.innerHTML = html;
+      gsRows = [...drop.querySelectorAll('.gs-row')];
+      gsSel = -1;
+      gsRows.forEach((rw, i) => {
+        rw.addEventListener('click', () => rw.dataset.cs ? goCS() : go(rw.dataset.code));
+        // hover and keyboard share one highlight so two rows never look selected at once
+        rw.addEventListener('mouseenter', () => {
+          gsSel = i;
+          gsRows.forEach((r, k) => { r.classList.toggle('sel', k === i); r.setAttribute('aria-selected', k === i ? 'true' : 'false'); });
+        });
+      });
+      open();
+    }
+    function go(code) {
+      const item = INDEX.find(o => o.code === code);
+      if (!item) return;
+      close();
+      input.blur();
+      const row = item.phase === 'implementation' ? OPO.impCards.find(r => r[0] === code) : OPO.cards.find(r => r[0] === code);
+      openWorkspace(item.phase, row);
+    }
+    function goCS() {
+      close();
+      input.blur();
+      const nav = document.querySelector('.nav-item[data-screen="country-strategies"]');
+      if (nav) nav.click();
+    }
+    function match(q, index) {
+      const s = q.toLowerCase();
+      const scored = [];
+      index.forEach(o => {
+        const c = o.code.toLowerCase(), n = o.name.toLowerCase();
+        let rank = -1;
+        if (c.startsWith(s)) rank = 0;
+        else if (c.includes(s)) rank = 1;
+        else if (n.includes(s)) rank = 2;
+        if (rank >= 0) scored.push([rank, o]);
+      });
+      scored.sort((a, b) => a[0] - b[0] || a[1].code.localeCompare(b[1].code));
+      return scored.map(x => x[1]);
+    }
+    function runSearch(q) {
+      const seq = ++gsSeq;
+      renderLoading();
+      setTimeout(() => {
+        if (seq !== gsSeq) return; // stale response, a newer query is in flight
+        if (gsDown) { renderError(q); return; }
+        const ops = match(q, INDEX), cs = match(q, INDEX_CS);
+        if (!ops.length && !cs.length) renderEmpty(q); else renderResults(ops, cs, q);
+      }, 450);
+    }
+    function onQuery() {
+      const q = input.value.trim();
+      wrap.classList.toggle('has-text', input.value.length > 0);
+      clearTimeout(gsTimer);
+      if (!q) { gsSeq++; renderHint(HINT); return; }
+      if (q.length < 2) { gsSeq++; renderHint('Keep typing to search operations.'); return; }
+      gsTimer = setTimeout(() => runSearch(q), 300);
+    }
+    input.addEventListener('input', onQuery);
+    input.addEventListener('focus', () => {
+      const q = input.value.trim();
+      if (!q) renderHint(HINT);
+      else if (q.length < 2) renderHint('Keep typing to search operations.');
+      else runSearch(q);
+    });
+    clearBtn.addEventListener('click', () => {
+      input.value = '';
+      wrap.classList.remove('has-text');
+      gsSeq++;
+      renderHint(HINT);
+      input.focus();
+    });
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { close(); input.blur(); return; }
+      if (!gsRows.length) return;
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        gsSel = e.key === 'ArrowDown' ? (gsSel + 1) % gsRows.length : (gsSel - 1 + gsRows.length) % gsRows.length;
+        gsRows.forEach((r, i) => { r.classList.toggle('sel', i === gsSel); r.setAttribute('aria-selected', i === gsSel ? 'true' : 'false'); });
+        gsRows[gsSel].scrollIntoView({ block: 'nearest' });
+      } else if (e.key === 'Enter') {
+        const target = gsRows[gsSel >= 0 ? gsSel : 0];
+        if (target) target.dataset.cs ? goCS() : go(target.dataset.code);
+      }
+    });
+    document.addEventListener('click', e => { if (!e.target.closest('#gs-wrap')) close(); });
+    // demo: press "s" 5 times (outside inputs) to toggle the simulated search service outage
+    let sCount = 0;
+    document.addEventListener('keydown', e => {
+      if (e.target.matches('input, textarea, select')) return;
+      if ((e.key || '').toLowerCase() === 's') {
+        sCount++;
+        if (sCount >= 5) { sCount = 0; gsDown = !gsDown; console.info('[OPO] search service ' + (gsDown ? 'DOWN (demo, S x5 to restore)' : 'restored')); }
+      } else sCount = 0;
+    });
+  })();
+
   if (location.hash && location.hash !== '#/' && location.hash !== '#/home') applyRoute();
   else try { history.replaceState(null, '', '#/home'); } catch (err) { /* sandboxed previews block replaceState */ }
 </script>
