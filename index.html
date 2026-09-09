@@ -1415,6 +1415,8 @@
   .lcn.todo .lb{color:#67676A;font-weight:500;}
   .lcn .sub{font-size:10px;line-height:14px;color:#8A8888;margin-top:2px;white-space:nowrap;}
   .lcn .sub.est{font-style:italic;}
+  .lcn .exp{font-size:10px;line-height:13px;color:#8A8888;margin-top:1px;text-align:center;padding:0 7px;max-width:100%;}
+  .lcn.todo .exp{color:#9C9A9A;}
   /* contract milestone between stages (e.g. CED): diamond marker, quieter than a stage node */
   .lcm{position:relative;display:flex;flex-direction:column;align-items:center;min-width:118px;max-width:132px;border-radius:8px;outline:none;scroll-snap-align:center;}
   .lcm .trk{display:flex;align-items:center;width:100%;height:22px;}
@@ -1427,12 +1429,13 @@
   .lcn.current .pill{margin-top:7px;display:inline-flex;flex-direction:column;align-items:center;gap:1px;background:#FFFFFF;border:1.5px solid #00854D;border-radius:8px;padding:5px 12px 6px;box-shadow:0 2px 7px rgba(0,105,61,.14);transition:transform .16s ease,box-shadow .16s ease;}
   .lcn.current .pill .lb2{font-size:12px;line-height:17px;font-weight:700;color:#272626;white-space:nowrap;}
   .lcn.current .pill .dt2{font-size:10px;line-height:14px;font-weight:700;color:#00693D;text-transform:uppercase;letter-spacing:.3px;}
+  .lcn.current .pill .exp2{font-size:10px;line-height:13px;font-weight:500;color:#5C5A5A;text-align:center;}
   /* dock-style hover: the hover target (.lcn) never moves, so the hitbox stays under the cursor
      (a transform on the hovered element itself makes hover flicker at its edges);
      only the visual pieces lift: dot, labels and pill. The line needs no counter-transform. */
-  .lcn .lb,.lcn .sub{transition:transform .26s cubic-bezier(0.33,0,0.15,1),color .16s ease;}
+  .lcn .lb,.lcn .sub,.lcn .exp{transition:transform .26s cubic-bezier(0.33,0,0.15,1),color .16s ease;}
   .lcn:hover .dot{transform:translateY(-4px) scale(1.18);transition:transform .32s cubic-bezier(0.34,1.56,0.64,1),box-shadow .18s ease;}
-  .lcn:hover .lb,.lcn:hover .sub{transform:translateY(-4px);transition:transform .32s cubic-bezier(0.34,1.56,0.64,1),color .16s ease;}
+  .lcn:hover .lb,.lcn:hover .sub,.lcn:hover .exp{transform:translateY(-4px);transition:transform .32s cubic-bezier(0.34,1.56,0.64,1),color .16s ease;}
   .lcn.current:hover .pill{transform:translateY(-4px);transition:transform .32s cubic-bezier(0.34,1.56,0.64,1),box-shadow .16s ease;}
   /* secondary layer: elevation shadow instead of a flat color swap */
   .lcn.done:hover .dot{box-shadow:0 5px 12px rgba(0,105,61,0.30);}
@@ -1448,7 +1451,7 @@
   @keyframes lc-in{from{opacity:.25;transform:translateY(3px);}to{opacity:1;transform:none;}}
   @keyframes lc-pulse{0%,100%{box-shadow:0 0 0 4px rgba(0,133,77,.12);}50%{box-shadow:0 0 0 6px rgba(0,133,77,.06);}}
   #ws-st-prev:disabled,#ws-st-next:disabled{opacity:.38;cursor:default;background:#FFFFFF;}
-  @media (prefers-reduced-motion:reduce){.lct.entering,.lcn.current .dot{animation:none;}.lcn,.lcn .dot,.lcn .pill,.lcn .lb,.lcn .sub{transition:none;}.lcn:hover .dot,.lcn:hover .lb,.lcn:hover .sub,.lcn.current:hover .pill{transform:none;}}
+  @media (prefers-reduced-motion:reduce){.lct.entering,.lcn.current .dot{animation:none;}.lcn,.lcn .dot,.lcn .pill,.lcn .lb,.lcn .sub,.lcn .exp{transition:none;}.lcn:hover .dot,.lcn:hover .lb,.lcn:hover .sub,.lcn:hover .exp,.lcn.current:hover .pill{transform:none;}}
 
   /* ===== Home loading state preview (press L five times on Home) ===== */
   #screen-home.skel > .section, #screen-home.skel > .page-header{display:none;}
@@ -1522,6 +1525,9 @@
   .ai-srcbtn:hover{background:var(--color-surface-cont-lowest);}
   .ai-srcbtn .msr{font-size:16px;color:var(--icon-default);transition:transform .15s ease;}
   .ai-srcbtn.open .msr{transform:rotate(180deg);}
+  .ai-srcbtn.open{background:#EAF4FA;border-color:#9CC8E0;color:#0E6E9E;}
+  .ai-srcbtn.open .msr{color:#0E6E9E;}
+  .ai-srcbtn.open:hover{background:#DEEDF7;}
   .ai-srclist{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
   .ai-srclist .row{display:flex;gap:10px;font-size:13px;line-height:18px;color:#272626;}
   .ai-srclist .n{font-weight:600;color:var(--link-default);flex:0 0 auto;}
@@ -1571,12 +1577,12 @@
   .ws-ai-caption{font-size:12px;color:#8A8888;}
   .ws-ai-fb{display:inline-flex;gap:4px;}
   .fb-btn{
-    position:relative;width:26px;height:26px;border:0;background:none;border-radius:50%;cursor:pointer;
+    position:relative;width:26px;height:26px;border:0;background:none;border-radius:6px;cursor:pointer;
     display:inline-flex;align-items:center;justify-content:center;color:#8A8888;
     transition:background 0.13s ease;
   }
   .fb-btn .msr{font-size:16px;}
-  .fb-btn:hover{background:var(--color-surface-cont-lowest);color:#5C5A5A;}
+  .fb-btn:hover{background:#E7E7E9;color:#43424B;}
   .fb-btn::after{
     content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);
     background:#1F1E1E;color:#fff;font-size:11px;line-height:14px;padding:5px 8px;border-radius:4px;
@@ -1642,7 +1648,7 @@
   }
   .ws-qa-card h3{font-size:16px;font-weight:700;color:#272626;margin-top:4px;}
   /* hover parity with Pinned operations cards on Home */
-  .ws-qa .ws-qa-card{transition:box-shadow 0.2s ease, border-color 0.2s ease, opacity 0.15s ease;}
+  .ws-qa .ws-qa-card{transition:box-shadow 0.2s ease, border-color 0.2s ease, opacity 0.15s ease, transform 0.12s cubic-bezier(0.2,0,0,1);}
   .ws-qa:hover .ws-qa-card{opacity:0.7;}
   .ws-qa .ws-qa-card:hover{
     opacity:1;
@@ -1658,6 +1664,9 @@
     .ws-qa-card:hover{animation:none;}
   }
   .ws-qa-card p{font-size:12px;line-height:16px;color:#5C5A5A;}
+  .ws-qa-card .imp-iconbox{width:32px;height:32px;border-radius:50%;background:#F0F4F7;color:#004E70;}
+  .ws-qa-card .imp-iconbox .msr{font-size:18px;}
+  .ws-qa-card .imp-iconbox svg{width:16px;height:16px;}
   .ws-qa-card{cursor:pointer;}
   .ws-qa-card:focus-visible{outline:2px solid #00629D;outline-offset:2px;}
   .ws-qa-card .start{
@@ -1988,6 +1997,15 @@
   .nf-back{margin-top:24px;display:inline-flex;align-items:center;gap:8px;}
   .nf-back .msr{font-size:18px;}
 
+  /* ============ Section coming soon ============ */
+  #screen-soon{flex-direction:column;}
+  .soon-crumb{display:flex;align-items:center;gap:7px;font-size:12px;line-height:17px;color:#8A8888;margin-bottom:14px;}
+  .soon-crumb a{color:#0E7CB8;font-weight:600;text-decoration:none;}
+  .soon-crumb a:hover{text-decoration:underline;}
+  .soon-crumb .sep{color:#C7C7C9;}
+  .soon-crumb [aria-current]{color:#5C5A5A;font-weight:600;}
+  .soon-card{min-height:calc(100vh - 230px);}
+
   /* ============ Placeholder screens (nav targets) ============ */
   .screen{display:none;}
   .screen.visible{display:flex;}
@@ -1999,6 +2017,27 @@
   .placeholder .msr{font-size:48px;color:var(--color-outline-variant);}
   .placeholder h2{font-size:18px;font-weight:600;color:var(--color-text-default);}
   .placeholder p{font-size:14px;max-width:420px;text-align:center;line-height:20px;}
+
+  /* ============ Micro interactions (motion tokens: 100/120/160/200ms · cubic-bezier(0.2,0,0,1)) ============ */
+  /* popovers and dropdowns: fade + 4px entrance, instant exit */
+  @keyframes mi-pop-in{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:none;}}
+  .menu.open,.combo.open,.gs-drop.open{animation:mi-pop-in .16s cubic-bezier(0.2,0,0,1);}
+  /* screen and workspace view change: near subliminal crossfade */
+  @keyframes mi-view-fade{from{opacity:.4;}to{opacity:1;}}
+  .screen.visible,#ws-view-dashboard,#ws-view-opdata,#ws-view-feed,#ws-view-tool{animation:mi-view-fade .1s ease-out;}
+  /* AI sources panel: 200ms in, 120ms out */
+  .ai-srclist{transition:opacity .2s cubic-bezier(0.2,0,0,1),transform .2s cubic-bezier(0.2,0,0,1);}
+  .ai-srclist.pre,.ai-srclist.closing{opacity:0;transform:translateY(-4px);}
+  .ai-srclist.closing{transition-duration:.12s,.12s;}
+  /* press feedback on primary buttons and quick access cards */
+  .btn-filled{transition:background .15s ease,transform .12s cubic-bezier(0.2,0,0,1);}
+  .btn-filled:active{transform:scale(0.98);}
+  .ws-qa-card:active{transform:scale(0.98);}
+  @media (prefers-reduced-motion:reduce){
+    .menu.open,.combo.open,.gs-drop.open,.screen.visible,#ws-view-dashboard,#ws-view-opdata,#ws-view-feed,#ws-view-tool{animation:none;}
+    .ai-srclist{transition:none;}
+    .btn-filled:active,.ws-qa-card:active{transform:none;}
+  }
 </style>
 </head>
 <body>
@@ -2364,6 +2403,56 @@
     </div>
   </main>
 
+  <!-- ============ Section coming soon (demo: press C five times; direct route #/coming-soon) ============ -->
+  <main class="main screen" id="screen-soon">
+    <nav class="soon-crumb" aria-label="Breadcrumb"><a href="#/home">Home</a><span class="sep">/</span><span aria-current="page">Country Strategies</span></nav>
+    <div class="nf-card soon-card">
+    <div class="nf-wrap">
+      <svg class="nf-illus" viewBox="0 0 256 189" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of a section under construction">
+        <g opacity="0.6">
+          <rect x="201.5" y="28.3" width="53" height="65" rx="9.5" fill="#FBFBFC" stroke="#E9E8E9"/>
+          <rect x="212" y="39.8" width="32" height="7" rx="3.5" fill="#F1F0F1"/>
+          <rect x="212" y="53.8" width="24" height="6" rx="3" fill="#F4F3F4"/>
+        </g>
+        <g opacity="0.45">
+          <rect x="1.5" y="100.3" width="57" height="55" rx="9.5" fill="#FBFBFC" stroke="#E9E8E9"/>
+          <rect x="12" y="111.8" width="34" height="7" rx="3.5" fill="#F2F1F2"/>
+          <rect x="12" y="125.8" width="26" height="6" rx="3" fill="#F5F4F5"/>
+        </g>
+        <circle cx="23" cy="45.8" r="3.5" fill="#E2E1E2"/>
+        <circle cx="237" cy="133.8" r="4" fill="#E6E5E6"/>
+        <rect x="41.5" y="20.3" width="171" height="135" rx="3.5" fill="#FFFFFF" stroke="#E4E4E4"/>
+        <path d="M41 51.8H213" stroke="#ECEBEC" stroke-width="2.5"/>
+        <circle cx="61" cy="35.8" r="4" fill="#D9D8D9"/><circle cx="75" cy="35.8" r="4" fill="#E2E1E2"/><circle cx="89" cy="35.8" r="4" fill="#EBEAEB"/>
+        <rect x="113" y="29.8" width="84" height="12" rx="6" fill="#F1F0F1"/>
+        <rect x="63" y="71.8" width="128" height="62" rx="10" stroke="#D2D1D2" stroke-width="2.5" stroke-dasharray="7 7"/>
+        <g stroke="#C7C7C9" stroke-width="2.5" fill="#FFFFFF">
+          <g transform="translate(115,100)">
+            <g stroke-linecap="round">
+              <line x1="0" y1="-14" x2="0" y2="-19"/><line x1="0" y1="14" x2="0" y2="19"/>
+              <line x1="-14" y1="0" x2="-19" y2="0"/><line x1="14" y1="0" x2="19" y2="0"/>
+              <line x1="-9.9" y1="-9.9" x2="-13.4" y2="-13.4"/><line x1="9.9" y1="9.9" x2="13.4" y2="13.4"/>
+              <line x1="-9.9" y1="9.9" x2="-13.4" y2="13.4"/><line x1="9.9" y1="-9.9" x2="13.4" y2="-13.4"/>
+            </g>
+            <circle r="14" fill="#F6F5F6"/><circle r="5" fill="#E2E1E2" stroke="none"/>
+          </g>
+          <g transform="translate(146,112)">
+            <g stroke-linecap="round">
+              <line x1="0" y1="-9" x2="0" y2="-13"/><line x1="0" y1="9" x2="0" y2="13"/>
+              <line x1="-9" y1="0" x2="-13" y2="0"/><line x1="9" y1="0" x2="13" y2="0"/>
+              <line x1="-6.4" y1="-6.4" x2="-9.2" y2="-9.2"/><line x1="6.4" y1="6.4" x2="9.2" y2="9.2"/>
+              <line x1="-6.4" y1="6.4" x2="-9.2" y2="9.2"/><line x1="6.4" y1="-6.4" x2="9.2" y2="-9.2"/>
+            </g>
+            <circle r="9" fill="#FBFBFC"/><circle r="3.5" fill="#E6E5E6" stroke="none"/>
+          </g>
+        </g>
+      </svg>
+      <h1 class="nf-t">We are building this section</h1>
+      <p class="nf-s">It is part of the portal rollout. It will be available in an upcoming release.</p>
+    </div>
+    </div>
+  </main>
+
   <!-- ============ Placeholder screens ============ -->
   <main class="main flush screen" id="screen-country-strategies">
     <div class="prep-hero cs-hero">
@@ -2721,7 +2810,7 @@
             <span class="start" aria-hidden="true">Open</span>
           </div>
           <div class="ws-qa-card" id="qa-rst" role="button" tabindex="0" aria-label="Open Risk Screening Tool">
-            <span class="imp-iconbox"><span class="msr">shield</span></span>
+            <span class="imp-iconbox"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 0.666667L2 3.33333V7.33333C2 11.0333 4.56 14.4933 8 15.3333C11.44 14.4933 14 11.0333 14 7.33333V3.33333L8 0.666667ZM12.6667 7.33333C12.6667 10.3467 10.68 13.1267 8 13.9533C5.32 13.1267 3.33333 10.3467 3.33333 7.33333V4.2L8 2.12667L12.6667 4.2V7.33333ZM4.94 7.72667L4 8.66667L6.66667 11.3333L12 6L11.06 5.05333L6.66667 9.44667L4.94 7.72667Z" fill="currentColor"/></svg></span>
             <h3>Risk Screening Tool</h3>
             <p>Identify, assess and screen environmental and social risks associated with this operation.</p>
             <span class="start" aria-hidden="true">Open</span>
@@ -3073,14 +3162,42 @@
 
   // ===== Navigation =====
   const navItems = document.querySelectorAll('.nav-item');
+  // demo flag: Country strategies renders as "coming soon" (toggle with C x5)
+  let soonDemo = false;
   navItems.forEach(item => {
     item.addEventListener('click', () => {
       navItems.forEach(i => i.classList.remove('active'));
       item.classList.add('active');
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('visible'));
-      document.getElementById('screen-' + item.dataset.screen).classList.add('visible');
+      const sid = (soonDemo && item.dataset.screen === 'country-strategies') ? 'screen-soon' : 'screen-' + item.dataset.screen;
+      document.getElementById(sid).classList.add('visible');
       setHash('#/' + item.dataset.screen);
     });
+  });
+  // section coming soon: shown for Country strategies while the demo flag is on, or via #/coming-soon
+  function showSoon() {
+    navItems.forEach(i => i.classList.remove('active'));
+    const cs = document.querySelector('.nav-item[data-screen="country-strategies"]');
+    if (cs) cs.classList.add('active');
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('visible'));
+    document.getElementById('screen-soon').classList.add('visible');
+  }
+  // demo: press "c" 5 times (outside inputs) to toggle the section coming soon state
+  let soonCount = 0;
+  document.addEventListener('keydown', e => {
+    if (e.target.matches('input, textarea, select')) return;
+    if ((e.key || '').toLowerCase() === 'c') {
+      soonCount++;
+      if (soonCount >= 5) {
+        soonCount = 0; soonDemo = !soonDemo;
+        console.info('[OPO] Country strategies coming soon ' + (soonDemo ? 'ON (demo, C x5 to restore)' : 'OFF'));
+        const active = document.querySelector('.nav-item.active');
+        if (active && active.dataset.screen === 'country-strategies') {
+          document.querySelectorAll('.screen').forEach(s => s.classList.remove('visible'));
+          document.getElementById(soonDemo ? 'screen-soon' : 'screen-country-strategies').classList.add('visible');
+        }
+      }
+    } else soonCount = 0;
   });
 
   // ===== Page not found =====
@@ -4241,6 +4358,18 @@
     'Operational Closure': 'Formal closure of operational activities.',
     'PCR Approved': 'Approval of the Project Completion Report.'
   };
+  // Official acronym expansions from the BID glossary. Shown under the stage name.
+  // Stages without an official acronym are intentionally absent: do not invent them.
+  const LC_ACR = {
+    'PP Distributed': 'Project Profile',
+    'PP Approved': 'Project Profile',
+    'PP Not Required': 'Project Profile',
+    'QRR Approved': 'Quality and Risk Review',
+    'POD Approved': 'Proposal for Operation Development',
+    'OPC Approved': 'Operations Policy Committee',
+    'DLP Approved': 'Draft Loan Proposal',
+    'PCR Approved': 'Project Completion Report'
+  };
   function lcRender() {
     const track = document.getElementById('lc-track');
     if (!lcOp) { track.innerHTML = ''; return; }
@@ -4279,22 +4408,25 @@
         const lCls = isFirst ? 'sg hide' : 'sg' + (st !== 'todo' ? ' on' : '');
         const rCls = isLast ? 'sg hide' : 'sg' + (nextState !== 'todo' ? ' on' : '');
         const def = LC_DEFS[s] || '';
+        const exp = LC_ACR[s] ? '<div class="exp">' + LC_ACR[s] + '</div>' : '';
         let meta = '', body = '';
         if (st === 'done') {
           const di = flatDone.indexOf(k + ':' + s);
           const dur = di > 0 ? lcDays(lcDateObj(di, flatDone.length) - lcDateObj(di - 1, flatDone.length)) : null;
           meta = 'Completed · ' + lcDate(di, flatDone.length) + (dur ? ' · ' + dur + ' days in stage' : '');
-          body = '<div class="lb">' + s + '</div><div class="sub">' + lcDate(di, flatDone.length) + '</div>';
+          body = '<div class="lb">' + s + '</div>' + exp + '<div class="sub">' + lcDate(di, flatDone.length) + '</div>';
         } else if (st === 'current') {
           const since = flatDone.length ? lcDays(LC_TODAY - lcDateObj(flatDone.length - 1, flatDone.length)) : null;
           meta = 'Current stage' + (since ? ' · Active for ' + since + ' days' : '');
-          body = '<div class="pill"><span class="lb2">' + s + '</span><span class="dt2">Current stage</span></div>';
+          body = '<div class="pill"><span class="lb2">' + s + '</span>'
+            + (LC_ACR[s] ? '<span class="exp2">' + LC_ACR[s] + '</span>' : '')
+            + '<span class="dt2">Current stage</span></div>';
         } else if (s === 'Approved' && lcOp.estApproval) {
           meta = 'Upcoming · Estimated ' + lcOp.estApproval;
           body = '<div class="lb">' + s + '</div><div class="sub est">Est. ' + lcOp.estApproval + '</div>';
         } else {
           meta = 'Upcoming · ' + LC_META[k].label;
-          body = '<div class="lb">' + s + '</div>';
+          body = '<div class="lb">' + s + '</div>' + exp;
         }
         const aria = LC_META[k].label + ', stage ' + (i + 1) + ' of ' + stages.length + ': ' + s + '. ' + meta;
         return '<div class="lcn ' + st + '" role="listitem" tabindex="0"' + (st === 'current' ? ' aria-current="step"' : '')
@@ -4451,6 +4583,7 @@
           document.body.classList.remove('no-scroll');
         }
         const screen = parts[0] || 'home';
+        if (screen === 'coming-soon') { showSoon(); return; } // direct link to the section coming soon state
         const item = document.querySelector(`.nav-item[data-screen="${screen}"]`);
         if (item) { if (!item.classList.contains('active')) item.click(); }
         else showNotFound(); // covers #/not-found and any unknown route
@@ -4539,15 +4672,24 @@
   document.getElementById('ai-srcbtn').addEventListener('click', () => {
     const list = document.getElementById('ai-srclist');
     const btn = document.getElementById('ai-srcbtn');
-    const open = list.style.display === 'none';
-    list.style.display = open ? '' : 'none';
+    const open = list.style.display === 'none' || list.classList.contains('closing');
+    if (open) {
+      clearTimeout(list._closeT);
+      list.classList.remove('closing');
+      list.style.display = '';
+      list.classList.add('pre');
+      requestAnimationFrame(() => requestAnimationFrame(() => list.classList.remove('pre')));
+    } else {
+      list.classList.add('closing');
+      list._closeT = setTimeout(() => { list.style.display = 'none'; list.classList.remove('closing'); }, 120);
+    }
     btn.classList.toggle('open', open);
     btn.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
 
   // ===== AI summary (OP-1275): inline source refs, sources list, scope label =====
   const aiRef = (n, ev) => '<sup class="ai-ref" data-t2h="' + ev[0] + '" data-t2b="' + ev[1] + '">[' + n + ']</sup>';
-  const AI_INF_TIP = ' data-t2h="Inferred" data-t2b="No direct event in the Activity feed. Inferred from recent activity, verify before relying on it."';
+  const AI_INF_TIP = ' data-t2h="Inferred" data-t2b="This detail does not come from the Activity feed. Check it before you use it."';
   function renderAiSummary(phase, row) {
     const isImpl = phase === 'implementation';
     const code = row[0];
@@ -4605,7 +4747,8 @@
     document.getElementById('ai-sep').style.display = show ? '' : 'none';
     if (!show) {
       document.getElementById('ai-more').style.display = 'none';
-      document.getElementById('ai-srclist').style.display = 'none';
+      const sl = document.getElementById('ai-srclist');
+      sl.style.display = 'none'; sl.classList.remove('pre', 'closing'); clearTimeout(sl._closeT);
       const b = document.getElementById('ai-srcbtn');
       b.classList.remove('open'); b.setAttribute('aria-expanded', 'false');
     }
