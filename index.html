@@ -284,6 +284,12 @@
     font-family:var(--font-ui);font-size:12.5px;font-weight:600;color:var(--link-default);cursor:pointer;
   }
   .gs-retry:hover{background:var(--color-surface-cont-lowest);}
+  .gs-empty .gs-retry{margin-top:14px;margin-left:0;}
+  /* partial results: one source failed, results from the other are shown with a notice strip */
+  .gs-pnote{display:flex;align-items:center;gap:10px;margin-top:4px;padding:9px 12px;border-top:1px solid #F1F0F1;background:#FFF9EE;border-radius:0 0 8px 8px;font-size:12px;line-height:16px;color:#5C5A5A;}
+  .gs-pnote svg{width:16px;height:16px;fill:#B26A00;flex:0 0 auto;}
+  .gs-pnote .rt{margin-left:auto;flex:0 0 auto;font-weight:600;color:#0E7CB8;background:none;border:0;font-family:var(--font-ui);font-size:12px;cursor:pointer;padding:0;}
+  .gs-pnote .rt:hover{text-decoration:underline;}
   .gs-skel{padding:4px 0;}
   .gs-skel .r{display:flex;align-items:center;gap:10px;padding:9px 12px;}
   .gs-skel .b{height:12px;border-radius:6px;background:linear-gradient(90deg,#EFEEEF 25%,#F7F6F7 50%,#EFEEEF 75%);background-size:200% 100%;animation:gsSh 1.1s linear infinite;}
@@ -674,6 +680,19 @@
     transition:box-shadow .15s ease,border-color .15s ease;
   }
   .op-card{transition:box-shadow 0.2s ease, border-color 0.2s ease, opacity 0.15s ease;}
+  /* ghost card: invites pinning while the grid has room (hidden from 4 pinned cards on) */
+  .op-add{
+    border:1.5px dashed #C7C7C9;border-radius:8px;background:#FCFCFC;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+    gap:8px;padding:16px 20px;cursor:pointer;color:#67676A;min-height:150px;
+    transition:border-color .15s ease,background .15s ease,color .15s ease;
+  }
+  .op-add:hover{border-color:#0E7CB8;color:#0E6E9E;background:#FBFDFE;}
+  .op-add:focus-visible{outline:2px solid #00629D;outline-offset:2px;}
+  .op-add .plus{width:32px;height:32px;border-radius:50%;background:#F0F4F7;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:500;color:#004E70;}
+  .op-add .t{font-size:13px;font-weight:600;}
+  .op-add .s{font-size:11px;line-height:15px;color:#8A8888;max-width:180px;}
+  #pin-carousel.cmode .op-add{flex:0 0 261px;width:261px;}
   /* focus by contrast: hovering the row dims every card... */
   .carousel:hover .op-card{opacity:0.7;}
   /* ...and the card under the cursor recovers full intensity (must come after the dim rule) */
@@ -1999,6 +2018,9 @@
 
   /* ============ Section coming soon ============ */
   #screen-soon{flex-direction:column;}
+  #screen-closing{flex-direction:column;}
+  /* nav "Coming soon" chip: compact, outside the label clamp, never deforms */
+  .nav-item .chip-soon{height:18px;padding:0 5px;font-size:9.5px;border-radius:4px;margin-left:auto;flex:0 0 auto;}
   .soon-crumb{display:flex;align-items:center;gap:7px;font-size:12px;line-height:17px;color:#8A8888;margin-bottom:14px;}
   .soon-crumb a{color:#0E7CB8;font-weight:600;text-decoration:none;}
   .soon-crumb a:hover{text-decoration:underline;}
@@ -2076,7 +2098,7 @@
         <span class="nav-ic"><span class="ic-outline"><svg viewBox="60.0 182.0 24 24" fill="currentColor" aria-hidden="true"><path d="M67.4121 193.608C67.6838 193.066 67.9733 192.542 68.2807 192.039C68.5882 191.536 68.927 191.039 69.2972 190.549L67.8311 190.255C67.7798 190.242 67.7301 190.244 67.6822 190.26C67.634 190.276 67.5907 190.303 67.5523 190.341L65.2905 192.602C65.2714 192.621 65.2649 192.644 65.2713 192.669C65.2778 192.695 65.2938 192.714 65.3195 192.727L67.4121 193.608ZM79.1549 186.445C77.8035 186.516 76.5041 186.856 75.2569 187.464C74.0098 188.071 72.8579 188.903 71.801 189.959C71.0822 190.678 70.4481 191.436 69.8985 192.235C69.3489 193.034 68.9185 193.806 68.6072 194.549L71.4456 197.371C72.1898 197.06 72.9632 196.629 73.7658 196.08C74.5683 195.531 75.329 194.897 76.0478 194.179C77.1047 193.123 77.937 191.975 78.5449 190.737C79.1528 189.499 79.4926 188.204 79.5644 186.854C79.5644 186.8 79.5566 186.748 79.5411 186.697C79.5258 186.646 79.4964 186.599 79.4529 186.556C79.4093 186.512 79.3622 186.483 79.3116 186.468C79.2609 186.452 79.2087 186.445 79.1549 186.445ZM73.2287 191.021C73.2287 190.537 73.3978 190.126 73.7361 189.788C74.0743 189.45 74.4881 189.281 74.9774 189.281C75.4668 189.281 75.8806 189.45 76.2187 189.788C76.5569 190.126 76.726 190.537 76.726 191.021C76.726 191.505 76.5569 191.916 76.2187 192.254C75.8806 192.592 75.4668 192.761 74.9774 192.761C74.4881 192.761 74.0743 192.592 73.7361 192.254C73.3978 191.916 73.2287 191.505 73.2287 191.021ZM72.3871 198.575L73.2692 200.682C73.282 200.708 73.3011 200.722 73.3266 200.725C73.3523 200.728 73.3747 200.72 73.3941 200.701L75.6558 198.45C75.6941 198.412 75.7214 198.368 75.7375 198.321C75.7535 198.272 75.7551 198.223 75.7423 198.172L75.4483 196.706C74.9576 197.076 74.4606 197.412 73.9571 197.715C73.4535 198.017 72.9302 198.303 72.3871 198.575ZM80.992 185.972C81.0548 187.72 80.747 189.38 80.0687 190.953C79.3904 192.526 78.3466 194.017 76.9374 195.425C76.9054 195.457 76.875 195.486 76.8462 195.512C76.8174 195.537 76.787 195.566 76.755 195.598L77.2162 197.868C77.2763 198.169 77.2612 198.462 77.1709 198.746C77.0807 199.03 76.9285 199.279 76.7145 199.493L73.7495 202.456C73.5254 202.68 73.2544 202.765 72.9367 202.71C72.6189 202.655 72.3998 202.477 72.2794 202.176L70.919 198.98L67.0124 195.066L63.8149 193.706C63.5138 193.586 63.3347 193.367 63.2778 193.05C63.2208 192.732 63.3044 192.461 63.5286 192.237L66.4936 189.274C66.7076 189.06 66.9593 188.909 67.2488 188.822C67.5382 188.735 67.8335 188.722 68.1346 188.782L70.4058 189.243C70.438 189.211 70.4652 189.182 70.4875 189.156C70.51 189.131 70.5372 189.102 70.5692 189.07C71.9785 187.662 73.47 186.617 75.0438 185.935C76.6176 185.254 78.2788 184.945 80.0275 185.008C80.1479 185.018 80.2667 185.048 80.3837 185.096C80.501 185.145 80.6064 185.216 80.7 185.31C80.7934 185.403 80.8629 185.507 80.9083 185.621C80.9538 185.735 80.9817 185.852 80.992 185.972ZM64.6335 197.824C65.1203 197.338 65.7138 197.093 66.4139 197.091C67.1139 197.09 67.7072 197.332 68.194 197.818C68.6808 198.305 68.9217 198.898 68.9167 199.598C68.9116 200.297 68.6656 200.891 68.1788 201.377C67.5011 202.054 66.7018 202.466 65.7806 202.613C64.8595 202.76 63.9326 202.889 63 203C63.1116 202.062 63.2423 201.134 63.3922 200.216C63.5421 199.299 63.9559 198.501 64.6335 197.824ZM65.7019 198.886C65.4123 199.176 65.2118 199.52 65.1004 199.919C64.989 200.319 64.9031 200.73 64.8428 201.152C65.2657 201.092 65.677 201.007 66.0767 200.898C66.4763 200.788 66.8209 200.589 67.1104 200.3C67.3102 200.1 67.4153 199.86 67.4256 199.58C67.4358 199.301 67.3409 199.061 67.1411 198.861C66.9412 198.661 66.7013 198.566 66.4214 198.574C66.1416 198.582 65.9018 198.686 65.7019 198.886Z"/></svg></span><span class="ic-filled"><svg viewBox="98.0 182.0 24 24" fill="currentColor" aria-hidden="true"><path d="M104.544 194.22C104.968 193.206 105.465 192.234 106.036 191.306C106.608 190.377 107.245 189.495 107.948 188.66L106.602 188.378C106.303 188.318 106.013 188.332 105.73 188.418C105.448 188.505 105.201 188.654 104.989 188.866L102.047 191.808C101.824 192.031 101.74 192.299 101.795 192.615C101.85 192.93 102.026 193.147 102.325 193.267L104.544 194.22ZM118.041 185.001C116.404 184.976 114.854 185.315 113.39 186.018C111.927 186.721 110.617 187.65 109.46 188.807C108.717 189.549 108.062 190.355 107.494 191.223C106.926 192.091 106.425 193.002 105.991 193.957C105.909 194.153 105.868 194.353 105.868 194.556C105.868 194.761 105.944 194.939 106.096 195.091L108.918 197.904C109.071 198.056 109.247 198.134 109.448 198.137C109.649 198.14 109.847 198.101 110.043 198.018C110.998 197.591 111.909 197.09 112.777 196.516C113.645 195.941 114.451 195.283 115.193 194.54C116.35 193.384 117.279 192.073 117.982 190.61C118.685 189.146 119.024 187.596 118.999 185.959C118.999 185.839 118.972 185.723 118.919 185.61C118.865 185.497 118.792 185.394 118.699 185.301C118.607 185.208 118.504 185.135 118.39 185.081C118.277 185.028 118.161 185.001 118.041 185.001ZM111.672 190.596C111.672 190.113 111.839 189.703 112.175 189.368C112.51 189.032 112.92 188.864 113.404 188.864C113.887 188.864 114.297 189.032 114.633 189.368C114.968 189.703 115.136 190.113 115.136 190.596C115.136 191.08 114.968 191.49 114.633 191.825C114.297 192.161 113.887 192.329 113.404 192.329C112.92 192.329 112.51 192.161 112.175 191.825C111.839 191.49 111.672 191.08 111.672 190.596ZM109.77 199.456L110.724 201.675C110.843 201.974 111.061 202.153 111.376 202.213C111.691 202.272 111.96 202.191 112.182 201.969L115.124 199.027C115.337 198.814 115.486 198.563 115.572 198.272C115.659 197.982 115.672 197.688 115.612 197.389L115.346 196.052C114.5 196.755 113.616 197.392 112.693 197.964C111.769 198.535 110.795 199.032 109.77 199.456ZM102.621 197.877C103.104 197.394 103.69 197.151 104.38 197.15C105.069 197.148 105.655 197.388 106.138 197.871C106.621 198.354 106.863 198.94 106.863 199.63C106.863 200.32 106.621 200.906 106.138 201.389C105.466 202.061 104.673 202.47 103.759 202.616C102.845 202.761 101.925 202.889 101 203C101.111 202.068 101.243 201.147 101.397 200.236C101.55 199.326 101.958 198.539 102.621 197.877Z"/><path d="M104.544 194.22C104.968 193.206 105.465 192.234 106.036 191.306C106.608 190.377 107.245 189.495 107.948 188.66L106.602 188.378C106.303 188.318 106.013 188.332 105.73 188.418C105.448 188.505 105.201 188.654 104.989 188.866L102.047 191.808C101.824 192.031 101.74 192.299 101.795 192.615C101.85 192.93 102.026 193.147 102.325 193.267L104.544 194.22ZM118.041 185.001C116.404 184.976 114.854 185.315 113.39 186.018C111.927 186.721 110.617 187.65 109.46 188.807C108.717 189.549 108.062 190.355 107.494 191.223C106.926 192.091 106.425 193.002 105.991 193.957C105.909 194.153 105.868 194.353 105.868 194.556C105.868 194.761 105.944 194.939 106.096 195.091L108.918 197.904C109.071 198.056 109.247 198.134 109.448 198.137C109.649 198.14 109.847 198.101 110.043 198.018C110.998 197.591 111.909 197.09 112.777 196.516C113.645 195.941 114.451 195.283 115.193 194.54C116.35 193.384 117.279 192.073 117.982 190.61C118.685 189.146 119.024 187.596 118.999 185.959C118.999 185.839 118.972 185.723 118.919 185.61C118.865 185.497 118.792 185.394 118.699 185.301C118.607 185.208 118.504 185.135 118.39 185.081C118.277 185.028 118.161 185.001 118.041 185.001ZM111.672 190.596C111.672 190.113 111.839 189.703 112.175 189.368C112.51 189.032 112.92 188.864 113.404 188.864C113.887 188.864 114.297 189.032 114.633 189.368C114.968 189.703 115.136 190.113 115.136 190.596C115.136 191.08 114.968 191.49 114.633 191.825C114.297 192.161 113.887 192.329 113.404 192.329C112.92 192.329 112.51 192.161 112.175 191.825C111.839 191.49 111.672 191.08 111.672 190.596ZM109.77 199.456L110.724 201.675C110.843 201.974 111.061 202.153 111.376 202.213C111.691 202.272 111.96 202.191 112.182 201.969L115.124 199.027C115.337 198.814 115.486 198.563 115.572 198.272C115.659 197.982 115.672 197.688 115.612 197.389L115.346 196.052C114.5 196.755 113.616 197.392 112.693 197.964C111.769 198.535 110.795 199.032 109.77 199.456ZM102.621 197.877C103.104 197.394 103.69 197.151 104.38 197.15C105.069 197.148 105.655 197.388 106.138 197.871C106.621 198.354 106.863 198.94 106.863 199.63C106.863 200.32 106.621 200.906 106.138 201.389C105.466 202.061 104.673 202.47 103.759 202.616C102.845 202.761 101.925 202.889 101 203C101.111 202.068 101.243 201.147 101.397 200.236C101.55 199.326 101.958 198.539 102.621 197.877Z"/></svg></span></span> Implementation
       </button>
       <button class="nav-item" data-screen="closing">
-        <span class="nav-ic"><span class="ic-outline"><svg viewBox="60.0 228.0 24 24" fill="currentColor" aria-hidden="true"><path d="M70.85 244.219L76.1443 238.9L75.1 237.856L70.85 242.096L68.725 239.981L67.6558 241.05L70.85 244.219ZM64.3077 247.5C63.8026 247.5 63.375 247.325 63.025 246.975C62.675 246.625 62.5 246.197 62.5 245.692V234.308C62.5 233.803 62.675 233.375 63.025 233.025C63.375 232.675 63.8026 232.5 64.3077 232.5H69.798L71.798 234.5H79.6923C80.1974 234.5 80.625 234.675 80.975 235.025C81.325 235.375 81.5 235.803 81.5 236.308V245.692C81.5 246.197 81.325 246.625 80.975 246.975C80.625 247.325 80.1974 247.5 79.6923 247.5H64.3077ZM64.3077 246H79.6923C79.7821 246 79.8558 245.971 79.9135 245.913C79.9712 245.856 80 245.782 80 245.692V236.308C80 236.218 79.9712 236.144 79.9135 236.087C79.8558 236.029 79.7821 236 79.6923 236H71.1845L69.1845 234H64.3077C64.2179 234 64.1442 234.029 64.0865 234.087C64.0288 234.144 64 234.218 64 234.308V245.692C64 245.782 64.0288 245.856 64.0865 245.913C64.1442 245.971 64.2179 246 64.3077 246Z"/></svg></span><span class="ic-filled"><svg viewBox="98.0 228.0 24 24" fill="currentColor" aria-hidden="true"><path d="M108.85 244.575L114.5 238.9L113.1 237.5L108.85 241.75L106.725 239.625L105.3 241.05L108.85 244.575ZM102 248C101.45 248 100.979 247.804 100.588 247.413C100.196 247.021 100 246.55 100 246V234C100 233.45 100.196 232.979 100.588 232.588C100.979 232.196 101.45 232 102 232H108L110 234H118C118.55 234 119.021 234.196 119.413 234.588C119.804 234.979 120 235.45 120 236V246C120 246.55 119.804 247.021 119.413 247.413C119.021 247.804 118.55 248 118 248H102Z"/></svg></span></span> Closing
+        <span class="nav-ic"><span class="ic-outline"><svg viewBox="60.0 228.0 24 24" fill="currentColor" aria-hidden="true"><path d="M70.85 244.219L76.1443 238.9L75.1 237.856L70.85 242.096L68.725 239.981L67.6558 241.05L70.85 244.219ZM64.3077 247.5C63.8026 247.5 63.375 247.325 63.025 246.975C62.675 246.625 62.5 246.197 62.5 245.692V234.308C62.5 233.803 62.675 233.375 63.025 233.025C63.375 232.675 63.8026 232.5 64.3077 232.5H69.798L71.798 234.5H79.6923C80.1974 234.5 80.625 234.675 80.975 235.025C81.325 235.375 81.5 235.803 81.5 236.308V245.692C81.5 246.197 81.325 246.625 80.975 246.975C80.625 247.325 80.1974 247.5 79.6923 247.5H64.3077ZM64.3077 246H79.6923C79.7821 246 79.8558 245.971 79.9135 245.913C79.9712 245.856 80 245.782 80 245.692V236.308C80 236.218 79.9712 236.144 79.9135 236.087C79.8558 236.029 79.7821 236 79.6923 236H71.1845L69.1845 234H64.3077C64.2179 234 64.1442 234.029 64.0865 234.087C64.0288 234.144 64 234.218 64 234.308V245.692C64 245.782 64.0288 245.856 64.0865 245.913C64.1442 245.971 64.2179 246 64.3077 246Z"/></svg></span><span class="ic-filled"><svg viewBox="98.0 228.0 24 24" fill="currentColor" aria-hidden="true"><path d="M108.85 244.575L114.5 238.9L113.1 237.5L108.85 241.75L106.725 239.625L105.3 241.05L108.85 244.575ZM102 248C101.45 248 100.979 247.804 100.588 247.413C100.196 247.021 100 246.55 100 246V234C100 233.45 100.196 232.979 100.588 232.588C100.979 232.196 101.45 232 102 232H108L110 234H118C118.55 234 119.021 234.196 119.413 234.588C119.804 234.979 120 235.45 120 236V246C120 246.55 119.804 247.021 119.413 247.413C119.021 247.804 118.55 248 118 248H102Z"/></svg></span></span> <span class="lb">Closing</span><span class="chip-soon">Coming soon</span>
       </button>
     </nav>
   </aside>
@@ -2281,6 +2303,11 @@
             </div>
             <div class="op-meta"><span class="msr">contract</span>LON / INV</div>
           </div>
+          <div class="op-add" id="pin-add" role="button" tabindex="0" aria-label="Pin another operation" style="display:none;">
+            <span class="plus" aria-hidden="true">+</span>
+            <span class="t">Pin another operation</span>
+            <span class="s">Search an operation and pin it to keep it at hand.</span>
+          </div>
         </div>
       </div>
       <div class="pin-empty" id="pin-empty" style="display:none;">
@@ -2409,6 +2436,7 @@
     <div class="nf-card soon-card">
     <div class="nf-wrap">
       <svg class="nf-illus" viewBox="0 0 256 189" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of a section under construction">
+        <g id="soon-illus-src">
         <g opacity="0.6">
           <rect x="201.5" y="28.3" width="53" height="65" rx="9.5" fill="#FBFBFC" stroke="#E9E8E9"/>
           <rect x="212" y="39.8" width="32" height="7" rx="3.5" fill="#F1F0F1"/>
@@ -2445,6 +2473,7 @@
             </g>
             <circle r="9" fill="#FBFBFC"/><circle r="3.5" fill="#E6E5E6" stroke="none"/>
           </g>
+        </g>
         </g>
       </svg>
       <h1 class="nf-t">We are building this section</h1>
@@ -2581,10 +2610,13 @@
     <div class="phase-body-slot"></div>
   </main>
   <main class="main screen" id="screen-closing">
-    <div class="placeholder">
-      <span class="msr">inventory</span>
-      <h2>Closing</h2>
-      <p>This screen is not part of the prototype yet. Select its frame in Figma and share it with Claude to add it.</p>
+    <nav class="soon-crumb" aria-label="Breadcrumb"><a href="#/home">Home</a><span class="sep">/</span><span aria-current="page">Closing</span></nav>
+    <div class="nf-card soon-card">
+    <div class="nf-wrap">
+      <svg class="nf-illus" viewBox="0 0 256 189" fill="none" role="img" aria-label="Illustration of a section under construction"><use href="#soon-illus-src"/></svg>
+      <h1 class="nf-t">We are building this section</h1>
+      <p class="nf-s">It is part of the portal rollout. It will be available in an upcoming release.</p>
+    </div>
     </div>
   </main>
 
@@ -3147,6 +3179,8 @@
 </aside>
 
 <script>
+  // Safe demo logger: some embedded consoles do not implement console.info
+  function opoInfo(msg) { try { ((console && (console.info || console.log)) || function () {}).call(console, msg); } catch (e) {} }
   // ===== Live date + time-of-day greeting =====
   const now = new Date();
   const WEEKDAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
@@ -3190,7 +3224,7 @@
       soonCount++;
       if (soonCount >= 5) {
         soonCount = 0; soonDemo = !soonDemo;
-        console.info('[OPO] Country strategies coming soon ' + (soonDemo ? 'ON (demo, C x5 to restore)' : 'OFF'));
+        opoInfo('[OPO] Country strategies coming soon ' + (soonDemo ? 'ON (demo, C x5 to restore)' : 'OFF'));
         const active = document.querySelector('.nav-item.active');
         if (active && active.dataset.screen === 'country-strategies') {
           document.querySelectorAll('.screen').forEach(s => s.classList.remove('visible'));
@@ -3394,7 +3428,7 @@
     clone.querySelector('.op-code').textContent = code;
     clone.querySelector('.op-title').textContent = p.title;
     clone.style.display = '';
-    carousel.appendChild(clone);
+    carousel.insertBefore(clone, document.getElementById('pin-add')); // ghost card stays last
   }
   function syncAllPins() {
     // phase list cards re-render from state; home carousel pins sync here
@@ -5688,6 +5722,18 @@
     // unpinned cards stay hidden; pinned ones start visible for measurement
     cards.forEach(c => c.style.display = c.dataset.unpinned === '1' ? 'none' : '');
     const visible = cards.filter(c => c.dataset.unpinned !== '1');
+    // ghost card: always last, visible while there is at least one pin and room under the pin limit.
+    // In the collapsed overflow state it yields to "View all"; it returns when the grid is expanded.
+    const addCard = document.getElementById('pin-add');
+    if (addCard) {
+      if (grid.lastElementChild !== addCard) grid.appendChild(addCard);
+      const room = typeof pinnedOps !== 'undefined' && typeof PIN_LIMIT !== 'undefined' ? pinnedOps.size < PIN_LIMIT : true;
+      addCard.style.display = visible.length && room ? '' : 'none';
+      requestAnimationFrame(() => {
+        const collapsedHidden = cards.some(c => c.dataset.unpinned !== '1' && c.style.display === 'none');
+        if (collapsedHidden) addCard.style.display = 'none';
+      });
+    }
     grid.classList.toggle('cmode', FLAGS.pinCarouselHybrid && !pinExpanded);
     if (!visible.length) { btn.style.display = 'none'; updatePinArrows(); return; }
     if (FLAGS.pinCarouselHybrid) {
@@ -5718,6 +5764,14 @@
     }
     updatePinArrows();
   }
+  // ghost card: opens the operation search dialog to pin the next operation (same flow as the empty state)
+  (() => {
+    const add = document.getElementById('pin-add');
+    if (!add) return;
+    const go = () => openOsd();
+    add.addEventListener('click', go);
+    add.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+  })();
   document.getElementById('pin-viewall').addEventListener('click', () => {
     pinExpanded = !pinExpanded;
     updatePinGrid();
@@ -6341,10 +6395,18 @@
         '<div class="r"><span class="b" style="width:64px;"></span><span class="b" style="width:' + w + '%;"></span></div>').join('') + '</div>';
       open();
     }
+    const GS_CLOUD = '<svg viewBox="0 -960 960 960" aria-hidden="true"><path d="M248-171q-88 0-148-59T40-377q0-80 50.5-134T217-577q2-14 6.5-31.5T236-640L91-785q-9-9-9-21t9-21q9-9 21-9t21 9l707 707q9 9 9 21t-9 21q-9 9-21.5 9T797-78l-94-93H248Zm0-60h397L285-591q-11 15-14.5 34t-3.5 37h-19q-62 0-105 39.5t-43 101q0 61.5 43 105T248-231Zm216-181Zm390 210-47-47q25-17 39-38t14-50q0-43-31-73.5T755-441h-67v-81q0-88-61-147.5T478.47-729q-28.47 0-60.97 9T358-691l-42-42q36-29 77.5-42.5T478-789q111 0 190.5 79T748-520v21q72-1 122 45t50 117q0 35-16.5 73.5T854-202ZM583-470Z"/></svg>';
+    // failure states share the "no results" anatomy: centered icon, title, subtitle (+ recovery action)
     function renderError(q) {
-      drop.innerHTML = '<div class="gs-error"><span class="gs-ic"><svg viewBox="0 -960 960 960" aria-hidden="true"><path d="M248-171q-88 0-148-59T40-377q0-80 50.5-134T217-577q2-14 6.5-31.5T236-640L91-785q-9-9-9-21t9-21q9-9 21-9t21 9l707 707q9 9 9 21t-9 21q-9 9-21.5 9T797-78l-94-93H248Zm0-60h397L285-591q-11 15-14.5 34t-3.5 37h-19q-62 0-105 39.5t-43 101q0 61.5 43 105T248-231Zm216-181Zm390 210-47-47q25-17 39-38t14-50q0-43-31-73.5T755-441h-67v-81q0-88-61-147.5T478.47-729q-28.47 0-60.97 9T358-691l-42-42q36-29 77.5-42.5T478-789q111 0 190.5 79T748-520v21q72-1 122 45t50 117q0 35-16.5 73.5T854-202ZM583-470Z"/></svg></span><span class="tx"><div class="t">We cannot search right now</div><div class="s">Something went wrong on our side. Try again in a moment.</div></span><button class="gs-retry" id="gs-retry">Try again</button></div>';
+      drop.innerHTML = '<div class="gs-empty"><span class="gs-ic">' + GS_CLOUD + '</span><div class="t">We cannot search right now</div><div class="s">Something went wrong on our side. Try again in a moment.</div><button class="gs-retry" id="gs-retry">Try again</button></div>';
       open();
-      document.getElementById('gs-retry').addEventListener('click', () => { gsDown = false; runSearch(q); });
+      document.getElementById('gs-retry').addEventListener('click', () => { gsDown = false; gsRecovered.add(q.toLowerCase()); runSearch(q); });
+    }
+    // one source failed and the surviving one has no matches: say it, or the user reads "does not exist"
+    function renderPartialEmpty(q, failedLabel, aliveLabel) {
+      drop.innerHTML = '<div class="gs-empty"><span class="gs-ic">' + GS_CLOUD + '</span><div class="t">We cannot search ' + failedLabel + ' right now</div><div class="s">No ' + aliveLabel + ' match "' + esc(q) + '". ' + failedLabel.charAt(0).toUpperCase() + failedLabel.slice(1) + ' results may exist, try again in a moment.</div><button class="gs-retry" id="gs-retry">Try again</button></div>';
+      open();
+      document.getElementById('gs-retry').addEventListener('click', () => { gsRecovered.add(q.toLowerCase()); runSearch(q); });
     }
     function renderEmpty(q) {
       drop.innerHTML = '<div class="gs-empty"><span class="gs-ic"><svg viewBox="0 -960 960 960" aria-hidden="true"><path d="m270-245 57 57q5 5 11.5 4.5T350-189q5-5 5-11.5t-5-11.5l-58-57 60-60q5-5 5-11.5t-5-11.5q-5-5-11.5-5t-11.5 5l-59 59-59-59q-5-5-11-5t-11 5q-5 5-5 11.5t5 11.5l58 59-58 58q-5 5-5 12t5 12q5 5 12 5t12-5l57-57ZM136-136q-56-56-56-134t56-134q56-56 134-56t134 56q56 56 56 134t-56 134q-56 56-134 56t-134-56Zm437-247q-14 11-31.5 21.5T508-344q-5-14-11-28.5T483-399q54-21 91.5-69.5T612-584q0-81-57-138.5T417-780q-82 0-139.5 57.5T220-584q0 17 3.5 35.5T232-517q-13 2-29 6.5T174-500q-7-18-10.5-40t-3.5-44q0-107 75-181.5T417-840q106 0 180.5 75T672-584q0 43-15 85t-41 73l242 240q9 9 9 22t-9 22q-9 9-22 9t-22-9L573-383Z"/></svg></span><div class="t">No results for "' + esc(q) + '"</div><div class="s">Check the operation ID or try a different word from the operation or strategy name.</div></div>';
@@ -6366,6 +6428,10 @@
       html += cs.slice(0, CS_MAX).map(o =>
         '<button class="gs-row cs" role="option" aria-selected="false" data-cs="1"><span class="code">' + hi(o.code, q) + '</span><span class="nm">' + hi(o.name, q, true) + '</span>' + GS_CHIP.cs + '</button>').join('');
       if (total > MAX) html += '<div class="gs-foot">Showing ' + MAX + ' of ' + total + ' operations. Keep typing to narrow down.</div>';
+      if (arguments[3]) html += '<div class="gs-pnote">' + GS_CLOUD
+        + (arguments[3] === 'cs' ? 'Country strategies are not available right now, so results may be incomplete.'
+                                 : 'Operations are not available right now, so results may be incomplete.')
+        + '<button class="rt" id="gs-pretry">Retry</button></div>';
       drop.innerHTML = html;
       gsRows = [...drop.querySelectorAll('.gs-row')];
       gsSel = -1;
@@ -6377,6 +6443,8 @@
           gsRows.forEach((r, k) => { r.classList.toggle('sel', k === i); r.setAttribute('aria-selected', k === i ? 'true' : 'false'); });
         });
       });
+      const pr = document.getElementById('gs-pretry');
+      if (pr) pr.addEventListener('click', () => { gsRecovered.add(q.toLowerCase()); runSearch(q); });
       open();
     }
     function go(code) {
@@ -6407,12 +6475,30 @@
       scored.sort((a, b) => a[0] - b[0] || a[1].code.localeCompare(b[1].code));
       return scored.map(x => x[1]);
     }
+    // demo scenarios for the multi source feedback states: type these IDs in the search bar.
+    // Retry (or Try again) simulates the failed source recovering for that query.
+    const gsRecovered = new Set();
+    const GS_DEMO = {
+      'br-l9001': { scen: 'cs-down', ops: [{ code: 'BR-L9001', name: 'Coastal Resilience and Flood Protection Program', label: 'Preparation' }, { code: 'BR-L9010', name: 'Urban Restoration Initiative', label: 'Implementation' }] },
+      'ar-l9002': { scen: 'ops-down', ops: [{ code: 'AR-L9002', name: 'Rural Connectivity Program', label: 'Preparation' }] },
+      'br-l9020': { scen: 'ops-down-empty', ops: [{ code: 'BR-L9020', name: 'Community Health Networks Program', label: 'Preparation' }] },
+      'uy-l9003': { scen: 'all-down', ops: [{ code: 'UY-L9003', name: 'Montevideo Urban Mobility Program', label: 'Implementation' }] }
+    };
+    opoInfo('[OPO] search feedback demos: BR-L9001 (CS source down), AR-L9002 (Operations down), BR-L9020 (Operations down, no CS matches), UY-L9003 (all sources down), S x5 (global outage toggle)');
     function runSearch(q) {
       const seq = ++gsSeq;
       renderLoading();
       setTimeout(() => {
         if (seq !== gsSeq) return; // stale response, a newer query is in flight
         if (gsDown) { renderError(q); return; }
+        const demo = GS_DEMO[q.toLowerCase()];
+        if (demo && !gsRecovered.has(q.toLowerCase())) {
+          if (demo.scen === 'all-down') { renderError(q); return; }
+          if (demo.scen === 'ops-down-empty') { renderPartialEmpty(q, 'operations', 'country strategies'); return; }
+          if (demo.scen === 'cs-down') { renderResults(demo.ops, [], q, 'cs'); return; }
+          if (demo.scen === 'ops-down') { renderResults([], match('argentina', INDEX_CS).slice(0, 1), q, 'ops'); return; }
+        }
+        if (demo) { renderResults(demo.ops, demo.scen === 'ops-down' ? match('argentina', INDEX_CS).slice(0, 1) : [], q); return; } // recovered demo
         const ops = match(q, INDEX), cs = match(q, INDEX_CS);
         if (!ops.length && !cs.length) renderEmpty(q); else renderResults(ops, cs, q);
       }, 450);
@@ -6459,7 +6545,7 @@
       if (e.target.matches('input, textarea, select')) return;
       if ((e.key || '').toLowerCase() === 's') {
         sCount++;
-        if (sCount >= 5) { sCount = 0; gsDown = !gsDown; console.info('[OPO] search service ' + (gsDown ? 'DOWN (demo, S x5 to restore)' : 'restored')); }
+        if (sCount >= 5) { sCount = 0; gsDown = !gsDown; opoInfo('[OPO] search service ' + (gsDown ? 'DOWN (demo, S x5 to restore)' : 'restored')); }
       } else sCount = 0;
     });
   })();
