@@ -2021,12 +2021,6 @@
   #screen-closing{flex-direction:column;}
   /* nav "Coming soon" chip: compact, outside the label clamp, never deforms */
   .nav-item .chip-soon{height:18px;padding:0 5px;font-size:9.5px;border-radius:4px;margin-left:auto;flex:0 0 auto;}
-  .soon-crumb{display:flex;align-items:center;gap:7px;font-size:12px;line-height:17px;color:#8A8888;margin-bottom:14px;}
-  .soon-crumb a{color:#0E7CB8;font-weight:600;text-decoration:none;}
-  .soon-crumb a:hover{text-decoration:underline;}
-  .soon-crumb .sep{color:#C7C7C9;}
-  .soon-crumb [aria-current]{color:#5C5A5A;font-weight:600;}
-  .soon-card{min-height:calc(100vh - 230px);}
 
   /* ============ Placeholder screens (nav targets) ============ */
   .screen{display:none;}
@@ -2432,8 +2426,7 @@
 
   <!-- ============ Section coming soon (demo: press C five times; direct route #/coming-soon) ============ -->
   <main class="main screen" id="screen-soon">
-    <nav class="soon-crumb" aria-label="Breadcrumb"><a href="#/home">Home</a><span class="sep">/</span><span aria-current="page">Country Strategies</span></nav>
-    <div class="nf-card soon-card">
+    <div class="nf-card">
     <div class="nf-wrap">
       <svg class="nf-illus" viewBox="0 0 256 189" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of a section under construction">
         <g id="soon-illus-src">
@@ -2610,8 +2603,7 @@
     <div class="phase-body-slot"></div>
   </main>
   <main class="main screen" id="screen-closing">
-    <nav class="soon-crumb" aria-label="Breadcrumb"><a href="#/home">Home</a><span class="sep">/</span><span aria-current="page">Closing</span></nav>
-    <div class="nf-card soon-card">
+    <div class="nf-card">
     <div class="nf-wrap">
       <svg class="nf-illus" viewBox="0 0 256 189" fill="none" role="img" aria-label="Illustration of a section under construction"><use href="#soon-illus-src"/></svg>
       <h1 class="nf-t">We are building this section</h1>
