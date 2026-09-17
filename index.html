@@ -145,6 +145,7 @@
     background:#FFFFFF;
     -webkit-font-smoothing:antialiased;
     letter-spacing:0;
+    min-width:900px;
   }
   .msr{
     font-family:'Material Symbols Rounded';
@@ -229,10 +230,26 @@
     background:rgba(255,255,255,0.08);
     border:1px solid rgba(255,255,255,0.45);
     padding:0 14px;cursor:text;
-    transition:background .15s ease,border-color .15s ease;
+    transition:background .18s ease,border-color .18s ease,box-shadow .18s ease;
   }
-  .global-search:focus-within{background:rgba(255,255,255,0.14);border-color:#FFFFFF;}
-  .global-search .msr{font-size:18px;color:#FFFFFF;opacity:.9;}
+  /* hover: paso intermedio, insinua sin comprometer */
+  .global-search:hover:not(:focus-within):not(:has(.gs-drop.open)){background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.75);}
+  /* focus: inversion a superficie blanca (opcion B) */
+  .global-search:focus-within,
+  .global-search:has(.gs-drop.open){background:#FFFFFF;border-color:#FFFFFF;box-shadow:0 0 0 3px rgba(255,255,255,0.25);}
+  .global-search .msr{font-size:18px;color:#FFFFFF;opacity:.9;transition:color .18s ease;}
+  .global-search:focus-within > .msr,
+  .global-search:has(.gs-drop.open) > .msr{color:#004E70;opacity:1;}
+  .global-search:focus-within input,
+  .global-search:has(.gs-drop.open) input{color:#272626;caret-color:#0E7CB8;}
+  .global-search:focus-within input::placeholder,
+  .global-search:has(.gs-drop.open) input::placeholder{color:#67676A;font-weight:500;}
+  .global-search:focus-within .gs-clear,
+  .global-search:has(.gs-drop.open) .gs-clear{color:#5C5A5A;}
+  .global-search:focus-within .gs-clear .msr,
+  .global-search:has(.gs-drop.open) .gs-clear .msr{color:#5C5A5A;opacity:1;font-size:16px;}
+  .global-search:focus-within .gs-clear:hover .msr,
+  .global-search:has(.gs-drop.open) .gs-clear:hover .msr{color:#272626;}
   .global-search input{
     flex:1;background:transparent;border:none;outline:none;
     font-family:var(--font-ui);font-size:12px;font-weight:600;color:#FFFFFF;
@@ -1289,6 +1306,8 @@
     background:rgba(255,255,255,0.16);border-radius:6px;padding:3px 10px;
     font-family:var(--font-mono);font-size:12px;font-weight:600;
   }
+  .ws-crumb .op.tool{font-family:var(--font-ui);font-size:13px;}
+  .ws-crumb.tool-open .op:not(.tool){background:none;padding:3px 0;}
   .ws-nav{
     grid-area:wsnav;background:var(--color-surface);
     border-right:1px solid var(--border-default);
@@ -1409,11 +1428,22 @@
   .lc-drag-hint .msr{font-size:15px;}
   .lc-shell.enhanced{margin-top:10px;border:1px solid #DEDEDF;border-radius:9px;background:#FFFFFF;overflow:hidden;}
   .lct{display:flex;align-items:stretch;min-width:max-content;padding:0;}
-  .lc-band{position:relative;flex:0 0 auto;padding:13px 0 18px;background:#FFFFFF;}
+  .lc-band{position:relative;flex:0 0 auto;padding:20px 0 26px;background:#FFFFFF;}
   .lc-band + .lc-band{border-left:1px solid #EEEDED;}
+  /* capitulos con tinte por phase; el progreso vive en el texto del header */
+  .lc-band.active{background:linear-gradient(180deg,#F4FAF7 0%,#FFFFFF 72%);}
+  .lc-band.upcoming{background:#FBFBFC;}
   .lc-band.active{background:#FBFDFB;}
-  .lc-band .bh{position:sticky;left:12px;z-index:2;width:max-content;display:flex;align-items:center;gap:6px;margin:0 13px 12px;padding:3px 7px 3px 5px;border-radius:5px;background:rgba(255,255,255,.94);font-size:10px;line-height:14px;font-weight:700;letter-spacing:.35px;text-transform:uppercase;color:#67676A;}
+  .lc-band .bh{position:sticky;left:12px;z-index:2;width:max-content;display:flex;align-items:center;gap:6px;margin:0 13px 16px;padding:3px 7px 3px 5px;border-radius:5px;background:rgba(255,255,255,.94);font-size:10px;line-height:14px;font-weight:700;letter-spacing:.35px;text-transform:uppercase;color:#67676A;}
   .lc-band.active .bh{color:#00693D;background:#EDF8F2;}
+  .lc-band .bh{cursor:pointer;}
+  .lc-band .bh:hover{background:#F1F0F1;}
+  .lc-band.active .bh:hover{background:#DFF0E7;}
+  .lc-band .bh:focus-visible{outline:2px solid #007EB6;outline-offset:2px;}
+  .lc-sub-h{cursor:pointer;}
+  .lc-sub-h:hover{color:#3C3B3B;}
+  .lc-subgrp.active .lc-sub-h:hover{color:#00552F;}
+  .lc-sub-h:focus-visible{outline:2px solid #007EB6;outline-offset:2px;border-radius:4px;}
   .lc-band .bh svg{width:14px;height:14px;display:block;color:currentColor;flex:0 0 auto;}
   .lc-band .bh .cnt{font-weight:600;color:#8A8888;text-transform:none;letter-spacing:0;}
   .lc-band.active .bh .cnt{color:#3E8A66;}
@@ -1437,6 +1467,22 @@
   .lcn .exp{font-size:10px;line-height:13px;color:#8A8888;margin-top:1px;text-align:center;padding:0 7px;max-width:100%;}
   .lcn.todo .exp{color:#9C9A9A;}
   /* contract milestone between stages (e.g. CED): diamond marker, quieter than a stage node */
+  /* Life Cycle detail view: subphase groups + compact acronym milestones */
+  .lc-subgrp{flex:0 0 auto;display:flex;flex-direction:column;}
+  .lc-subgrp + .lc-subgrp{border-left:1px dashed #E1E0E1;}
+  .lc-sub-h{display:flex;align-items:center;gap:6px;margin:0 14px 14px;font-size:10px;line-height:13px;font-weight:600;color:#8A8888;white-space:nowrap;}
+  .lc-sub-h::before,.lc-sub-h::after{content:"";height:1px;flex:1;background:#E9E8E9;min-width:10px;}
+  .lc-sub-h .scnt{font-weight:500;color:#A6A6A8;}
+  .lc-subgrp.active .lc-sub-h{color:#00693D;}
+  .lc-subgrp.active .lc-sub-h::before,.lc-subgrp.active .lc-sub-h::after{background:#CBE5D6;}
+  .lc-subgrp.complete .lc-sub-h{color:#67676A;}
+  .lc-srow{display:flex;align-items:flex-start;}
+  .lcn.mini{min-width:210px;max-width:230px;}
+  .lcn.mini.current .pill .lb2{white-space:normal;text-align:center;max-width:172px;text-wrap:balance;}
+  .lcn.mini .lb{margin-top:12px;max-width:172px;text-wrap:balance;}
+  .lcn.mini .exp{margin-top:4px;}
+  .lcn.mini .sub{margin-top:5px;}
+  .lcn.mini.current .pill{margin-top:10px;padding:7px 14px 8px;gap:2px;}
   .lcm{position:relative;display:flex;flex-direction:column;align-items:center;min-width:118px;max-width:132px;border-radius:8px;outline:none;scroll-snap-align:center;}
   .lcm .trk{display:flex;align-items:center;width:100%;height:22px;}
   .lcm .trk .sg{flex:1;height:3px;background:#DADADB;}
@@ -1706,15 +1752,15 @@
   }
   .ws-mini .left{display:flex;align-items:center;gap:24px;min-width:0;}
   .ws-mini .idgrp{display:flex;align-items:center;gap:12px;min-width:0;}
-  .ws-mini .idrow{display:flex;align-items:center;gap:6px;}
+  .ws-mini .idrow{display:flex;align-items:center;gap:6px;flex:0 0 auto;}
   .ws-mini .pin{
     background:none;border:none;padding:2px;margin:-2px;cursor:pointer;
     color:var(--icon-default);display:inline-flex;border-radius:50%;
   }
   .ws-mini .pin .msr{font-size:20px;}
   .ws-mini .pin:hover{background:rgba(35,34,34,0.08);}
-  .ws-mini .code{font-size:14px;font-weight:700;color:#272626;}
-  .ws-mini .opname{font-size:14px;font-weight:600;color:#272626;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px;}
+  .ws-mini .code{font-size:14px;font-weight:700;color:#272626;white-space:nowrap;}
+  .ws-mini .opname{font-size:14px;font-weight:600;color:#272626;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px;min-width:0;}
   .ws-mini .phase-chip{
     display:inline-flex;align-items:center;gap:4px;height:24px;padding:0 8px;
     background:#F3F3F3;border-radius:4px;flex:0 0 auto;
@@ -1725,6 +1771,42 @@
   .ws-mini .right{display:flex;align-items:center;gap:16px;flex:0 0 auto;}
   .ws-mini .right .info{display:flex;align-items:center;gap:24px;}
   .ws-mini .icons{display:flex;align-items:center;gap:12px;}
+  /* Compact workspace header: two bands under 1100px */
+  @media (max-width:1100px){
+    .ws-mini{
+      height:auto;display:grid;
+      grid-template-columns:auto auto 1fr auto;
+      align-items:center;gap:0;row-gap:14px;
+      padding:14px 24px 16px;
+    }
+    .ws-mini .left,.ws-mini .right{display:contents;}
+    .ws-mini .idgrp{grid-column:1;grid-row:1;min-width:0;}
+    .ws-mini .code{font-size:16px;letter-spacing:.3px;}
+    .ws-mini .opname{font-size:13px;font-weight:500;color:#5C5A5A;max-width:none;flex:0 1 auto;}
+    .ws-mini .phase-chip{grid-column:2;grid-row:1;margin-left:16px;}
+    .ws-mini .icons{grid-column:4;grid-row:1;justify-self:end;}
+    .ws-mini .right .info{
+      grid-column:1 / -1;grid-row:2;
+      display:flex;align-items:stretch;gap:0;
+      overflow-x:auto;scrollbar-width:none;
+    }
+    .ws-mini .right .info::-webkit-scrollbar{display:none;}
+    .ws-mini .info .ws-meta{
+      display:flex;flex-direction:column;align-items:flex-start;gap:4px;
+      padding:0 28px;flex:0 0 auto;border-left:1px solid #F1F0F1;
+    }
+    .ws-mini .info .ws-meta:first-child{padding-left:0;border-left:none;}
+    /* Dashboard hero: la fila superior gana wrap con aire (opcion B) */
+    .ws-hero-top{height:auto;min-height:60px;padding:14px 24px;align-items:flex-start;}
+    .ws-hero-top .info{flex-wrap:wrap;justify-content:flex-end;row-gap:12px;column-gap:28px;}
+    .ws-hero-top > .ops-more{margin-top:-3px;}
+    .ws-mini .info .ws-meta .l{
+      font-size:10.5px;font-weight:600;letter-spacing:.5px;
+      text-transform:uppercase;color:#8A8888;white-space:nowrap;
+    }
+    .ws-mini .info .ws-meta .d{display:none;}
+    .ws-mini .info .ws-meta .v{font-size:13px;white-space:nowrap;}
+  }
   .ws-page{padding:32px;}
   .ws-page h1{font-size:24px;line-height:32px;font-weight:700;color:#272626;}
   .od-titlerow{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
@@ -1735,7 +1817,7 @@
   /* ============ Rich tooltip (field name + value) ============ */
   #richtip{position:fixed;z-index:9000;background:#1F1E1E;border:1px solid #3B3939;border-radius:8px;padding:11px 14px 12px;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity 0.12s ease,transform 0.12s ease;max-width:320px;box-shadow:0 8px 24px rgba(0,0,0,0.24);}
   #richtip.show{opacity:1;transform:none;}
-  #richtip .h{font-size:11px;line-height:16px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;color:#fff;white-space:nowrap;}
+  #richtip .h{font-size:11px;line-height:16px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;color:#fff;white-space:normal;overflow-wrap:break-word;text-wrap:balance;}
   #richtip .m{font-size:11px;line-height:16px;color:#AEE2C8;font-weight:600;margin-top:2px;}
   #richtip .b{font-size:13px;line-height:18px;color:#fff;font-weight:400;margin-top:5px;}
   [data-t2h]{cursor:default;}
@@ -1881,7 +1963,7 @@
   .od3-cols{display:grid;grid-template-columns:1fr 1fr;width:100%;}
   .od3-col{display:flex;flex-direction:column;gap:32px;min-width:0;padding-right:24px;}
   .od3-col + .od3-col{border-left:1px solid #CBCACA;padding-left:24px;padding-right:0;}
-  @media (max-width:760px){.od3-cols{grid-template-columns:1fr;}.od3-col{padding-right:0;}.od3-col + .od3-col{border-left:none;padding-left:0;margin-top:32px;}}
+  @media (max-width:1100px){.od3-cols{grid-template-columns:1fr;}.od3-col{padding-right:0;}.od3-col + .od3-col{border-left:none;padding-left:0;margin-top:32px;}}
   .od3-kv{display:flex;flex-direction:column;gap:2px;min-width:0;}
   .od3-kv .l{font-size:11px;line-height:16px;color:#5C5A5A;}
   .od3-kv .v{font-size:12px;line-height:16px;font-weight:600;color:#272626;}
@@ -2204,6 +2286,18 @@
 
           <div class="op-card">
             <div class="card-top">
+              <span class="chip-phase"><svg class="chip-ic" viewBox="98.0 140.0 24 24" fill="currentColor" aria-hidden="true"><path d="M114 150C114.283 150 114.521 149.904 114.713 149.713C114.904 149.521 115 149.283 115 149C115 148.717 114.904 148.479 114.713 148.288C114.521 148.096 114.283 148 114 148H111C110.717 148 110.479 148.096 110.288 148.288C110.096 148.479 110 148.717 110 149C110 149.283 110.096 149.521 110.288 149.713C110.479 149.904 110.717 150 111 150H114ZM114 156C114.283 156 114.521 155.904 114.713 155.713C114.904 155.521 115 155.283 115 155C115 154.717 114.904 154.479 114.713 154.288C114.521 154.096 114.283 154 114 154H111C110.717 154 110.479 154.096 110.288 154.288C110.096 154.479 110 154.717 110 155C110 155.283 110.096 155.521 110.288 155.713C110.479 155.904 110.717 156 111 156H114ZM108.413 150.413C108.804 150.021 109 149.55 109 149C109 148.45 108.804 147.979 108.413 147.588C108.021 147.196 107.55 147 107 147C106.45 147 105.979 147.196 105.588 147.588C105.196 147.979 105 148.45 105 149C105 149.55 105.196 150.021 105.588 150.413C105.979 150.804 106.45 151 107 151C107.55 151 108.021 150.804 108.413 150.413ZM108.413 156.413C108.804 156.021 109 155.55 109 155C109 154.45 108.804 153.979 108.413 153.588C108.021 153.196 107.55 153 107 153C106.45 153 105.979 153.196 105.588 153.588C105.196 153.979 105 154.45 105 155C105 155.55 105.196 156.021 105.588 156.413C105.979 156.804 106.45 157 107 157C107.55 157 108.021 156.804 108.413 156.413ZM103 161C102.45 161 101.979 160.804 101.588 160.413C101.196 160.021 101 159.55 101 159V145C101 144.45 101.196 143.979 101.588 143.588C101.979 143.196 102.45 143 103 143H117C117.55 143 118.021 143.196 118.413 143.588C118.804 143.979 119 144.45 119 145V159C119 159.55 118.804 160.021 118.413 160.413C118.021 160.804 117.55 161 117 161H103Z"/><path d="M114 150C114.283 150 114.521 149.904 114.713 149.713C114.904 149.521 115 149.283 115 149C115 148.717 114.904 148.479 114.713 148.288C114.521 148.096 114.283 148 114 148H111C110.717 148 110.479 148.096 110.288 148.288C110.096 148.479 110 148.717 110 149C110 149.283 110.096 149.521 110.288 149.713C110.479 149.904 110.717 150 111 150H114ZM114 156C114.283 156 114.521 155.904 114.713 155.713C114.904 155.521 115 155.283 115 155C115 154.717 114.904 154.479 114.713 154.288C114.521 154.096 114.283 154 114 154H111C110.717 154 110.479 154.096 110.288 154.288C110.096 154.479 110 154.717 110 155C110 155.283 110.096 155.521 110.288 155.713C110.479 155.904 110.717 156 111 156H114ZM108.413 150.413C108.804 150.021 109 149.55 109 149C109 148.45 108.804 147.979 108.413 147.588C108.021 147.196 107.55 147 107 147C106.45 147 105.979 147.196 105.588 147.588C105.196 147.979 105 148.45 105 149C105 149.55 105.196 150.021 105.588 150.413C105.979 150.804 106.45 151 107 151C107.55 151 108.021 150.804 108.413 150.413ZM108.413 156.413C108.804 156.021 109 155.55 109 155C109 154.45 108.804 153.979 108.413 153.588C108.021 153.196 107.55 153 107 153C106.45 153 105.979 153.196 105.588 153.588C105.196 153.979 105 154.45 105 155C105 155.55 105.196 156.021 105.588 156.413C105.979 156.804 106.45 157 107 157C107.55 157 108.021 156.804 108.413 156.413ZM103 161C102.45 161 101.979 160.804 101.588 160.413C101.196 160.021 101 159.55 101 159V145C101 144.45 101.196 143.979 101.588 143.588C101.979 143.196 102.45 143 103 143H117C117.55 143 118.021 143.196 118.413 143.588C118.804 143.979 119 144.45 119 145V159C119 159.55 118.804 160.021 118.413 160.413C118.021 160.804 117.55 161 117 161H103Z"/></svg>Preparation</span>
+              <button class="pin-btn pinned" aria-label="Unpin"><span class="msr">push_pin</span></button>
+            </div>
+            <div>
+              <div class="op-code">BO-L1930</div>
+              <div class="op-title">Lake Titicaca Basin Environmental Restoration</div>
+            </div>
+            <div class="op-meta"><span class="msr">contract</span>LON / INV</div>
+          </div>
+
+          <div class="op-card">
+            <div class="card-top">
               <span class="chip-phase"><svg class="chip-ic" viewBox="98.0 182.0 24 24" fill="currentColor" aria-hidden="true"><path d="M104.544 194.22C104.968 193.206 105.465 192.234 106.036 191.306C106.608 190.377 107.245 189.495 107.948 188.66L106.602 188.378C106.303 188.318 106.013 188.332 105.73 188.418C105.448 188.505 105.201 188.654 104.989 188.866L102.047 191.808C101.824 192.031 101.74 192.299 101.795 192.615C101.85 192.93 102.026 193.147 102.325 193.267L104.544 194.22ZM118.041 185.001C116.404 184.976 114.854 185.315 113.39 186.018C111.927 186.721 110.617 187.65 109.46 188.807C108.717 189.549 108.062 190.355 107.494 191.223C106.926 192.091 106.425 193.002 105.991 193.957C105.909 194.153 105.868 194.353 105.868 194.556C105.868 194.761 105.944 194.939 106.096 195.091L108.918 197.904C109.071 198.056 109.247 198.134 109.448 198.137C109.649 198.14 109.847 198.101 110.043 198.018C110.998 197.591 111.909 197.09 112.777 196.516C113.645 195.941 114.451 195.283 115.193 194.54C116.35 193.384 117.279 192.073 117.982 190.61C118.685 189.146 119.024 187.596 118.999 185.959C118.999 185.839 118.972 185.723 118.919 185.61C118.865 185.497 118.792 185.394 118.699 185.301C118.607 185.208 118.504 185.135 118.39 185.081C118.277 185.028 118.161 185.001 118.041 185.001ZM111.672 190.596C111.672 190.113 111.839 189.703 112.175 189.368C112.51 189.032 112.92 188.864 113.404 188.864C113.887 188.864 114.297 189.032 114.633 189.368C114.968 189.703 115.136 190.113 115.136 190.596C115.136 191.08 114.968 191.49 114.633 191.825C114.297 192.161 113.887 192.329 113.404 192.329C112.92 192.329 112.51 192.161 112.175 191.825C111.839 191.49 111.672 191.08 111.672 190.596ZM109.77 199.456L110.724 201.675C110.843 201.974 111.061 202.153 111.376 202.213C111.691 202.272 111.96 202.191 112.182 201.969L115.124 199.027C115.337 198.814 115.486 198.563 115.572 198.272C115.659 197.982 115.672 197.688 115.612 197.389L115.346 196.052C114.5 196.755 113.616 197.392 112.693 197.964C111.769 198.535 110.795 199.032 109.77 199.456ZM102.621 197.877C103.104 197.394 103.69 197.151 104.38 197.15C105.069 197.148 105.655 197.388 106.138 197.871C106.621 198.354 106.863 198.94 106.863 199.63C106.863 200.32 106.621 200.906 106.138 201.389C105.466 202.061 104.673 202.47 103.759 202.616C102.845 202.761 101.925 202.889 101 203C101.111 202.068 101.243 201.147 101.397 200.236C101.55 199.326 101.958 198.539 102.621 197.877Z"/><path d="M104.544 194.22C104.968 193.206 105.465 192.234 106.036 191.306C106.608 190.377 107.245 189.495 107.948 188.66L106.602 188.378C106.303 188.318 106.013 188.332 105.73 188.418C105.448 188.505 105.201 188.654 104.989 188.866L102.047 191.808C101.824 192.031 101.74 192.299 101.795 192.615C101.85 192.93 102.026 193.147 102.325 193.267L104.544 194.22ZM118.041 185.001C116.404 184.976 114.854 185.315 113.39 186.018C111.927 186.721 110.617 187.65 109.46 188.807C108.717 189.549 108.062 190.355 107.494 191.223C106.926 192.091 106.425 193.002 105.991 193.957C105.909 194.153 105.868 194.353 105.868 194.556C105.868 194.761 105.944 194.939 106.096 195.091L108.918 197.904C109.071 198.056 109.247 198.134 109.448 198.137C109.649 198.14 109.847 198.101 110.043 198.018C110.998 197.591 111.909 197.09 112.777 196.516C113.645 195.941 114.451 195.283 115.193 194.54C116.35 193.384 117.279 192.073 117.982 190.61C118.685 189.146 119.024 187.596 118.999 185.959C118.999 185.839 118.972 185.723 118.919 185.61C118.865 185.497 118.792 185.394 118.699 185.301C118.607 185.208 118.504 185.135 118.39 185.081C118.277 185.028 118.161 185.001 118.041 185.001ZM111.672 190.596C111.672 190.113 111.839 189.703 112.175 189.368C112.51 189.032 112.92 188.864 113.404 188.864C113.887 188.864 114.297 189.032 114.633 189.368C114.968 189.703 115.136 190.113 115.136 190.596C115.136 191.08 114.968 191.49 114.633 191.825C114.297 192.161 113.887 192.329 113.404 192.329C112.92 192.329 112.51 192.161 112.175 191.825C111.839 191.49 111.672 191.08 111.672 190.596ZM109.77 199.456L110.724 201.675C110.843 201.974 111.061 202.153 111.376 202.213C111.691 202.272 111.96 202.191 112.182 201.969L115.124 199.027C115.337 198.814 115.486 198.563 115.572 198.272C115.659 197.982 115.672 197.688 115.612 197.389L115.346 196.052C114.5 196.755 113.616 197.392 112.693 197.964C111.769 198.535 110.795 199.032 109.77 199.456ZM102.621 197.877C103.104 197.394 103.69 197.151 104.38 197.15C105.069 197.148 105.655 197.388 106.138 197.871C106.621 198.354 106.863 198.94 106.863 199.63C106.863 200.32 106.621 200.906 106.138 201.389C105.466 202.061 104.673 202.47 103.759 202.616C102.845 202.761 101.925 202.889 101 203C101.111 202.068 101.243 201.147 101.397 200.236C101.55 199.326 101.958 198.539 102.621 197.877Z"/></svg>Implementation</span>
               <button class="pin-btn pinned" aria-label="Unpin"><span class="msr">push_pin</span></button>
             </div>
@@ -2246,18 +2340,6 @@
             <div>
               <div class="op-code">CO-L1203</div>
               <div class="op-title">Digital Transformation of Public Services</div>
-            </div>
-            <div class="op-meta"><span class="msr">contract</span>LON / INV</div>
-          </div>
-
-          <div class="op-card">
-            <div class="card-top">
-              <span class="chip-phase"><svg class="chip-ic" viewBox="98.0 140.0 24 24" fill="currentColor" aria-hidden="true"><path d="M114 150C114.283 150 114.521 149.904 114.713 149.713C114.904 149.521 115 149.283 115 149C115 148.717 114.904 148.479 114.713 148.288C114.521 148.096 114.283 148 114 148H111C110.717 148 110.479 148.096 110.288 148.288C110.096 148.479 110 148.717 110 149C110 149.283 110.096 149.521 110.288 149.713C110.479 149.904 110.717 150 111 150H114ZM114 156C114.283 156 114.521 155.904 114.713 155.713C114.904 155.521 115 155.283 115 155C115 154.717 114.904 154.479 114.713 154.288C114.521 154.096 114.283 154 114 154H111C110.717 154 110.479 154.096 110.288 154.288C110.096 154.479 110 154.717 110 155C110 155.283 110.096 155.521 110.288 155.713C110.479 155.904 110.717 156 111 156H114ZM108.413 150.413C108.804 150.021 109 149.55 109 149C109 148.45 108.804 147.979 108.413 147.588C108.021 147.196 107.55 147 107 147C106.45 147 105.979 147.196 105.588 147.588C105.196 147.979 105 148.45 105 149C105 149.55 105.196 150.021 105.588 150.413C105.979 150.804 106.45 151 107 151C107.55 151 108.021 150.804 108.413 150.413ZM108.413 156.413C108.804 156.021 109 155.55 109 155C109 154.45 108.804 153.979 108.413 153.588C108.021 153.196 107.55 153 107 153C106.45 153 105.979 153.196 105.588 153.588C105.196 153.979 105 154.45 105 155C105 155.55 105.196 156.021 105.588 156.413C105.979 156.804 106.45 157 107 157C107.55 157 108.021 156.804 108.413 156.413ZM103 161C102.45 161 101.979 160.804 101.588 160.413C101.196 160.021 101 159.55 101 159V145C101 144.45 101.196 143.979 101.588 143.588C101.979 143.196 102.45 143 103 143H117C117.55 143 118.021 143.196 118.413 143.588C118.804 143.979 119 144.45 119 145V159C119 159.55 118.804 160.021 118.413 160.413C118.021 160.804 117.55 161 117 161H103Z"/><path d="M114 150C114.283 150 114.521 149.904 114.713 149.713C114.904 149.521 115 149.283 115 149C115 148.717 114.904 148.479 114.713 148.288C114.521 148.096 114.283 148 114 148H111C110.717 148 110.479 148.096 110.288 148.288C110.096 148.479 110 148.717 110 149C110 149.283 110.096 149.521 110.288 149.713C110.479 149.904 110.717 150 111 150H114ZM114 156C114.283 156 114.521 155.904 114.713 155.713C114.904 155.521 115 155.283 115 155C115 154.717 114.904 154.479 114.713 154.288C114.521 154.096 114.283 154 114 154H111C110.717 154 110.479 154.096 110.288 154.288C110.096 154.479 110 154.717 110 155C110 155.283 110.096 155.521 110.288 155.713C110.479 155.904 110.717 156 111 156H114ZM108.413 150.413C108.804 150.021 109 149.55 109 149C109 148.45 108.804 147.979 108.413 147.588C108.021 147.196 107.55 147 107 147C106.45 147 105.979 147.196 105.588 147.588C105.196 147.979 105 148.45 105 149C105 149.55 105.196 150.021 105.588 150.413C105.979 150.804 106.45 151 107 151C107.55 151 108.021 150.804 108.413 150.413ZM108.413 156.413C108.804 156.021 109 155.55 109 155C109 154.45 108.804 153.979 108.413 153.588C108.021 153.196 107.55 153 107 153C106.45 153 105.979 153.196 105.588 153.588C105.196 153.979 105 154.45 105 155C105 155.55 105.196 156.021 105.588 156.413C105.979 156.804 106.45 157 107 157C107.55 157 108.021 156.804 108.413 156.413ZM103 161C102.45 161 101.979 160.804 101.588 160.413C101.196 160.021 101 159.55 101 159V145C101 144.45 101.196 143.979 101.588 143.588C101.979 143.196 102.45 143 103 143H117C117.55 143 118.021 143.196 118.413 143.588C118.804 143.979 119 144.45 119 145V159C119 159.55 118.804 160.021 118.413 160.413C118.021 160.804 117.55 161 117 161H103Z"/></svg>Preparation</span>
-              <button class="pin-btn pinned" aria-label="Unpin"><span class="msr">push_pin</span></button>
-            </div>
-            <div>
-              <div class="op-code">BO-L1930</div>
-              <div class="op-title">Lake Titicaca Basin Environmental Restoration</div>
             </div>
             <div class="op-meta"><span class="msr">contract</span>LON / INV</div>
           </div>
@@ -2636,6 +2718,8 @@
       <span class="ph" id="ws-crumb-phase" role="button" tabindex="0">Implementation <span class="msr chev" style="font-size:16px;">expand_more</span></span>
       <span class="sep">/</span>
       <span class="op" id="ws-crumb-code">BR-L1587</span>
+      <span class="sep" id="ws-crumb-sep2" style="display:none;">/</span>
+      <span class="op tool" id="ws-crumb-tool" style="display:none;"></span>
     </div>
     <div class="avatar" title="Alejandro Romero">AR</div>
   </div>
@@ -2685,6 +2769,16 @@
           <h1 class="nf-t">We cannot open this section</h1>
           <p class="nf-s">This tool is not available for this operation.</p>
           <button class="btn-filled nf-back" id="nf2-back"><span class="msr">west</span> Go back</button>
+        </div>
+      </div>
+    </div>
+    <div id="ws-view-toolsoon" style="display:none;">
+      <div class="nf-card">
+        <div class="nf-wrap">
+          <svg class="nf-illus" viewBox="0 0 256 189" fill="none" role="img" aria-label="Illustration of a section under construction"><use href="#soon-illus-src"/></svg>
+          <h1 class="nf-t">We are building this section</h1>
+          <p class="nf-s">It is part of the portal rollout. It will be available in an upcoming release.</p>
+          <button class="btn-filled nf-back" id="nf3-back"><span class="msr">west</span> Go back</button>
         </div>
       </div>
     </div>
@@ -2759,7 +2853,7 @@
       </section>
       <section>
         <div class="ws-sec-title">
-          <div class="lc-titlegrp"><h2>Overall stages</h2><span class="lc-sum" id="lc-sum"></span></div>
+          <div class="lc-titlegrp"><h2>Life Cycle</h2><span class="lc-sum" id="lc-sum"></span></div>
           <div class="ctrl">
             <button class="icon-btn outlined" id="ws-st-prev" aria-label="Scroll stages left"><span class="msr">chevron_left</span></button>
             <button class="icon-btn outlined" id="ws-st-next" aria-label="Scroll stages right"><span class="msr">chevron_right</span></button>
@@ -3235,6 +3329,9 @@
   document.getElementById('nf-back').addEventListener('click', () => { location.hash = '#/home'; });
   document.getElementById('nf2-back').addEventListener('click', () => {
     // Go back; direct landings with no history fall back to the operation dashboard
+    if (history.length > 1) history.back(); else setWsView('dashboard');
+  });
+  document.getElementById('nf3-back').addEventListener('click', () => {
     if (history.length > 1) history.back(); else setWsView('dashboard');
   });
 
@@ -4113,15 +4210,25 @@
 
   // workspace inner views (Dashboard / Operation data)
   let wsRow = null, wsPhase = 'implementation';
+  const QA_TOOL_SLUG = { 'Theory of Change': 'theory-of-change', 'sgDELTA Questionnaire': 'sgdelta-questionnaire', 'Risk Screening Tool': 'risk' };
+  const QA_SLUG_TOOL = Object.fromEntries(Object.entries(QA_TOOL_SLUG).map(([n, s]) => [s, n]));
+  let wsToolName = '';
   function setWsView(view) {
     if (wsScreen.classList.contains('open') && wsScreen.dataset.code)
-      setHash('#/op/' + wsScreen.dataset.code + '/' + (view === 'opdata' ? 'data' : view === 'feed' ? 'feed' : view === 'tool' ? 'sgdelta' : view === 'rst' ? 'risk' : 'dashboard'));
+      setHash('#/op/' + wsScreen.dataset.code + '/' + (view === 'opdata' ? 'data' : view === 'feed' ? 'feed' : view === 'tool' ? 'sgdelta' : view === 'toolsoon' ? (QA_TOOL_SLUG[wsToolName] || 'tool') : 'dashboard'));
     document.getElementById('ws-view-dashboard').style.display = view === 'dashboard' ? '' : 'none';
     document.getElementById('ws-view-opdata').style.display = view === 'opdata' ? '' : 'none';
     document.getElementById('ws-view-feed').style.display = view === 'feed' ? '' : 'none';
-    document.getElementById('ws-view-tool').style.display = (view === 'tool' || view === 'rst') ? '' : 'none';
+    document.getElementById('ws-view-tool').style.display = view === 'tool' ? '' : 'none';
+    document.getElementById('ws-view-toolsoon').style.display = view === 'toolsoon' ? '' : 'none';
     document.getElementById('ws-mini').style.display = view === 'dashboard' ? 'none' : '';
     document.querySelectorAll('.ws-item[data-wsview]').forEach(i => i.classList.toggle('active', i.dataset.wsview === view));
+    // breadcrumb: append the tool name when a tool view is open
+    const crumbToolName = view === 'toolsoon' ? wsToolName : view === 'tool' ? 'sgDELTA' : '';
+    document.getElementById('ws-crumb-tool').textContent = crumbToolName;
+    document.getElementById('ws-crumb-tool').style.display = crumbToolName ? '' : 'none';
+    document.getElementById('ws-crumb-sep2').style.display = crumbToolName ? '' : 'none';
+    document.querySelector('.ws-crumb').classList.toggle('tool-open', !!crumbToolName);
     requestAnimationFrame(navClampCheck);
     if (view !== 'dashboard' && wsRow) {
       const row = wsRow, isImpl = wsPhase === 'implementation';
@@ -4285,7 +4392,7 @@
   }
   document.querySelectorAll('.od-tab').forEach(b => b.addEventListener('click', () => setOdTab(b.dataset.odtab)));
   document.querySelectorAll('.ws-qa-card').forEach(c => {
-    const go = () => setWsView(c.id === 'qa-rst' ? 'rst' : 'tool');
+    const go = () => { wsToolName = (c.getAttribute('aria-label') || '').replace(/^Open /, ''); setWsView('toolsoon'); };
     c.addEventListener('click', go);
     c.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
   });
@@ -4323,8 +4430,29 @@
   });
   // stages strip scroll
   const lcScrollBehavior = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
-  document.getElementById('ws-st-prev').addEventListener('click', () => document.getElementById('ws-stages').scrollBy({left: -240, behavior: lcScrollBehavior()}));
-  document.getElementById('ws-st-next').addEventListener('click', () => document.getElementById('ws-stages').scrollBy({left: 240, behavior: lcScrollBehavior()}));
+  // arrows page by viewport width with one node of overlap for continuity
+  const lcPageStep = () => Math.max(240, document.getElementById('ws-stages').clientWidth - 240);
+  document.getElementById('ws-st-prev').addEventListener('click', () => document.getElementById('ws-stages').scrollBy({left: -lcPageStep(), behavior: lcScrollBehavior()}));
+  document.getElementById('ws-st-next').addEventListener('click', () => document.getElementById('ws-stages').scrollBy({left: lcPageStep(), behavior: lcScrollBehavior()}));
+  // phase and subphase headers jump straight to their chapter
+  (function () {
+    const st = document.getElementById('ws-stages');
+    const track = document.getElementById('lc-track');
+    function lcJump(h) {
+      const target = h.classList.contains('bh') ? h.closest('.lc-band') : h.closest('.lc-subgrp');
+      if (!target) return;
+      st.scrollBy({ left: target.getBoundingClientRect().left - st.getBoundingClientRect().left - 16, behavior: lcScrollBehavior() });
+    }
+    track.addEventListener('click', e => {
+      const h = e.target.closest('.bh,.lc-sub-h');
+      if (h) lcJump(h);
+    });
+    track.addEventListener('keydown', e => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      const h = e.target.closest('.bh,.lc-sub-h');
+      if (h) { e.preventDefault(); lcJump(h); }
+    });
+  })();
 
   // ===== Overall stages lifecycle timeline (flag lcTimeline) =====
   // '@PP' resolves per operation to 'PP Approved' or 'PP Not Required' (mutually exclusive)
@@ -4341,6 +4469,54 @@
   };
   const LC_OPS = {
     'BR-L1587': { phase: 'preparation', current: 'POD Approved', pp: 'PP Approved' }
+  };
+  // Life Cycle detail model (phases > subphases > milestones). Source: BA-L1073 structure
+  // provided by the team; phase 2 keeps the portal label Implementation for consistency.
+  // Demo data wired to BO-L1930 only.
+  const LC_DETAIL = {
+    'BO-L1930': {
+      currentM: 'QRR',
+      phases: [
+        { key: 'preparation', label: 'Preparation', subs: [
+          { name: 'Eligibility', ms: [
+            ['REQ','Request Date'],['ON','Activate/Registration Date'],['START','Official Start Date'],
+            ['MID','Identification Mission'],['PPS','PP Package Preparation Started'],['PPD','PP distribution date'],
+            ['ERM','Eligibility Review Meeting date'],['PPO','PP submission for non-objection'],
+            ['PP','PP package approval date'],['PPPD','PP Package Disclosure']
+          ]},
+          { name: 'Quality Control', ms: [
+            ['MAN','Analysis Mission'],['PODS','POD Package Preparation Started'],['PODDD','POD due date'],
+            ['PODDI','POD distribution date'],['QRR','Quality and Risk Review date'],
+            ['PODO','POD submission for non-objection'],['POD','POD package approval date']
+          ]},
+          { name: 'Final Management Review', ms: [
+            ['DLPS','DLP Package Preparation Started'],['DLPD','DLP distribution date'],['SECO','DLP sent for translation'],
+            ['OPC','Operations Policy Committee date'],['DLPOPC','DLP approval date'],['NEG','Negotiation date'],
+            ['SECC','Post-negotiation changes translation']
+          ]},
+          { name: 'Board Approval', ms: [
+            ['SECD','LP distributed to the Board'],['COW','Committee of the Whole date'],['APPR','Approval date']
+          ]}
+        ]},
+        { key: 'implementation', label: 'Implementation', subs: [
+          { name: 'Contract Formalization', ms: [
+            ['ASCR','LEG sends contract to Representative for signature'],['SDCB','Representative sends contract to Borrower for signature'],
+            ['SI','Signature Date'],['SSOL','Representative sends signed originals to LEG'],['EF','Effective'],
+            ['KICK','Kick-Off Meeting'],['SSCA','LEG sends signed contract to Vital Records'],
+            ['EL','First Eligibility'],['TEL','Total Eligibility']
+          ]},
+          { name: 'Supervision for Results', ms: [
+            ['DI','Disbursing'],['95D','After 95% Disbursed'],['OED','Original Last Disbursement Expiration Date'],
+            ['CED','Current Last Disbursement Expiration Date'],['FD','Fully Disbursed'],['PCRS','Start PCR'],
+            ['PCRG',"PCR's QRR"],['PCRSOVE','PCR Validated by OVE'],['PCRCOVE','PCR DUE to OVE'],
+            ['PCRA','Approved by VPC/MGR'],['PCRINTER','PCR Published Internet']
+          ]},
+          { name: 'Closing', ms: [
+            ['EOC','Estimated Operational Close'],['CO','Fully Justified'],['COO','Operative Close'],['CF','Financial Close']
+          ]}
+        ]}
+      ]
+    }
   };
   let lcOp = null;
   const lcHash = s => { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; };
@@ -4396,9 +4572,76 @@
     'DLP Approved': 'Draft Loan Proposal',
     'PCR Approved': 'Project Completion Report'
   };
+  // Detail renderer: phases > subphases > acronym milestones. Hover = title, status, date.
+  function lcRenderDetail() {
+    const track = document.getElementById('lc-track');
+    const d = lcOp.detail;
+    const flat = [];
+    d.phases.forEach((ph, pi) => ph.subs.forEach((sb, si) => sb.ms.forEach(m => flat.push({ pi, si, acr: m[0], name: m[1] }))));
+    const curI = flat.findIndex(f => f.acr === d.currentM);
+    // deterministic ascending dates for completed milestones, ending ~2 weeks ago
+    const h = lcHash(lcOp.code);
+    const dates = [];
+    let t = LC_TODAY.getTime() - (12 + h % 9) * 86400000;
+    for (let j = curI - 1; j >= 0; j--) { dates[j] = lcFmt(new Date(t)); t -= (9 + ((h + j * 5) % 16)) * 86400000; }
+    const stateOf = i => i < curI ? 'done' : i === curI ? 'current' : 'todo';
+    let gi = 0;
+    track.setAttribute('aria-label', 'Operation life cycle');
+    track.innerHTML = d.phases.map((ph, pi) => {
+      const phTotal = ph.subs.reduce((a, s) => a + s.ms.length, 0);
+      const phDone = flat.filter((f, i) => f.pi === pi && i < curI).length;
+      const isCur = flat[curI] && flat[curI].pi === pi;
+      const phaseState = phDone === phTotal ? 'complete' : isCur ? 'active' : 'upcoming';
+      const phaseCount = phDone === phTotal ? phTotal + ' completed'
+        : isCur ? 'Current phase · ' + phDone + ' of ' + phTotal + ' complete'
+        : 'Upcoming · ' + phTotal + ' milestones';
+      const subs = ph.subs.map((sb, si) => {
+        const sTotal = sb.ms.length;
+        const sDone = flat.filter((f, i) => f.pi === pi && f.si === si && i < curI).length;
+        const sCur = flat[curI] && flat[curI].pi === pi && flat[curI].si === si;
+        const sState = sDone === sTotal ? 'complete' : sCur ? 'active' : '';
+        const nodes = sb.ms.map(m => {
+          const i = gi++;
+          const st = stateOf(i);
+          const isFirst = i === 0, isLast = i === flat.length - 1;
+          const lCls = isFirst ? 'sg hide' : 'sg' + (st !== 'todo' ? ' on' : '');
+          const rCls = isLast ? 'sg hide' : 'sg' + (stateOf(i + 1) !== 'todo' ? ' on' : '');
+          let meta = '', body = '';
+          const acr = '<div class="exp">' + m[0] + '</div>';
+          // join the last two words so no line wraps leaving one short word alone
+          const nm = m[1].replace(/ (\S+)$/, ' $1');
+          if (st === 'done') {
+            meta = 'Completed · ' + dates[i];
+            body = '<div class="lb">' + nm + '</div>' + acr + '<div class="sub">' + dates[i] + '</div>';
+          } else if (st === 'current') {
+            meta = 'In progress';
+            body = '<div class="pill"><span class="lb2">' + nm + '</span><span class="exp2">' + m[0] + '</span><span class="dt2">Current</span></div>';
+          } else if (m[0] === 'APPR' && lcOp.estApproval) {
+            meta = 'Date pending · Est. ' + lcOp.estApproval;
+            body = '<div class="lb">' + nm + '</div>' + acr + '<div class="sub est">Est. ' + lcOp.estApproval + '</div>';
+          } else {
+            meta = 'Date pending';
+            body = '<div class="lb">' + nm + '</div>' + acr;
+          }
+          const aria = ph.label + ', ' + sb.name + ': ' + m[1] + '. ' + meta;
+          return '<div class="lcn mini ' + st + '" role="listitem" tabindex="0"' + (st === 'current' ? ' aria-current="step"' : '')
+            + ' aria-label="' + aria + '" data-t2h="' + m[0] + '" data-t2m="' + meta + '" data-t2b="">'
+            + '<div class="trk"><span class="' + lCls + '"></span><span class="dot">'
+            + (st === 'done' ? '<span class="msr">check</span>' : '') + '</span><span class="' + rCls + '"></span></div>' + body + '</div>';
+        }).join('');
+        return '<div class="lc-subgrp ' + sState + '"><div class="lc-sub-h" role="button" tabindex="0" aria-label="Go to ' + sb.name + '">' + sb.name
+          + ' <span class="scnt">' + sDone + ' of ' + sTotal + '</span></div><div class="lc-srow">' + nodes + '</div></div>';
+      }).join('');
+      return '<div class="lc-band ' + phaseState + '"><div class="bh" role="button" tabindex="0" aria-label="Go to ' + ph.label + ' phase">' + lcPhaseIcon(ph.key) + ph.label
+        + '<span class="cnt">· ' + phaseCount + '</span></div><div class="lc-brow">' + subs + '</div></div>';
+    }).join('');
+    track.classList.remove('entering');
+    requestAnimationFrame(() => track.classList.add('entering'));
+  }
   function lcRender() {
     const track = document.getElementById('lc-track');
     if (!lcOp) { track.innerHTML = ''; return; }
+    if (lcOp.detail) { lcRenderDetail(); return; }
     const curPhaseR = LC_ORDER.indexOf(lcOp.phase);
     const curStageI = lcStagesOf(lcOp.phase).indexOf(lcOp.current);
     const phaseDoneN = k => {
@@ -4438,12 +4681,10 @@
         let meta = '', body = '';
         if (st === 'done') {
           const di = flatDone.indexOf(k + ':' + s);
-          const dur = di > 0 ? lcDays(lcDateObj(di, flatDone.length) - lcDateObj(di - 1, flatDone.length)) : null;
-          meta = 'Completed · ' + lcDate(di, flatDone.length) + (dur ? ' · ' + dur + ' days in stage' : '');
+          meta = 'Completed · ' + lcDate(di, flatDone.length);
           body = '<div class="lb">' + s + '</div>' + exp + '<div class="sub">' + lcDate(di, flatDone.length) + '</div>';
         } else if (st === 'current') {
-          const since = flatDone.length ? lcDays(LC_TODAY - lcDateObj(flatDone.length - 1, flatDone.length)) : null;
-          meta = 'Current stage' + (since ? ' · Active for ' + since + ' days' : '');
+          meta = 'Current stage';
           body = '<div class="pill"><span class="lb2">' + s + '</span>'
             + (LC_ACR[s] ? '<span class="exp2">' + LC_ACR[s] + '</span>' : '')
             + '<span class="dt2">Current stage</span></div>';
@@ -4451,12 +4692,12 @@
           meta = 'Upcoming · Estimated ' + lcOp.estApproval;
           body = '<div class="lb">' + s + '</div><div class="sub est">Est. ' + lcOp.estApproval + '</div>';
         } else {
-          meta = 'Upcoming · ' + LC_META[k].label;
+          meta = 'Upcoming';
           body = '<div class="lb">' + s + '</div>' + exp;
         }
         const aria = LC_META[k].label + ', stage ' + (i + 1) + ' of ' + stages.length + ': ' + s + '. ' + meta;
         return '<div class="lcn ' + st + '" role="listitem" tabindex="0"' + (st === 'current' ? ' aria-current="step"' : '')
-          + ' aria-label="' + aria + '" data-t2h="' + s + '" data-t2m="' + meta + '" data-t2b="' + def + '">'
+          + ' aria-label="' + aria + '" data-t2h="' + s + '" data-t2m="' + meta + '" data-t2b="">'
           + '<div class="trk"><span class="' + lCls + '"></span><span class="dot">'
           + (st === 'done' ? '<span class="msr">check</span>' : '') + '</span><span class="' + rCls + '"></span></div>' + body + '</div>';
       }).join('');
@@ -4467,12 +4708,12 @@
         const on = nxt !== 'todo';
         ced = '<div class="lcm' + (on ? ' done' : '') + '" role="listitem" tabindex="0"'
           + ' aria-label="CED, Current Last Disbursement Expiration Date: ' + lcOp.ced + '"'
-          + ' data-t2h="CED · ' + lcOp.ced + '" data-t2m="Contract milestone"'
-          + ' data-t2b="Current Last Disbursement Expiration Date: the deadline for the last disbursement under the current contract.">'
+          + ' data-t2h="Current Last Disbursement Expiration Date" data-t2m="Contract milestone · ' + lcOp.ced + '"'
+          + ' data-t2b="">'
           + '<div class="trk"><span class="sg' + (on ? ' on' : '') + '"></span><span class="mk"></span><span class="sg' + (on ? ' on' : '') + '"></span></div>'
           + '<div class="lb">CED</div><div class="sub">' + lcOp.ced + '</div></div>';
       }
-      return '<div class="lc-band ' + phaseState + '"><div class="bh">' + lcPhaseIcon(k) + LC_META[k].label
+      return '<div class="lc-band ' + phaseState + '"><div class="bh" role="button" tabindex="0" aria-label="Go to ' + LC_META[k].label + ' phase">' + lcPhaseIcon(k) + LC_META[k].label
         + '<span class="cnt">· ' + phaseCount + '</span></div><div class="lc-brow">' + nodes + ced + '</div></div>';
     }).join('');
     track.classList.remove('entering');
@@ -4544,6 +4785,7 @@
     }
     lcOp = {
       code, phase: phaseKey, current,
+      detail: LC_DETAIL[code] || null,
       pp: ex.pp || (lcHash(code) % 3 === 0 ? 'PP Not Required' : 'PP Approved'),
       // estimated dates the business actually has today (extend once Naty confirms the full list)
       estApproval: phaseKey === 'preparation' ? (row[8] || null) : null,
@@ -4601,7 +4843,8 @@
           return;
         }
         openWorkspace(phase, row);
-        setWsView(parts[2] === 'data' ? 'opdata' : parts[2] === 'feed' ? 'feed' : parts[2] === 'sgdelta' ? 'tool' : parts[2] === 'risk' ? 'rst' : 'dashboard');
+        if (QA_SLUG_TOOL[parts[2]]) { wsToolName = QA_SLUG_TOOL[parts[2]]; setWsView('toolsoon'); }
+        else setWsView(parts[2] === 'data' ? 'opdata' : parts[2] === 'feed' ? 'feed' : parts[2] === 'sgdelta' ? 'tool' : 'dashboard');
         if (parts[2] === 'data') setOdTab(parts[3] === 'team' ? 'team' : 'gi');
       } else {
         if (wsScreen.classList.contains('open')) {
@@ -6234,11 +6477,26 @@
     b.textContent = el.dataset.t2b || '';
     b.style.marginTop = el.dataset.t2h ? '' : '0';
     const r = el.getBoundingClientRect();
+    richtip.style.width = '';
     richtip.classList.add('show');
+    // shrink the box to the widest rendered line: balanced titles leave dead space otherwise
+    let lw = 0;
+    richtip.querySelectorAll('.h,.m,.b').forEach(n => {
+      if (!n.textContent || n.style.display === 'none') return;
+      const rg = document.createRange();
+      rg.selectNodeContents(n);
+      for (const x of rg.getClientRects()) lw = Math.max(lw, x.width);
+    });
+    if (lw) richtip.style.width = (Math.ceil(lw) + 30) + 'px';
     const tw = richtip.offsetWidth, th = richtip.offsetHeight;
-    let left = r.left, top = r.bottom + 8;
+    // anchor to the visible content bottom, not the layout box: stretched nodes leave a gap otherwise
+    let cb = r.top;
+    for (const c of el.children) { const b = c.getBoundingClientRect().bottom; if (b > cb) cb = b; }
+    const bottom = el.children.length ? Math.min(cb, r.bottom) : r.bottom;
+    let left = r.left + r.width / 2 - tw / 2, top = bottom + 6;
+    if (left < 12) left = 12;
     if (left + tw > window.innerWidth - 12) left = window.innerWidth - tw - 12;
-    if (top + th > window.innerHeight - 12) top = r.top - th - 8;
+    if (top + th > window.innerHeight - 12) top = r.top - th - 6;
     richtip.style.left = left + 'px';
     richtip.style.top = top + 'px';
   }
@@ -6356,7 +6614,6 @@
     const input = document.getElementById('gs-input');
     const drop = document.getElementById('gs-drop');
     const clearBtn = document.getElementById('gs-clear');
-    const HINT = 'Type an operation ID (e.g. BR-L1587) or a word from its name.';
     let gsTimer = null, gsSeq = 0, gsSel = -1, gsRows = [], gsDown = false;
 
     const INDEX = [
@@ -6401,7 +6658,7 @@
       document.getElementById('gs-retry').addEventListener('click', () => { gsRecovered.add(q.toLowerCase()); runSearch(q); });
     }
     function renderEmpty(q) {
-      drop.innerHTML = '<div class="gs-empty"><span class="gs-ic"><svg viewBox="0 -960 960 960" aria-hidden="true"><path d="m270-245 57 57q5 5 11.5 4.5T350-189q5-5 5-11.5t-5-11.5l-58-57 60-60q5-5 5-11.5t-5-11.5q-5-5-11.5-5t-11.5 5l-59 59-59-59q-5-5-11-5t-11 5q-5 5-5 11.5t5 11.5l58 59-58 58q-5 5-5 12t5 12q5 5 12 5t12-5l57-57ZM136-136q-56-56-56-134t56-134q56-56 134-56t134 56q56 56 56 134t-56 134q-56 56-134 56t-134-56Zm437-247q-14 11-31.5 21.5T508-344q-5-14-11-28.5T483-399q54-21 91.5-69.5T612-584q0-81-57-138.5T417-780q-82 0-139.5 57.5T220-584q0 17 3.5 35.5T232-517q-13 2-29 6.5T174-500q-7-18-10.5-40t-3.5-44q0-107 75-181.5T417-840q106 0 180.5 75T672-584q0 43-15 85t-41 73l242 240q9 9 9 22t-9 22q-9 9-22 9t-22-9L573-383Z"/></svg></span><div class="t">No results for "' + esc(q) + '"</div><div class="s">Check the operation ID or try a different word from the operation or strategy name.</div></div>';
+      drop.innerHTML = '<div class="gs-empty"><span class="gs-ic"><svg viewBox="0 -960 960 960" aria-hidden="true"><path d="m270-245 57 57q5 5 11.5 4.5T350-189q5-5 5-11.5t-5-11.5l-58-57 60-60q5-5 5-11.5t-5-11.5q-5-5-11.5-5t-11.5 5l-59 59-59-59q-5-5-11-5t-11 5q-5 5-5 11.5t5 11.5l58 59-58 58q-5 5-5 12t5 12q5 5 12 5t12-5l57-57ZM136-136q-56-56-56-134t56-134q56-56 134-56t134 56q56 56 56 134t-56 134q-56 56-134 56t-134-56Zm437-247q-14 11-31.5 21.5T508-344q-5-14-11-28.5T483-399q54-21 91.5-69.5T612-584q0-81-57-138.5T417-780q-82 0-139.5 57.5T220-584q0 17 3.5 35.5T232-517q-13 2-29 6.5T174-500q-7-18-10.5-40t-3.5-44q0-107 75-181.5T417-840q106 0 180.5 75T672-584q0 43-15 85t-41 73l242 240q9 9 9 22t-9 22q-9 9-22 9t-22-9L573-383Z"/></svg></span><div class="t">No results for "' + esc(q) + '"</div><div class="s">Check the operation ID or country strategy code and try again.</div></div>';
       open();
     }
     const gsIc = k => {
@@ -6499,22 +6756,22 @@
       const q = input.value.trim();
       wrap.classList.toggle('has-text', input.value.length > 0);
       clearTimeout(gsTimer);
-      if (!q) { gsSeq++; renderHint(HINT); return; }
+      if (!q) { gsSeq++; close(); return; }
       if (q.length < 2) { gsSeq++; renderHint('Keep typing to search operations.'); return; }
       gsTimer = setTimeout(() => runSearch(q), 300);
     }
     input.addEventListener('input', onQuery);
     input.addEventListener('focus', () => {
       const q = input.value.trim();
-      if (!q) renderHint(HINT);
-      else if (q.length < 2) renderHint('Keep typing to search operations.');
+      if (!q) return;
+      if (q.length < 2) renderHint('Keep typing to search operations.');
       else runSearch(q);
     });
     clearBtn.addEventListener('click', () => {
       input.value = '';
       wrap.classList.remove('has-text');
       gsSeq++;
-      renderHint(HINT);
+      close();
       input.focus();
     });
     input.addEventListener('keydown', e => {
