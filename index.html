@@ -230,6 +230,7 @@
     background:rgba(255,255,255,0.08);
     border:1px solid rgba(255,255,255,0.45);
     padding:0 14px;cursor:text;
+    user-select:none;-webkit-user-select:none;
     transition:background .18s ease,border-color .18s ease,box-shadow .18s ease;
   }
   /* hover: paso intermedio, insinua sin comprometer */
@@ -253,6 +254,7 @@
   .global-search input{
     flex:1;background:transparent;border:none;outline:none;
     font-family:var(--font-ui);font-size:12px;font-weight:600;color:#FFFFFF;
+    user-select:text;-webkit-user-select:text;
   }
   .global-search input::placeholder{color:rgba(255,255,255,0.85);font-weight:600;}
   /* ===== Global search dropdown ===== */
@@ -6788,6 +6790,12 @@
       }
     });
     document.addEventListener('click', e => { if (!e.target.closest('#gs-wrap')) close(); });
+    // any press on the pill chrome (icon, padding) focuses the input instead of starting a text selection
+    wrap.addEventListener('mousedown', e => {
+      if (e.target === input || e.target.closest('.gs-drop') || e.target.closest('#gs-clear')) return;
+      e.preventDefault();
+      input.focus();
+    });
     // demo: press "s" 5 times (outside inputs) to toggle the simulated search service outage
     let sCount = 0;
     document.addEventListener('keydown', e => {
