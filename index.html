@@ -1822,6 +1822,78 @@
   #richtip .h{font-size:11px;line-height:16px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;color:#fff;white-space:normal;overflow-wrap:break-word;text-wrap:balance;}
   #richtip .m{font-size:11px;line-height:16px;color:#AEE2C8;font-weight:600;margin-top:2px;}
   #richtip .b{font-size:13px;line-height:18px;color:#fff;font-weight:400;margin-top:5px;}
+  /* ============ Help Center (fab + panel) y Report an issue ============ */
+  .hc-fab{
+    position:fixed;right:0;bottom:28px;z-index:7000;
+    writing-mode:vertical-rl;transform:rotate(180deg);padding:16px 11px;border:none;cursor:pointer;
+    background:#0E6E9E;color:#FFFFFF;font-family:var(--font-ui);font-size:13px;font-weight:700;
+    letter-spacing:.3px;border-radius:0 10px 10px 0;box-shadow:0 4px 14px rgba(0,0,0,.18);
+  }
+  .hc-fab:hover{background:#0C608A;}
+  .hc-fab:focus-visible{outline:2px solid #FFFFFF;outline-offset:-4px;}
+  .hc-panel{
+    position:fixed;right:18px;bottom:18px;z-index:7500;width:384px;max-width:calc(100vw - 36px);
+    max-height:calc(100vh - 40px);overflow:auto;display:none;
+    background:#FFFFFF;border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.28);
+  }
+  .hc-panel.open{display:block;animation:mi-pop-in .16s cubic-bezier(0.2,0,0,1);}
+  .hc-head{background:#15597F;padding:20px 22px 22px;color:#FFFFFF;position:relative;}
+  .hc-head h2{font-size:24px;line-height:30px;font-weight:700;}
+  .hc-head .s{font-size:14.5px;opacity:.92;margin-top:2px;}
+  .hc-x{position:absolute;top:14px;right:14px;background:none;border:none;color:#FFFFFF;cursor:pointer;padding:4px;border-radius:50%;line-height:0;}
+  .hc-x:hover{background:rgba(255,255,255,.14);}
+  .hc-x .msr{font-size:20px;}
+  .hc-search{display:flex;align-items:center;gap:8px;background:#FFFFFF;border-radius:26px;height:42px;padding:0 14px;margin-top:16px;}
+  .hc-search .msr{font-size:18px;color:#8A8888;}
+  .hc-search input{flex:1;border:none;outline:none;font-family:var(--font-ui);font-size:14px;color:#272626;min-width:0;}
+  .hc-search input::placeholder{color:#8A8A8D;}
+  .hc-list{padding:10px 8px 14px;}
+  .hc-item{display:flex;align-items:flex-start;gap:14px;width:100%;text-align:left;background:none;border:none;cursor:pointer;padding:13px 14px;border-radius:10px;font-family:var(--font-ui);}
+  .hc-item:hover{background:#F4F8FB;}
+  .hc-item:focus-visible{outline:2px solid #007EB6;outline-offset:-2px;}
+  .hc-item .ic{width:38px;height:38px;border-radius:50%;background:#D8E9F4;color:#0E6E9E;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+  .hc-item .ic .msr{font-size:19px;}
+  .hc-item .tx{flex:1;min-width:0;}
+  .hc-item .t{font-size:15px;line-height:20px;font-weight:700;color:#272626;}
+  .hc-item .s{font-size:13px;line-height:18px;color:#5C5A5A;margin-top:2px;}
+  .hc-item .chev{align-self:center;color:#8A8888;flex:0 0 auto;}
+  /* modal report an issue */
+  .ri-overlay{position:fixed;inset:0;z-index:8000;background:rgba(20,20,20,.45);display:none;align-items:center;justify-content:center;padding:20px;}
+  .ri-overlay.open{display:flex;}
+  .ri-modal{width:480px;max-width:100%;background:#FFFFFF;border-radius:14px;box-shadow:0 16px 48px rgba(0,0,0,.3);padding:22px 24px 20px;animation:mi-pop-in .16s cubic-bezier(0.2,0,0,1);}
+  .ri-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+  .ri-top h2{font-size:18px;line-height:24px;font-weight:700;color:#272626;}
+  .ri-top .s{font-size:13px;line-height:18px;color:#5C5A5A;margin-top:3px;}
+  .ri-close{background:none;border:none;cursor:pointer;color:#5C5A5A;padding:4px;margin:-4px;border-radius:50%;line-height:0;flex:0 0 auto;}
+  .ri-close:hover{background:rgba(35,34,34,.08);}
+  .ri-close .msr{font-size:20px;}
+  .ri-label{display:block;font-size:13px;font-weight:600;color:#272626;margin:18px 0 6px;}
+  .ri-ta{
+    width:100%;min-height:128px;resize:vertical;border:1px solid #A6A6A8;border-radius:8px;
+    padding:10px 12px;font-family:var(--font-ui);font-size:13.5px;line-height:19px;color:#272626;
+  }
+  .ri-ta::placeholder{color:#8A8A8D;}
+  .ri-ta:focus{outline:none;border-color:#007EB6;box-shadow:0 0 0 3px rgba(0,126,182,.18);}
+  .ri-ta:disabled{background:#F6F5F6;color:#8A8888;}
+  .ri-err{display:none;align-items:flex-start;gap:8px;background:#FCEDED;border:1px solid #E5B9B9;border-radius:8px;padding:10px 12px;font-size:13px;line-height:18px;color:#8C2F2F;margin-top:14px;}
+  .ri-err.show{display:flex;}
+  .ri-err .msr{font-size:17px;flex:0 0 auto;color:#B04141;}
+  .ri-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;}
+  .ri-cancel{height:36px;padding:0 16px;border-radius:80px;border:1px solid #C9C7C7;background:#FFFFFF;font-family:var(--font-ui);font-size:13px;font-weight:600;color:#272626;cursor:pointer;}
+  .ri-cancel:hover{background:#F6F5F6;}
+  .ri-send{min-width:118px;}
+  .ri-send:disabled{opacity:.45;cursor:default;}
+  .ri-spin{width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#FFFFFF;border-radius:50%;display:inline-block;vertical-align:-2px;margin-right:7px;animation:ri-rot .7s linear infinite;}
+  @keyframes ri-rot{to{transform:rotate(360deg);}}
+  /* success view */
+  .ri-ok{display:none;text-align:center;padding:14px 6px 6px;}
+  .ri-ok.show{display:block;}
+  .ri-ok .okic{width:52px;height:52px;border-radius:50%;background:#EDF8F2;color:#00854D;display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px;}
+  .ri-ok .okic .msr{font-size:28px;}
+  .ri-ok h3{font-size:17px;font-weight:700;color:#272626;}
+  .ri-ok p{font-size:13.5px;line-height:19px;color:#5C5A5A;margin-top:6px;max-width:320px;margin-left:auto;margin-right:auto;text-wrap:balance;}
+  .ri-ok .btn-filled{margin-top:18px;}
+  @media (prefers-reduced-motion: reduce){.hc-panel.open,.ri-modal{animation:none;}.ri-spin{animation-duration:1.4s;}}
   [data-t2h]{cursor:default;}
 
   /* ============ Activity feed ============ */
@@ -3137,6 +3209,44 @@
   </main>
 </div>
 
+<button class="hc-fab" id="hc-fab" aria-haspopup="dialog" aria-expanded="false">Help Center</button>
+<div class="hc-panel" id="hc-panel" role="dialog" aria-label="Help Center">
+  <div class="hc-head">
+    <button class="hc-x" id="hc-close" aria-label="Close Help Center"><span class="msr">close</span></button>
+    <h2>Help Center</h2>
+    <div class="s">Your guide to the Operational Portal</div>
+    <div class="hc-search"><span class="msr">search</span><input type="text" placeholder="Search for user guides here" aria-label="Search user guides"></div>
+  </div>
+  <div class="hc-list">
+    <button class="hc-item"><span class="ic"><span class="msr">list_alt</span></span><span class="tx"><span class="t">I am new to the Portal</span><span class="s" style="display:block;">Guided tours to help you navigate every workspace</span></span></button>
+    <button class="hc-item"><span class="ic"><span class="msr">preview</span></span><span class="tx"><span class="t">Access sgDELTA and RST quickly</span><span class="s" style="display:block;">A simple guide to access operational tools</span></span></button>
+    <button class="hc-item"><span class="ic"><span class="msr">monitoring</span></span><span class="tx"><span class="t">Help us improve</span><span class="s" style="display:block;">Share your ideas to improve the Portal</span></span></button>
+    <button class="hc-item" id="hc-report"><span class="ic"><span class="msr">report</span></span><span class="tx"><span class="t">Report an issue</span><span class="s" style="display:block;">Tell us when something is not working as expected</span></span></button>
+  </div>
+</div>
+<div class="ri-overlay" id="ri-overlay">
+  <div class="ri-modal" role="dialog" aria-modal="true" aria-labelledby="ri-title">
+    <div id="ri-form">
+      <div class="ri-top">
+        <div><h2 id="ri-title">Report an issue</h2><div class="s">Describe what happened. Our support team will follow up.</div></div>
+        <button class="ri-close" id="ri-close" aria-label="Close"><span class="msr">close</span></button>
+      </div>
+      <label class="ri-label" for="ri-desc">What went wrong?</label>
+      <textarea class="ri-ta" id="ri-desc" placeholder="Describe the issue, including what you were trying to do when it happened."></textarea>
+      <div class="ri-err" id="ri-err"><span class="msr">report</span><span>We could not send your report. Try again in a moment.</span></div>
+      <div class="ri-actions">
+        <button class="ri-cancel" id="ri-cancel">Cancel</button>
+        <button class="btn-filled ri-send" id="ri-send" disabled>Send report</button>
+      </div>
+    </div>
+    <div class="ri-ok" id="ri-ok">
+      <span class="okic"><span class="msr">check</span></span>
+      <h3>Report sent</h3>
+      <p>Thank you for letting us know. Our support team will review it shortly.</p>
+      <button class="btn-filled" id="ri-done">Done</button>
+    </div>
+  </div>
+</div>
 <div class="crumb-menu" id="crumb-menu"></div>
 
 <div class="menu opmenu" id="ops-menu">
@@ -4811,6 +4921,85 @@
       `${String(d.getDate()).padStart(2, '0')} ${MONTHS[d.getMonth()]} ${d.getFullYear()}, 6:00 AM`;
     document.getElementById('fd-updated-at').textContent =
       `${String(d.getDate()).padStart(2, '0')} ${MONTHS[d.getMonth()]} ${d.getFullYear()}, 6:00 AM`;
+  })();
+
+  // ===== Help Center + Report an issue =====
+  (function () {
+    const fab = document.getElementById('hc-fab');
+    const panel = document.getElementById('hc-panel');
+    const overlay = document.getElementById('ri-overlay');
+    const form = document.getElementById('ri-form');
+    const ok = document.getElementById('ri-ok');
+    const desc = document.getElementById('ri-desc');
+    const send = document.getElementById('ri-send');
+    const err = document.getElementById('ri-err');
+    let sending = false;
+    function panelOpen(v) {
+      panel.classList.toggle('open', v);
+      fab.setAttribute('aria-expanded', String(v));
+      if (v) panel.querySelector('.hc-search input').focus();
+    }
+    fab.addEventListener('click', () => panelOpen(!panel.classList.contains('open')));
+    document.getElementById('hc-close').addEventListener('click', () => { panelOpen(false); fab.focus(); });
+    document.addEventListener('click', e => {
+      if (panel.classList.contains('open') && !e.target.closest('#hc-panel') && !e.target.closest('#hc-fab')) panelOpen(false);
+    });
+    function riReset() {
+      form.style.display = '';
+      ok.classList.remove('show');
+      err.classList.remove('show');
+      desc.value = '';
+      desc.disabled = false;
+      send.disabled = true;
+      send.innerHTML = 'Send report';
+      sending = false;
+    }
+    function riOpen() {
+      panelOpen(false);
+      riReset();
+      overlay.classList.add('open');
+      desc.focus();
+    }
+    function riClose() {
+      if (sending) return;
+      overlay.classList.remove('open');
+      fab.focus();
+    }
+    document.getElementById('hc-report').addEventListener('click', riOpen);
+    document.getElementById('ri-close').addEventListener('click', riClose);
+    document.getElementById('ri-cancel').addEventListener('click', riClose);
+    document.getElementById('ri-done').addEventListener('click', riClose);
+    overlay.addEventListener('mousedown', e => { if (e.target === overlay) riClose(); });
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Escape') return;
+      if (overlay.classList.contains('open')) riClose();
+      else if (panel.classList.contains('open')) { panelOpen(false); fab.focus(); }
+    });
+    desc.addEventListener('input', () => { if (!sending) send.disabled = !desc.value.trim(); });
+    send.addEventListener('click', () => {
+      if (sending || !desc.value.trim()) return;
+      sending = true;
+      err.classList.remove('show');
+      desc.disabled = true;
+      send.disabled = true;
+      send.innerHTML = '<span class="ri-spin" aria-hidden="true"></span>Sending…';
+      // demo: a description containing "error" simulates a ServiceNow failure
+      const fail = /error/i.test(desc.value);
+      setTimeout(() => {
+        sending = false;
+        send.innerHTML = 'Send report';
+        if (fail) {
+          err.classList.add('show');
+          desc.disabled = false;
+          send.disabled = false;
+          desc.focus();
+        } else {
+          form.style.display = 'none';
+          ok.classList.add('show');
+          document.getElementById('ri-done').focus();
+        }
+      }, 1200);
+    });
   })();
 
   // ===== Financial info tooltip =====
