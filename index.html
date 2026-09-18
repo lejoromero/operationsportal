@@ -1875,8 +1875,10 @@
   .ri-ta::placeholder{color:#8A8A8D;}
   .ri-ta:focus{outline:none;border-color:#007EB6;box-shadow:0 0 0 3px rgba(0,126,182,.18);}
   .ri-ta:disabled{background:#F6F5F6;color:#8A8888;}
+  .ri-count{font-size:12px;line-height:16px;color:#5C5A5A;text-align:right;margin-top:6px;}
+  .ri-count.limit{color:#8C2F2F;font-weight:600;}
   .ri-err{display:none;align-items:flex-start;gap:8px;background:#FCEDED;border:1px solid #E5B9B9;border-radius:8px;padding:10px 12px;font-size:13px;line-height:18px;color:#8C2F2F;margin-top:14px;}
-  .ri-err.show{display:flex;}
+  .ri-err.show{display:flex;animation:mi-pop-in .16s cubic-bezier(0.2,0,0,1);}
   .ri-err .msr{font-size:17px;flex:0 0 auto;color:#B04141;}
   .ri-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;}
   .ri-cancel{height:36px;padding:0 16px;border-radius:80px;border:1px solid #C9C7C7;background:#FFFFFF;font-family:var(--font-ui);font-size:13px;font-weight:600;color:#272626;cursor:pointer;}
@@ -1893,7 +1895,7 @@
   .ri-ok h3{font-size:17px;font-weight:700;color:#272626;}
   .ri-ok p{font-size:13.5px;line-height:19px;color:#5C5A5A;margin-top:6px;max-width:320px;margin-left:auto;margin-right:auto;text-wrap:balance;}
   .ri-ok .btn-filled{margin-top:18px;}
-  @media (prefers-reduced-motion: reduce){.hc-panel.open,.ri-modal{animation:none;}.ri-spin{animation-duration:1.4s;}}
+  @media (prefers-reduced-motion: reduce){.hc-panel.open,.ri-modal,.ri-err.show{animation:none;}.ri-spin{animation-duration:1.4s;}}
   [data-t2h]{cursor:default;}
 
   /* ============ Activity feed ============ */
@@ -3231,9 +3233,10 @@
         <div><h2 id="ri-title">Report an issue</h2><div class="s">Describe what happened. Our support team will follow up.</div></div>
         <button class="ri-close" id="ri-close" aria-label="Close"><span class="msr">close</span></button>
       </div>
+      <div class="ri-err" id="ri-err" role="alert"><span class="msr">report</span><span id="ri-err-msg"></span></div>
       <label class="ri-label" for="ri-desc">What went wrong?</label>
-      <textarea class="ri-ta" id="ri-desc" placeholder="Describe the issue, including what you were trying to do when it happened."></textarea>
-      <div class="ri-err" id="ri-err"><span class="msr">report</span><span>We could not send your report. Try again in a moment.</span></div>
+      <textarea class="ri-ta" id="ri-desc" maxlength="300" placeholder="Describe the issue, including what you were trying to do when it happened."></textarea>
+      <div class="ri-count" id="ri-count" aria-live="polite"></div>
       <div class="ri-actions">
         <button class="ri-cancel" id="ri-cancel">Cancel</button>
         <button class="btn-filled ri-send" id="ri-send" disabled>Send report</button>
@@ -4953,6 +4956,7 @@
       send.disabled = true;
       send.innerHTML = 'Send report';
       sending = false;
+      riCount();
     }
     function riOpen() {
       panelOpen(false);
@@ -4975,21 +4979,40 @@
       if (overlay.classList.contains('open')) riClose();
       else if (panel.classList.contains('open')) { panelOpen(false); fab.focus(); }
     });
-    desc.addEventListener('input', () => { if (!sending) send.disabled = !desc.value.trim(); });
+    // counter always visible: with a small limit, users deserve to know it from the start
+    const RI_MAX = 300;
+    const count = document.getElementById('ri-count');
+    function riCount() {
+      const rem = RI_MAX - desc.value.length;
+      count.classList.toggle('limit', rem === 0);
+      count.textContent = rem === 1 ? '1 character remaining' : rem + ' characters remaining';
+    }
+    // soft minimum: 10 characters before Send enables, to avoid unusable one-word reports
+    const RI_MIN = 10;
+    desc.addEventListener('input', () => {
+      if (!sending) send.disabled = desc.value.trim().length < RI_MIN;
+      // a stale error belongs to the previous attempt, not to the edited text
+      err.classList.remove('show');
+      riCount();
+    });
     send.addEventListener('click', () => {
-      if (sending || !desc.value.trim()) return;
+      if (sending || desc.value.trim().length < RI_MIN) return;
       sending = true;
       err.classList.remove('show');
       desc.disabled = true;
       send.disabled = true;
       send.innerHTML = '<span class="ri-spin" aria-hidden="true"></span>Sending…';
-      // demo: a description containing "error" simulates a ServiceNow failure
-      const fail = /error/i.test(desc.value);
+      // demo: typing exactly "Show me an Error" simulates a ServiceNow failure
+      const fail = desc.value.trim().toLowerCase() === 'show me an error';
       setTimeout(() => {
         sending = false;
         send.innerHTML = 'Send report';
         if (fail) {
           err.classList.add('show');
+          // re-set the text so role=alert announces it on every failure
+          const m = document.getElementById('ri-err-msg');
+          m.textContent = '';
+          m.textContent = 'We could not send your report. Try again in a moment.';
           desc.disabled = false;
           send.disabled = false;
           desc.focus();
