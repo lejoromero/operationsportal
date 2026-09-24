@@ -1595,7 +1595,16 @@
   .ai-srcbtn.open{background:#EAF4FA;border-color:#9CC8E0;color:#0E6E9E;}
   .ai-srcbtn.open .msr{color:#0E6E9E;}
   .ai-srcbtn.open:hover{background:#DEEDF7;}
-  .ai-srclist{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+  .ai-srclist{display:flex;flex-direction:column;gap:8px;margin-top:12px;padding-left:16px;}
+  /* safety net for anomalous source counts: the list scrolls after ~8 rows instead of pushing the dashboard */
+  .ai-srclist .scr{display:flex;flex-direction:column;gap:8px;max-height:204px;overflow-y:auto;scrollbar-width:thin;padding-right:6px;}
+  .ai-srclist .allrow{
+    display:inline-flex;align-items:center;gap:6px;align-self:stretch;justify-content:flex-start;
+    margin-top:2px;padding:8px 0 0;border:none;border-top:1px solid #EDECED;background:none;cursor:pointer;
+    font-family:var(--font-ui);font-size:13px;font-weight:600;color:var(--link-default);
+  }
+  .ai-srclist .allrow:hover{text-decoration:underline;}
+  .ai-srclist .allrow .msr{font-size:15px;}
   .ai-srclist .row{display:flex;gap:10px;font-size:13px;line-height:18px;color:#272626;}
   .ai-srclist .n{font-weight:600;color:var(--link-default);flex:0 0 auto;}
   .ai-srclist .d{color:#8A8888;}
@@ -1895,6 +1904,17 @@
   .ri-ok h3{font-size:17px;font-weight:700;color:#272626;}
   .ri-ok p{font-size:13.5px;line-height:19px;color:#5C5A5A;margin-top:6px;max-width:320px;margin-left:auto;margin-right:auto;text-wrap:balance;}
   .ri-ok .btn-filled{margin-top:18px;}
+  /* ===== Full portal outage page (#/difficulties): blocking, no actions ===== */
+  .dif-screen{position:fixed;inset:0;z-index:9500;background:#EEF0F2;display:none;flex-direction:column;}
+  .dif-screen.open{display:flex;}
+  .dif-top{height:56px;flex:0 0 auto;background:var(--color-secondary);display:flex;align-items:center;padding-right:22px;}
+  .dif-brandbox{height:100%;background:#FFFFFF;display:flex;align-items:center;gap:12px;padding:0 28px 0 22px;flex:0 0 auto;}
+  .dif-brandbox svg{width:42px;height:17px;}
+  .dif-name{font-size:14px;font-weight:700;color:#272626;white-space:nowrap;}
+  .dif-avatar{width:32px;height:32px;border-radius:50%;background:#E6F6FC;color:var(--color-secondary);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;border:2px solid rgba(255,255,255,0.25);margin-left:auto;flex:0 0 auto;}
+  .dif-body{flex:1;display:flex;padding:22px 26px 26px;overflow:auto;}
+  .dif-card{flex:1;background:#FFFFFF;border:1px solid #E4E4E4;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:48px 24px;}
+  .dif-card .nf-s{font-size:15px;line-height:22px;max-width:560px;}
   @media (prefers-reduced-motion: reduce){.hc-panel.open,.ri-modal,.ri-err.show{animation:none;}.ri-spin{animation-duration:1.4s;}}
   [data-t2h]{cursor:default;}
 
@@ -3187,7 +3207,7 @@
             <div class="segmented" id="fd-seg">
               <button class="on" data-seg="all">All</button>
               <button data-seg="financial">Financial</button>
-              <button data-seg="contracts">Contracts</button>
+              <button data-seg="contracts">Contract clauses</button>
             </div>
           </div>
           <div class="fd-fright">
@@ -3226,6 +3246,100 @@
     <button class="hc-item" id="hc-report"><span class="ic"><span class="msr">report</span></span><span class="tx"><span class="t">Report an issue</span><span class="s" style="display:block;">Tell us when something is not working as expected</span></span></button>
   </div>
 </div>
+<!-- Full portal outage page: reachable at #/difficulties. Blocking by design: no navigation, no actions. -->
+<div class="dif-screen" id="dif-screen" role="dialog" aria-modal="true" aria-label="Portal temporarily unavailable">
+  <div class="dif-top">
+    <div class="dif-brandbox"><svg width="42" height="17" viewBox="0 0 60 23" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="IDB">
+      <g clip-path="url(#clip0_5808_43045)">
+        <path d="M57.5072 10.4399C58.5916 9.70533 59.1192 8.7059 59.1192 7.3964V7.35501C59.1192 6.31644 58.7768 5.46979 58.0731 4.76612C57.2024 3.89538 55.8553 3.4348 54.1785 3.4348H47.3187V18.1757H54.3418C57.8835 18.1757 59.9154 16.6652 59.9154 14.0312V13.9913C59.9154 12.2972 59.1689 11.1879 57.5072 10.4399ZM54.3418 14.9704H50.8295V12.2754H54.2395C55.6347 12.2754 56.3422 12.7217 56.3422 13.6022V13.6429C56.3422 14.5241 55.6694 14.9697 54.3418 14.9697V14.9704ZM50.8295 9.21389V6.64081H53.7089C54.5473 6.64081 55.5467 6.85605 55.5467 7.88558V7.92622C55.5467 8.77965 54.8596 9.21314 53.5042 9.21314H50.8295V9.21389Z" fill="#3C3B3B"/>
+        <path d="M38.4457 3.43555H32.647L32.6508 18.1772H38.4457C40.6523 18.1764 42.6534 17.4208 44.0826 16.0489C45.4899 14.698 46.2643 12.8361 46.2643 10.8056V10.7642C46.2643 6.51738 42.9755 3.43555 38.445 3.43555H38.4457ZM42.5292 10.8056V10.8463C42.5292 13.2643 40.8878 14.8899 38.4457 14.8899H36.2399V6.72284H38.4457C40.8878 6.72284 42.5292 8.36347 42.5292 10.8056Z" fill="#3C3B3B"/>
+        <path d="M29.4252 3.41222C30.4171 3.41222 31.2224 4.21673 31.2224 5.20864V18.1794H27.6288V3.41147H29.4245L29.4252 3.41222Z" fill="#3C3B3B"/>
+        <path d="M12.6313 13.0333C10.7356 16.1023 16.8247 16.1482 14.0078 21.8837C13.925 21.8972 13.843 21.913 13.7587 21.925C7.19238 22.8869 1.08967 18.3427 0.127869 11.7757C-0.327445 8.6615 0.456749 5.65266 2.10491 3.24665C1.79861 10.1765 14.4021 10.1689 12.6321 13.034M15.318 21.5886C15.9668 20.3815 17.3794 18.6212 20.4002 15.072C24.9173 9.76403 11.5318 11.5469 9.23791 7.52961C7.34892 4.2205 14.3796 1.84157 18.6279 0C21.3899 1.8205 23.394 4.76386 23.9096 8.29499C24.7931 14.327 21.0279 19.9646 15.318 21.5886ZM11.3534 6.43234C10.9026 6.66865 11.7094 7.71625 13.7722 7.77194C15.8358 7.82914 13.1754 5.47505 11.3534 6.43234ZM15.9066 7.55219C14.36 7.05172 15.3775 8.28897 16.1135 8.371C16.8488 8.45228 17.0023 7.90741 15.9066 7.55219ZM17.5201 8.7631C17.0053 8.74202 16.9135 9.05209 17.6864 9.2154C18.7769 9.44569 18.0349 8.78417 17.5201 8.7631Z" fill="#004E70"/>
+      </g>
+    </svg><span class="dif-name">Operational Portal</span></div>
+    <div class="dif-avatar" aria-hidden="true">AR</div>
+  </div>
+  <div class="dif-body"><div class="dif-card">
+    <div class="nf-wrap">
+      <svg class="nf-illus" width="256" height="189" viewBox="0 0 256 189" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of the portal being improved">
+        <g opacity="0.6">
+          <g opacity="0.5" filter="url(#dif_f0)">
+            <path d="M245 27.8008H211C205.477 27.8008 201 32.2779 201 37.8008V83.8008C201 89.3236 205.477 93.8008 211 93.8008H245C250.523 93.8008 255 89.3236 255 83.8008V37.8008C255 32.2779 250.523 27.8008 245 27.8008Z" fill="url(#dif_p0)"/>
+            <path d="M211 28.3008H245C250.247 28.3008 254.5 32.5541 254.5 37.8008V83.8008C254.5 89.0475 250.247 93.3008 245 93.3008H211C205.753 93.3008 201.5 89.0475 201.5 83.8008V37.8008C201.5 32.5541 205.753 28.3008 211 28.3008Z" stroke="url(#dif_p1)"/>
+          </g>
+          <path d="M240.5 39.8008H215.5C213.567 39.8008 212 41.3678 212 43.3008C212 45.2338 213.567 46.8008 215.5 46.8008H240.5C242.433 46.8008 244 45.2338 244 43.3008C244 41.3678 242.433 39.8008 240.5 39.8008Z" fill="#F1F0F1"/>
+          <path d="M233 53.8008H215C213.343 53.8008 212 55.1439 212 56.8008C212 58.4576 213.343 59.8008 215 59.8008H233C234.657 59.8008 236 58.4576 236 56.8008C236 55.1439 234.657 53.8008 233 53.8008Z" fill="#F4F3F4"/>
+        </g>
+        <g opacity="0.45">
+          <g opacity="0.5" filter="url(#dif_f1)">
+            <path d="M49 99.8008H11C5.47715 99.8008 1 104.278 1 109.801V145.801C1 151.324 5.47715 155.801 11 155.801H49C54.5228 155.801 59 151.324 59 145.801V109.801C59 104.278 54.5228 99.8008 49 99.8008Z" fill="url(#dif_p2)"/>
+            <path d="M11 100.301H49C54.2467 100.301 58.5 104.554 58.5 109.801V145.801C58.5 151.047 54.2467 155.301 49 155.301H11C5.75329 155.301 1.5 151.047 1.5 145.801V109.801C1.5 104.554 5.75329 100.301 11 100.301Z" stroke="url(#dif_p3)"/>
+          </g>
+          <path d="M42.5 111.801H15.5C13.567 111.801 12 113.368 12 115.301C12 117.234 13.567 118.801 15.5 118.801H42.5C44.433 118.801 46 117.234 46 115.301C46 113.368 44.433 111.801 42.5 111.801Z" fill="#F2F1F2"/>
+          <path d="M35 125.801H15C13.3431 125.801 12 127.144 12 128.801C12 130.458 13.3431 131.801 15 131.801H35C36.6569 131.801 38 130.458 38 128.801C38 127.144 36.6569 125.801 35 125.801Z" fill="#F5F4F5"/>
+        </g>
+        <path d="M23 49.3008C24.933 49.3008 26.5 47.7338 26.5 45.8008C26.5 43.8678 24.933 42.3008 23 42.3008C21.067 42.3008 19.5 43.8678 19.5 45.8008C19.5 47.7338 21.067 49.3008 23 49.3008Z" fill="#E2E1E2"/>
+        <path d="M237 137.801C239.209 137.801 241 136.01 241 133.801C241 131.592 239.209 129.801 237 129.801C234.791 129.801 233 131.592 233 133.801C233 136.01 234.791 137.801 237 137.801Z" fill="#E6E5E6"/>
+        <g filter="url(#dif_f2)">
+          <path d="M209 19.8008H45C42.7909 19.8008 41 21.5916 41 23.8008V151.801C41 154.01 42.7909 155.801 45 155.801H209C211.209 155.801 213 154.01 213 151.801V23.8008C213 21.5916 211.209 19.8008 209 19.8008Z" fill="white"/>
+          <path d="M45 20.3008H209C210.933 20.3008 212.5 21.8678 212.5 23.8008V151.801C212.5 153.734 210.933 155.301 209 155.301H45C43.067 155.301 41.5 153.734 41.5 151.801V23.8008C41.5 21.8678 43.067 20.3008 45 20.3008Z" stroke="#E4E4E4"/>
+        </g>
+        <path d="M182 71.8008H74C68.4772 71.8008 64 76.2779 64 81.8008V123.801C64 129.324 68.4772 133.801 74 133.801H182C187.523 133.801 192 129.324 192 123.801V81.8008C192 76.2779 187.523 71.8008 182 71.8008Z" stroke="#D2D1D2" stroke-width="2.5" stroke-dasharray="7 7"/>
+        <rect x="88" y="92" width="80" height="16" rx="4" fill="#F6F5F6" stroke="#C7C7C9" stroke-width="2.5"/>
+        <path d="M100 106L110 94M118 106L128 94M136 106L146 94M154 106L160 98" stroke="#D9D8D9" stroke-width="4" stroke-linecap="round"/>
+        <path d="M98 108V126M158 108V126" stroke="#C7C7C9" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M92 126H104M152 126H164" stroke="#C7C7C9" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M75 126l5.5-16 5.5 16" fill="#F6F5F6" stroke="#C7C7C9" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M77.5 119h6" stroke="#C7C7C9" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M70 126h21" stroke="#C7C7C9" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M174 126l4.5-13 4.5 13" fill="#FBFBFC" stroke="#C7C7C9" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M176 120.5h5" stroke="#C7C7C9" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M170 126h17" stroke="#C7C7C9" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M41 51.8008H213" stroke="#ECEBEC" stroke-width="2.5"/>
+        <path d="M61 39.8008C63.2091 39.8008 65 38.0099 65 35.8008C65 33.5916 63.2091 31.8008 61 31.8008C58.7909 31.8008 57 33.5916 57 35.8008C57 38.0099 58.7909 39.8008 61 39.8008Z" fill="#D9D8D9"/>
+        <path d="M75 39.8008C77.2091 39.8008 79 38.0099 79 35.8008C79 33.5916 77.2091 31.8008 75 31.8008C72.7909 31.8008 71 33.5916 71 35.8008C71 38.0099 72.7909 39.8008 75 39.8008Z" fill="#E2E1E2"/>
+        <path d="M89 39.8008C91.2091 39.8008 93 38.0099 93 35.8008C93 33.5916 91.2091 31.8008 89 31.8008C86.7909 31.8008 85 33.5916 85 35.8008C85 38.0099 86.7909 39.8008 89 39.8008Z" fill="#EBEAEB"/>
+        <path d="M191 29.8008H119C115.686 29.8008 113 32.4871 113 35.8008C113 39.1145 115.686 41.8008 119 41.8008H191C194.314 41.8008 197 39.1145 197 35.8008C197 32.4871 194.314 29.8008 191 29.8008Z" fill="#F1F0F1"/>
+        <defs>
+          <filter id="dif_f0" x="200" y="26.8008" width="56" height="68" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+            <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+            <feGaussianBlur stdDeviation="0.5" result="effect1_foregroundBlur"/>
+          </filter>
+          <filter id="dif_f1" x="0" y="98.8008" width="60" height="58" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+            <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+            <feGaussianBlur stdDeviation="0.5" result="effect1_foregroundBlur"/>
+          </filter>
+          <filter id="dif_f2" x="14.9" y="0.00078249" width="224.2" height="188.2" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+            <feOffset dy="6.3"/>
+            <feGaussianBlur stdDeviation="13.05"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 0.392157 0 0 0 0 0.392157 0 0 0 0 0.435294 0 0 0 0.2 0"/>
+            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+          </filter>
+          <linearGradient id="dif_p0" x1="206.1" y1="50.9086" x2="173.699" y2="50.9206" gradientUnits="userSpaceOnUse">
+            <stop stop-color="white"/><stop offset="1" stop-color="#F3F3F3"/>
+          </linearGradient>
+          <linearGradient id="dif_p1" x1="222.6" y1="-8.19922" x2="170.089" y2="35.6239" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#F2F2F2"/><stop offset="1" stop-color="#FEFEFE"/>
+          </linearGradient>
+          <linearGradient id="dif_p2" x1="6.47778" y1="119.407" x2="-28.3229" y2="119.424" gradientUnits="userSpaceOnUse">
+            <stop stop-color="white"/><stop offset="1" stop-color="#F3F3F3"/>
+          </linearGradient>
+          <linearGradient id="dif_p3" x1="24.2" y1="69.2553" x2="-21.0177" y2="117.025" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#F2F2F2"/><stop offset="1" stop-color="#FEFEFE"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <h1 class="nf-t">We are working to improve the portal</h1>
+      <p class="nf-s">The portal is temporarily unavailable while we make improvements.<br>Try again in a few minutes.</p>
+    </div>
+  </div></div>
+</div>
+
 <div class="ri-overlay" id="ri-overlay">
   <div class="ri-modal" role="dialog" aria-modal="true" aria-labelledby="ri-title">
     <div id="ri-form">
@@ -4587,11 +4701,8 @@
   };
   // Life Cycle detail model (phases > subphases > milestones). Source: BA-L1073 structure
   // provided by the team; phase 2 keeps the portal label Implementation for consistency.
-  // Demo data wired to BO-L1930 only.
-  const LC_DETAIL = {
-    'BO-L1930': {
-      currentM: 'QRR',
-      phases: [
+  // The template applies to EVERY operation; only the current milestone varies per op.
+  const LC_TEMPLATE = [
         { key: 'preparation', label: 'Preparation', subs: [
           { name: 'Eligibility', ms: [
             ['REQ','Request Date'],['ON','Activate/Registration Date'],['START','Official Start Date'],
@@ -4630,8 +4741,17 @@
             ['EOC','Estimated Operational Close'],['CO','Fully Justified'],['COO','Operative Close'],['CF','Financial Close']
           ]}
         ]}
-      ]
-    }
+      ];
+  // per-op current milestone overrides (acronym); every other op derives it from its stage
+  const LC_DETAIL_CUR = { 'BO-L1930': 'QRR' };
+  // stage label (cards data / legacy stages) -> template milestone acronym
+  const LC_STAGE2M = {
+    'Registered': 'ON', 'Started': 'START', 'PP Distributed': 'PPD', 'PP Approved': 'PP', 'PP Not Required': 'PP',
+    'QRR Approved': 'QRR', 'POD Distributed to QRR': 'PODDI', 'POD Approved': 'POD', 'OPC Approved': 'OPC',
+    'DLP Approved': 'DLPOPC', 'Negotiation': 'NEG', 'Approved': 'APPR',
+    'Pending Signature': 'SI', 'Pending Ratification': 'EF', 'Pending Eligibility': 'EL',
+    'Disbursing': 'DI', 'Fully Disbursed': 'FD', 'Fully Justified': 'CO',
+    'Operational Closure': 'COO', 'PCR Approved': 'PCRA'
   };
   let lcOp = null;
   const lcHash = s => { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; };
@@ -4898,9 +5018,13 @@
       if (phase === 'implementation') current = LC_STAGES.implementation.includes(row[3]) ? row[3] : 'Disbursing';
       else current = 'QRR Approved';
     }
+    // every operation renders the detail template; current milestone comes from an
+    // explicit override, the op's stage in the cards data, or the legacy current label
+    const currentM = LC_DETAIL_CUR[code] || LC_STAGE2M[ex.current] || LC_STAGE2M[row[3]]
+      || LC_STAGE2M[current] || (phaseKey === 'implementation' ? 'DI' : 'QRR');
     lcOp = {
       code, phase: phaseKey, current,
-      detail: LC_DETAIL[code] || null,
+      detail: { currentM, phases: LC_TEMPLATE },
       pp: ex.pp || (lcHash(code) % 3 === 0 ? 'PP Not Required' : 'PP Approved'),
       // estimated dates the business actually has today (extend once Naty confirms the full list)
       estApproval: phaseKey === 'preparation' ? (row[8] || null) : null,
@@ -5045,6 +5169,9 @@
     routing = true;
     try {
       const parts = (location.hash || '#/home').replace(/^#\/?/, '').split('/').filter(Boolean);
+      // full outage page: blocking overlay, closes only by navigating elsewhere
+      document.getElementById('dif-screen').classList.toggle('open', parts[0] === 'difficulties');
+      if (parts[0] === 'difficulties') return;
       if (parts[0] === 'op' && parts[1]) {
         const code = parts[1].toUpperCase();
         let phase = 'implementation';
@@ -5169,6 +5296,10 @@
     btn.classList.toggle('open', open);
     btn.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
+  // sources overflow: the closing link jumps to the canonical place instead of listing everything here
+  document.getElementById('ai-srclist').addEventListener('click', e => {
+    if (e.target.closest('#ai-allfeed')) setWsView('feed');
+  });
 
   // ===== AI summary (OP-1275): inline source refs, sources list, scope label =====
   const aiRef = (n, ev) => '<sup class="ai-ref" data-t2h="' + ev[0] + '" data-t2b="' + ev[1] + '">[' + n + ']</sup>';
@@ -5187,13 +5318,19 @@
     let range = fmtD(cited[cited.length - 1].date) + ' - ' + fmtD(cited[0].date);
     let text;
     if (code === 'BR-L1587' && !isImpl) {
-      // demo operation: rich narrative citing the curated feed events, in narrative order
+      // demo operation: rich narrative citing the curated feed events, in narrative order.
+      // deliberately cites MANY events to exercise the sources overflow protections
+      // (scroll after ~8 rows + link to the Activity feed).
       const find = n => feed.find(e => e.name === n);
-      cited = [find('Project Profile Approved'), find('Technical Mission Completed'), find('Results Matrix Agreement Logged')];
+      cited = [find('Project Profile Approved'), find('Technical Mission Completed'), find('Results Matrix Agreement Logged'),
+               find('Results Framework Baseline Registered'), find('Preparation Funds Authorized'), find('Draft Contract Clauses Reviewed'),
+               find('Procurement Plan Draft Received'), find('ESG Screening Completed'), find('Risk Screening Completed'),
+               find('Integrity Due Diligence Completed')].filter(Boolean);
       events = cited.map(e => [e.name, fmtD(e.date)]);
-      range = fmtD(cited[0].date) + ' - ' + fmtD(cited[2].date);
+      const ds = cited.map(e => e.date.getTime());
+      range = fmtD(new Date(Math.min(...ds))) + ' - ' + fmtD(new Date(Math.max(...ds)));
       const prepBase = parseInt((row[10] || '$95,000,000').replace(/[^0-9]/g, ''), 10);
-      text = `In the last 180 days, ${code} (${title}) advanced through its preparation milestones: the Project Profile was approved${aiRef(1, events[0])} and the operation currently stands at ${row[3]}. The team, led by ${row[7]}, completed a technical mission with the executing agency${aiRef(2, events[1])} and agreed the results matrix${aiRef(3, events[2])}, with an IDB envelope of $${fmt(prepBase)} under discussion with the authorities of Brazil. <span class="ai-inf"${AI_INF_TIP}>The sgDELTA questionnaire and the QRR readiness checks are expected to follow ahead of POD distribution</span>.`;
+      text = `In the last 180 days, ${code} (${title}) advanced through its preparation milestones: the Project Profile was approved${aiRef(1, events[0])} and the operation currently stands at ${row[3]}. The team, led by ${row[7]}, completed a technical mission with the executing agency${aiRef(2, events[1])}, agreed the results matrix${aiRef(3, events[2])} and registered its baseline indicators${aiRef(4, events[3])}. Preparation funds were authorized${aiRef(5, events[4])}, the draft contract clauses moved into legal review${aiRef(6, events[5])} and a draft procurement plan was received from the executing agency${aiRef(7, events[6])}, with an IDB envelope of $${fmt(prepBase)} under discussion with the authorities of Brazil. The ESG screening${aiRef(8, events[7])}, the risk screening${aiRef(9, events[8])} and the integrity due diligence${aiRef(10, events[9])} were also completed during the period. <span class="ai-inf"${AI_INF_TIP}>The sgDELTA questionnaire and the QRR readiness checks are expected to follow ahead of POD distribution</span>.`;
     } else if (isImpl) {
       text = `In the last 180 days, ${code} (${title}) recorded steady activity across its execution systems. The most recent events are ${events[0][0]} on ${events[0][1]}${aiRef(1, events[0])} and ${events[1][0]}${aiRef(2, events[1])}. Earlier in the period, the feed also logged ${events[2][0]}${aiRef(3, events[2])}, ${events[3][0]}${aiRef(4, events[3])}, and ${events[4][0]}${aiRef(5, events[4])}. <span class="ai-inf"${AI_INF_TIP}>Based on this pace, execution activity is expected to continue at a similar rhythm in the coming weeks</span>.`;
     } else {
@@ -5202,8 +5339,11 @@
     // sources list, scope label and clean text for Copy
     aiEvents = events;
     document.getElementById('ai-srcn').textContent = events.length;
-    document.getElementById('ai-srclist').innerHTML = events.map((ev, i) =>
+    // over the editorial cap (8), the list scrolls and closes with a link to the canonical place
+    const srcRows = events.map((ev, i) =>
       '<div class="row"><span class="n">[' + (i + 1) + ']</span><span>' + ev[0] + ' <span class="d">&middot; ' + ev[1] + '</span></span></div>').join('');
+    document.getElementById('ai-srclist').innerHTML = '<div class="scr">' + srcRows + '</div>'
+      + (events.length > 8 ? '<button class="allrow" id="ai-allfeed">View all activity in the Activity feed <span class="msr">arrow_forward</span></button>' : '');
     document.getElementById('ai-meta').textContent =
       'Based on ' + events.length + ' events from the Activity feed · ' + range
       + (window.AI_LAST_UPDATED ? ' · Updated ' + window.AI_LAST_UPDATED : '');
