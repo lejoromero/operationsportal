@@ -478,6 +478,7 @@
     background:#fff;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.18);padding:8px;
   }
   .crumb-menu.open{display:block;}
+  .crumb-item .chip-soon{height:18px;padding:0 6px;font-size:9.5px;border-radius:4px;margin-left:10px;flex:0 0 auto;}
   .crumb-item{
     display:flex;align-items:center;gap:12px;width:100%;padding:12px;
     border:0;background:none;border-radius:8px;cursor:pointer;
@@ -909,6 +910,16 @@
     cursor:pointer;flex:0 0 auto;
   }
   .filter-dd .msr{font-size:18px;color:var(--icon-default);}
+  /* long single-select values: cap the trigger, ellipsize, full text via tooltip */
+  .filter-dd .flabel{max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;}
+  .filter-dd{position:relative;}
+  .filter-dd[data-tip]::after{
+    content:attr(data-tip);position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);
+    background:#1F1E1E;color:#fff;font-size:11px;line-height:14px;padding:5px 8px;border-radius:4px;
+    width:max-content;max-width:260px;white-space:normal;text-align:left;
+    opacity:0;pointer-events:none;transition:opacity 0.12s ease;z-index:200;
+  }
+  .filter-dd[data-tip]:hover::after,.filter-dd[data-tip]:focus-visible::after{opacity:1;}
   .filter-dd:hover{background:var(--color-surface-cont-lowest);}
   .filter-dd.disabled{color:var(--color-text-placeholder);cursor:default;}
   .filter-dd.disabled .msr{color:var(--color-outline);}
@@ -920,6 +931,7 @@
     transition:background 0.13s ease,color 0.13s ease;
   }
   .filter-dd:not(.disabled):hover .cnt, .filter-dd.dd-open .cnt, .filter-dd .cnt.has{background:var(--color-primary);color:#FFFFFF;}
+  .cnt.zero{display:none;}
   .filter-dd:not(.disabled):hover{border-color:#67676A;}
 
   /* Count + sort row */
@@ -1436,19 +1448,45 @@
   .lc-band.active{background:linear-gradient(180deg,#F4FAF7 0%,#FFFFFF 72%);}
   .lc-band.upcoming{background:#FBFBFC;}
   .lc-band.active{background:#FBFDFB;}
-  .lc-band .bh{position:sticky;left:12px;z-index:2;width:max-content;display:flex;align-items:center;gap:6px;margin:0 13px 16px;padding:3px 7px 3px 5px;border-radius:5px;background:rgba(255,255,255,.94);font-size:10px;line-height:14px;font-weight:700;letter-spacing:.35px;text-transform:uppercase;color:#67676A;}
-  .lc-band.active .bh{color:#00693D;background:#EDF8F2;}
+  .lc-band .bh{position:sticky;left:var(--bhL,12px);z-index:2;transition:left .2s ease;width:max-content;min-height:32px;display:flex;align-items:center;gap:6px;margin:0 13px 16px;padding:0 11px 0 9px;border-radius:6px;border:1px solid var(--color-outline-variant);background:#FFFFFF;font-size:10px;line-height:14px;font-weight:700;letter-spacing:.35px;text-transform:uppercase;color:#67676A;}
+  /* option A: one hue, different weights. Active phase = solid Success (the present carries
+     the strongest ink); completed = Success container with check; upcoming = neutral. */
+  .lc-band.active .bh{color:#00693D;background:#E6F6EE;border-color:#CBE7D7;}
+  .lc-band.complete .bh{color:#FFFFFF;background:#00693D;border-color:#00693D;}
   .lc-band .bh{cursor:pointer;}
   .lc-band .bh:hover{background:#F1F0F1;}
-  .lc-band.active .bh:hover{background:#DFF0E7;}
+  .lc-band.active .bh:hover{background:#DFF2E8;}
+  .lc-band.complete .bh:hover{background:#005A34;}
   .lc-band .bh:focus-visible{outline:2px solid #007EB6;outline-offset:2px;}
   .lc-sub-h{cursor:pointer;}
   .lc-sub-h:hover{color:#3C3B3B;}
   .lc-subgrp.active .lc-sub-h:hover{color:#00552F;}
   .lc-sub-h:focus-visible{outline:2px solid #007EB6;outline-offset:2px;border-radius:4px;}
   .lc-band .bh svg{width:14px;height:14px;display:block;color:currentColor;flex:0 0 auto;}
+  /* B2 edge hints: adjacent phase chips anchored to the strip edges, on the header lane */
+  .lc-scrollwrap{position:relative;}
+  /* phase hints: standard outline button (white, hover surface-cont-lowest); color never fakes a state */
+  .lc-hint{position:absolute;top:20px;z-index:6;display:none;align-items:center;gap:6px;min-height:32px;padding:0 11px;border:1px solid var(--color-outline-variant);background:var(--color-surface);color:#43424B;font-family:var(--font-ui);font-size:10px;line-height:14px;font-weight:700;letter-spacing:.35px;text-transform:uppercase;cursor:pointer;}
+  .lc-hint.show{display:inline-flex;}
+  .lc-hint:hover{background:var(--color-surface-cont-lowest);}
+  .lc-hint svg{width:14px;height:14px;display:block;color:var(--icon-default);flex:0 0 auto;}
+  .lc-hint .ar{font-size:12px;line-height:1;color:#0E6E9E;transition:transform .15s cubic-bezier(0.2,0,0,1);}
+  .lc-hint .hck{color:#00854D;font-size:11px;line-height:1;font-weight:700;}
+  .lc-hint.edge-r{right:0;border-radius:5px 0 0 5px;border-right:none;}
+  .lc-hint.edge-l{left:0;border-radius:0 5px 5px 0;border-left:none;}
+  .lc-hint.edge-r:hover .ar{transform:translateX(2px);}
+  .lc-hint.edge-l:hover .ar{transform:translateX(-2px);}
+  /* current chip: neutral outline like the phase hints; only the dot carries the state */
+  .lc-hint .cdot{width:8px;height:8px;border-radius:50%;border:2px solid #00854D;background:#FFFFFF;flex:0 0 auto;position:relative;}
+  .lc-hint .cdot::after{content:'';position:absolute;inset:-5px;border-radius:50%;border:2px solid rgba(0,133,77,.45);animation:lcCurPulse 2s cubic-bezier(0.2,0,0,1) infinite;}
+  @keyframes lcCurPulse{0%{transform:scale(.55);opacity:1;}70%{transform:scale(1.1);opacity:0;}100%{transform:scale(1.1);opacity:0;}}
+  .lc-hint:focus-visible{outline:2px solid #00629D;outline-offset:2px;}
+  @media (prefers-reduced-motion: reduce){.lc-hint .ar{transition:none;}.lc-hint .cdot::after{animation:none;transform:scale(.8);opacity:.5;}}
+  .lct .bh .bh-ck{color:#00854D;font-size:12px;line-height:1;font-weight:700;}
+  .lc-band.complete .bh .bh-ck{color:#FFFFFF;}
   .lc-band .bh .cnt{font-weight:600;color:#8A8888;text-transform:none;letter-spacing:0;}
   .lc-band.active .bh .cnt{color:#3E8A66;}
+  .lc-band.complete .bh .cnt{color:rgba(255,255,255,.85);}
   .lc-brow{display:flex;align-items:flex-start;min-width:max-content;}
   .lcn{position:relative;display:flex;flex-direction:column;align-items:center;min-width:170px;max-width:190px;border-radius:8px;outline:none;scroll-snap-align:center;transition:transform .26s cubic-bezier(0.33,0,0.15,1);}
   .lcn:focus-visible{box-shadow:0 0 0 2px #007EB6;}
@@ -1907,10 +1945,11 @@
   /* ===== Full portal outage page (#/difficulties): blocking, no actions ===== */
   .dif-screen{position:fixed;inset:0;z-index:9500;background:#EEF0F2;display:none;flex-direction:column;}
   .dif-screen.open{display:flex;}
-  .dif-top{height:56px;flex:0 0 auto;background:var(--color-secondary);display:flex;align-items:center;padding-right:22px;}
-  .dif-brandbox{height:100%;background:#FFFFFF;display:flex;align-items:center;gap:12px;padding:0 28px 0 22px;flex:0 0 auto;}
-  .dif-brandbox svg{width:42px;height:17px;}
-  .dif-name{font-size:14px;font-weight:700;color:#272626;white-space:nowrap;}
+  .dif-top{height:50px;flex:0 0 auto;background:var(--color-secondary);display:flex;align-items:center;padding-right:24px;}
+  .dif-brandbox{height:100%;background:#FFFFFF;display:flex;align-items:center;gap:10px;padding:0 16px;flex:0 0 auto;border-bottom:1px solid var(--border-default);cursor:pointer;}
+  .dif-brandbox:focus-visible{outline:2px solid #00629D;outline-offset:-2px;}
+  .dif-brandbox svg{width:60px;height:23px;display:block;}
+  .dif-name{font-size:14px;font-weight:500;color:var(--color-text-default);white-space:nowrap;}
   .dif-avatar{width:32px;height:32px;border-radius:50%;background:#E6F6FC;color:var(--color-secondary);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;border:2px solid rgba(255,255,255,0.25);margin-left:auto;flex:0 0 auto;}
   .dif-body{flex:1;display:flex;padding:22px 26px 26px;overflow:auto;}
   .dif-card{flex:1;background:#FFFFFF;border:1px solid #E4E4E4;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:48px 24px;}
@@ -2270,7 +2309,7 @@
         <span class="nav-ic"><span class="ic-outline"><svg viewBox="60.0 182.0 24 24" fill="currentColor" aria-hidden="true"><path d="M67.4121 193.608C67.6838 193.066 67.9733 192.542 68.2807 192.039C68.5882 191.536 68.927 191.039 69.2972 190.549L67.8311 190.255C67.7798 190.242 67.7301 190.244 67.6822 190.26C67.634 190.276 67.5907 190.303 67.5523 190.341L65.2905 192.602C65.2714 192.621 65.2649 192.644 65.2713 192.669C65.2778 192.695 65.2938 192.714 65.3195 192.727L67.4121 193.608ZM79.1549 186.445C77.8035 186.516 76.5041 186.856 75.2569 187.464C74.0098 188.071 72.8579 188.903 71.801 189.959C71.0822 190.678 70.4481 191.436 69.8985 192.235C69.3489 193.034 68.9185 193.806 68.6072 194.549L71.4456 197.371C72.1898 197.06 72.9632 196.629 73.7658 196.08C74.5683 195.531 75.329 194.897 76.0478 194.179C77.1047 193.123 77.937 191.975 78.5449 190.737C79.1528 189.499 79.4926 188.204 79.5644 186.854C79.5644 186.8 79.5566 186.748 79.5411 186.697C79.5258 186.646 79.4964 186.599 79.4529 186.556C79.4093 186.512 79.3622 186.483 79.3116 186.468C79.2609 186.452 79.2087 186.445 79.1549 186.445ZM73.2287 191.021C73.2287 190.537 73.3978 190.126 73.7361 189.788C74.0743 189.45 74.4881 189.281 74.9774 189.281C75.4668 189.281 75.8806 189.45 76.2187 189.788C76.5569 190.126 76.726 190.537 76.726 191.021C76.726 191.505 76.5569 191.916 76.2187 192.254C75.8806 192.592 75.4668 192.761 74.9774 192.761C74.4881 192.761 74.0743 192.592 73.7361 192.254C73.3978 191.916 73.2287 191.505 73.2287 191.021ZM72.3871 198.575L73.2692 200.682C73.282 200.708 73.3011 200.722 73.3266 200.725C73.3523 200.728 73.3747 200.72 73.3941 200.701L75.6558 198.45C75.6941 198.412 75.7214 198.368 75.7375 198.321C75.7535 198.272 75.7551 198.223 75.7423 198.172L75.4483 196.706C74.9576 197.076 74.4606 197.412 73.9571 197.715C73.4535 198.017 72.9302 198.303 72.3871 198.575ZM80.992 185.972C81.0548 187.72 80.747 189.38 80.0687 190.953C79.3904 192.526 78.3466 194.017 76.9374 195.425C76.9054 195.457 76.875 195.486 76.8462 195.512C76.8174 195.537 76.787 195.566 76.755 195.598L77.2162 197.868C77.2763 198.169 77.2612 198.462 77.1709 198.746C77.0807 199.03 76.9285 199.279 76.7145 199.493L73.7495 202.456C73.5254 202.68 73.2544 202.765 72.9367 202.71C72.6189 202.655 72.3998 202.477 72.2794 202.176L70.919 198.98L67.0124 195.066L63.8149 193.706C63.5138 193.586 63.3347 193.367 63.2778 193.05C63.2208 192.732 63.3044 192.461 63.5286 192.237L66.4936 189.274C66.7076 189.06 66.9593 188.909 67.2488 188.822C67.5382 188.735 67.8335 188.722 68.1346 188.782L70.4058 189.243C70.438 189.211 70.4652 189.182 70.4875 189.156C70.51 189.131 70.5372 189.102 70.5692 189.07C71.9785 187.662 73.47 186.617 75.0438 185.935C76.6176 185.254 78.2788 184.945 80.0275 185.008C80.1479 185.018 80.2667 185.048 80.3837 185.096C80.501 185.145 80.6064 185.216 80.7 185.31C80.7934 185.403 80.8629 185.507 80.9083 185.621C80.9538 185.735 80.9817 185.852 80.992 185.972ZM64.6335 197.824C65.1203 197.338 65.7138 197.093 66.4139 197.091C67.1139 197.09 67.7072 197.332 68.194 197.818C68.6808 198.305 68.9217 198.898 68.9167 199.598C68.9116 200.297 68.6656 200.891 68.1788 201.377C67.5011 202.054 66.7018 202.466 65.7806 202.613C64.8595 202.76 63.9326 202.889 63 203C63.1116 202.062 63.2423 201.134 63.3922 200.216C63.5421 199.299 63.9559 198.501 64.6335 197.824ZM65.7019 198.886C65.4123 199.176 65.2118 199.52 65.1004 199.919C64.989 200.319 64.9031 200.73 64.8428 201.152C65.2657 201.092 65.677 201.007 66.0767 200.898C66.4763 200.788 66.8209 200.589 67.1104 200.3C67.3102 200.1 67.4153 199.86 67.4256 199.58C67.4358 199.301 67.3409 199.061 67.1411 198.861C66.9412 198.661 66.7013 198.566 66.4214 198.574C66.1416 198.582 65.9018 198.686 65.7019 198.886Z"/></svg></span><span class="ic-filled"><svg viewBox="98.0 182.0 24 24" fill="currentColor" aria-hidden="true"><path d="M104.544 194.22C104.968 193.206 105.465 192.234 106.036 191.306C106.608 190.377 107.245 189.495 107.948 188.66L106.602 188.378C106.303 188.318 106.013 188.332 105.73 188.418C105.448 188.505 105.201 188.654 104.989 188.866L102.047 191.808C101.824 192.031 101.74 192.299 101.795 192.615C101.85 192.93 102.026 193.147 102.325 193.267L104.544 194.22ZM118.041 185.001C116.404 184.976 114.854 185.315 113.39 186.018C111.927 186.721 110.617 187.65 109.46 188.807C108.717 189.549 108.062 190.355 107.494 191.223C106.926 192.091 106.425 193.002 105.991 193.957C105.909 194.153 105.868 194.353 105.868 194.556C105.868 194.761 105.944 194.939 106.096 195.091L108.918 197.904C109.071 198.056 109.247 198.134 109.448 198.137C109.649 198.14 109.847 198.101 110.043 198.018C110.998 197.591 111.909 197.09 112.777 196.516C113.645 195.941 114.451 195.283 115.193 194.54C116.35 193.384 117.279 192.073 117.982 190.61C118.685 189.146 119.024 187.596 118.999 185.959C118.999 185.839 118.972 185.723 118.919 185.61C118.865 185.497 118.792 185.394 118.699 185.301C118.607 185.208 118.504 185.135 118.39 185.081C118.277 185.028 118.161 185.001 118.041 185.001ZM111.672 190.596C111.672 190.113 111.839 189.703 112.175 189.368C112.51 189.032 112.92 188.864 113.404 188.864C113.887 188.864 114.297 189.032 114.633 189.368C114.968 189.703 115.136 190.113 115.136 190.596C115.136 191.08 114.968 191.49 114.633 191.825C114.297 192.161 113.887 192.329 113.404 192.329C112.92 192.329 112.51 192.161 112.175 191.825C111.839 191.49 111.672 191.08 111.672 190.596ZM109.77 199.456L110.724 201.675C110.843 201.974 111.061 202.153 111.376 202.213C111.691 202.272 111.96 202.191 112.182 201.969L115.124 199.027C115.337 198.814 115.486 198.563 115.572 198.272C115.659 197.982 115.672 197.688 115.612 197.389L115.346 196.052C114.5 196.755 113.616 197.392 112.693 197.964C111.769 198.535 110.795 199.032 109.77 199.456ZM102.621 197.877C103.104 197.394 103.69 197.151 104.38 197.15C105.069 197.148 105.655 197.388 106.138 197.871C106.621 198.354 106.863 198.94 106.863 199.63C106.863 200.32 106.621 200.906 106.138 201.389C105.466 202.061 104.673 202.47 103.759 202.616C102.845 202.761 101.925 202.889 101 203C101.111 202.068 101.243 201.147 101.397 200.236C101.55 199.326 101.958 198.539 102.621 197.877Z"/><path d="M104.544 194.22C104.968 193.206 105.465 192.234 106.036 191.306C106.608 190.377 107.245 189.495 107.948 188.66L106.602 188.378C106.303 188.318 106.013 188.332 105.73 188.418C105.448 188.505 105.201 188.654 104.989 188.866L102.047 191.808C101.824 192.031 101.74 192.299 101.795 192.615C101.85 192.93 102.026 193.147 102.325 193.267L104.544 194.22ZM118.041 185.001C116.404 184.976 114.854 185.315 113.39 186.018C111.927 186.721 110.617 187.65 109.46 188.807C108.717 189.549 108.062 190.355 107.494 191.223C106.926 192.091 106.425 193.002 105.991 193.957C105.909 194.153 105.868 194.353 105.868 194.556C105.868 194.761 105.944 194.939 106.096 195.091L108.918 197.904C109.071 198.056 109.247 198.134 109.448 198.137C109.649 198.14 109.847 198.101 110.043 198.018C110.998 197.591 111.909 197.09 112.777 196.516C113.645 195.941 114.451 195.283 115.193 194.54C116.35 193.384 117.279 192.073 117.982 190.61C118.685 189.146 119.024 187.596 118.999 185.959C118.999 185.839 118.972 185.723 118.919 185.61C118.865 185.497 118.792 185.394 118.699 185.301C118.607 185.208 118.504 185.135 118.39 185.081C118.277 185.028 118.161 185.001 118.041 185.001ZM111.672 190.596C111.672 190.113 111.839 189.703 112.175 189.368C112.51 189.032 112.92 188.864 113.404 188.864C113.887 188.864 114.297 189.032 114.633 189.368C114.968 189.703 115.136 190.113 115.136 190.596C115.136 191.08 114.968 191.49 114.633 191.825C114.297 192.161 113.887 192.329 113.404 192.329C112.92 192.329 112.51 192.161 112.175 191.825C111.839 191.49 111.672 191.08 111.672 190.596ZM109.77 199.456L110.724 201.675C110.843 201.974 111.061 202.153 111.376 202.213C111.691 202.272 111.96 202.191 112.182 201.969L115.124 199.027C115.337 198.814 115.486 198.563 115.572 198.272C115.659 197.982 115.672 197.688 115.612 197.389L115.346 196.052C114.5 196.755 113.616 197.392 112.693 197.964C111.769 198.535 110.795 199.032 109.77 199.456ZM102.621 197.877C103.104 197.394 103.69 197.151 104.38 197.15C105.069 197.148 105.655 197.388 106.138 197.871C106.621 198.354 106.863 198.94 106.863 199.63C106.863 200.32 106.621 200.906 106.138 201.389C105.466 202.061 104.673 202.47 103.759 202.616C102.845 202.761 101.925 202.889 101 203C101.111 202.068 101.243 201.147 101.397 200.236C101.55 199.326 101.958 198.539 102.621 197.877Z"/></svg></span></span> Implementation
       </button>
       <button class="nav-item" data-screen="closing">
-        <span class="nav-ic"><span class="ic-outline"><svg viewBox="60.0 228.0 24 24" fill="currentColor" aria-hidden="true"><path d="M70.85 244.219L76.1443 238.9L75.1 237.856L70.85 242.096L68.725 239.981L67.6558 241.05L70.85 244.219ZM64.3077 247.5C63.8026 247.5 63.375 247.325 63.025 246.975C62.675 246.625 62.5 246.197 62.5 245.692V234.308C62.5 233.803 62.675 233.375 63.025 233.025C63.375 232.675 63.8026 232.5 64.3077 232.5H69.798L71.798 234.5H79.6923C80.1974 234.5 80.625 234.675 80.975 235.025C81.325 235.375 81.5 235.803 81.5 236.308V245.692C81.5 246.197 81.325 246.625 80.975 246.975C80.625 247.325 80.1974 247.5 79.6923 247.5H64.3077ZM64.3077 246H79.6923C79.7821 246 79.8558 245.971 79.9135 245.913C79.9712 245.856 80 245.782 80 245.692V236.308C80 236.218 79.9712 236.144 79.9135 236.087C79.8558 236.029 79.7821 236 79.6923 236H71.1845L69.1845 234H64.3077C64.2179 234 64.1442 234.029 64.0865 234.087C64.0288 234.144 64 234.218 64 234.308V245.692C64 245.782 64.0288 245.856 64.0865 245.913C64.1442 245.971 64.2179 246 64.3077 246Z"/></svg></span><span class="ic-filled"><svg viewBox="98.0 228.0 24 24" fill="currentColor" aria-hidden="true"><path d="M108.85 244.575L114.5 238.9L113.1 237.5L108.85 241.75L106.725 239.625L105.3 241.05L108.85 244.575ZM102 248C101.45 248 100.979 247.804 100.588 247.413C100.196 247.021 100 246.55 100 246V234C100 233.45 100.196 232.979 100.588 232.588C100.979 232.196 101.45 232 102 232H108L110 234H118C118.55 234 119.021 234.196 119.413 234.588C119.804 234.979 120 235.45 120 236V246C120 246.55 119.804 247.021 119.413 247.413C119.021 247.804 118.55 248 118 248H102Z"/></svg></span></span> <span class="lb">Closing</span><span class="chip-soon">Coming soon</span>
+        <span class="nav-ic"><span class="ic-outline"><svg viewBox="60.0 228.0 24 24" fill="currentColor" aria-hidden="true"><path d="M70.85 244.219L76.1443 238.9L75.1 237.856L70.85 242.096L68.725 239.981L67.6558 241.05L70.85 244.219ZM64.3077 247.5C63.8026 247.5 63.375 247.325 63.025 246.975C62.675 246.625 62.5 246.197 62.5 245.692V234.308C62.5 233.803 62.675 233.375 63.025 233.025C63.375 232.675 63.8026 232.5 64.3077 232.5H69.798L71.798 234.5H79.6923C80.1974 234.5 80.625 234.675 80.975 235.025C81.325 235.375 81.5 235.803 81.5 236.308V245.692C81.5 246.197 81.325 246.625 80.975 246.975C80.625 247.325 80.1974 247.5 79.6923 247.5H64.3077ZM64.3077 246H79.6923C79.7821 246 79.8558 245.971 79.9135 245.913C79.9712 245.856 80 245.782 80 245.692V236.308C80 236.218 79.9712 236.144 79.9135 236.087C79.8558 236.029 79.7821 236 79.6923 236H71.1845L69.1845 234H64.3077C64.2179 234 64.1442 234.029 64.0865 234.087C64.0288 234.144 64 234.218 64 234.308V245.692C64 245.782 64.0288 245.856 64.0865 245.913C64.1442 245.971 64.2179 246 64.3077 246Z"/></svg></span><span class="ic-filled"><svg viewBox="98.0 228.0 24 24" fill="currentColor" aria-hidden="true"><path d="M108.85 244.575L114.5 238.9L113.1 237.5L108.85 241.75L106.725 239.625L105.3 241.05L108.85 244.575ZM102 248C101.45 248 100.979 247.804 100.588 247.413C100.196 247.021 100 246.55 100 246V234C100 233.45 100.196 232.979 100.588 232.588C100.979 232.196 101.45 232 102 232H108L110 234H118C118.55 234 119.021 234.196 119.413 234.588C119.804 234.979 120 235.45 120 236V246C120 246.55 119.804 247.021 119.413 247.413C119.021 247.804 118.55 248 118 248H102Z"/></svg></span></span> <span class="lb">Closure</span><span class="chip-soon">Coming soon</span>
       </button>
     </nav>
   </aside>
@@ -2713,16 +2752,17 @@
         </div>
         <div class="filters-group">
           <div class="dd-wrap">
-            <button class="filter-dd" data-menu="pipeline-menu"><span id="pipeline-label">All pipeline</span> <span class="msr">expand_more</span></button>
-            <div class="menu" id="pipeline-menu" data-kind="single-label" data-default="All pipeline">
-              <button class="menu-item selected" data-val="All pipeline">All pipeline<span class="mcheck"><span class="msr">check</span></span></button>
+            <button class="filter-dd" data-menu="pipeline-menu"><span class="flabel" id="pipeline-label">All pipelines</span> <span class="msr">expand_more</span></button>
+            <div class="menu" id="pipeline-menu" data-kind="single-label" data-default="All pipelines">
+              <button class="menu-item selected" data-val="All pipelines">All pipelines<span class="mcheck"><span class="msr">check</span></span></button>
               <button class="menu-item" data-val="Pipeline A">Pipeline A<span class="mcheck"><span class="msr">check</span></span></button>
               <button class="menu-item" data-val="Pipeline B">Pipeline B<span class="mcheck"><span class="msr">check</span></span></button>
             </div>
           </div>
           <div class="dd-wrap">
-            <button class="filter-dd" data-menu="products-menu">All products <span class="msr">expand_more</span></button>
+            <button class="filter-dd" data-menu="products-menu"><span class="flabel" id="products-label">All products</span> <span class="msr">expand_more</span></button>
             <div class="menu" id="products-menu" data-kind="single-chip" data-group="products">
+              <button class="menu-item selected" data-all="1">All products<span class="mcheck"><span class="msr">check</span></span></button>
               <button class="menu-item" data-chip="LON"><span class="mcode">LON</span>Loan<span class="mcheck"><span class="msr">check</span></span></button>
               <button class="menu-item" data-chip="GUA"><span class="mcode">GUA</span>Guarantee<span class="mcheck"><span class="msr">check</span></span></button>
               <button class="menu-item" data-chip="GRF"><span class="mcode">GRF</span>Grant Financing<span class="mcheck"><span class="msr">check</span></span></button>
@@ -2731,15 +2771,15 @@
             </div>
           </div>
           <div class="dd-wrap collapsible">
-            <button class="filter-dd disabled" id="instruments-trigger" data-menu="instruments-menu">Instruments <span class="cnt" data-count="instruments">0</span> <span class="msr">expand_more</span></button>
+            <button class="filter-dd disabled" id="instruments-trigger" aria-disabled="true" data-menu="instruments-menu"><span class="flabel" id="instruments-label">All instruments</span> <span class="msr">expand_more</span></button>
             <div class="menu" id="instruments-menu"></div>
           </div>
           <div class="dd-wrap collapsible">
-            <button class="filter-dd disabled" id="modalities-trigger" data-menu="modalities-menu">Modalities <span class="cnt" data-count="modalities">0</span> <span class="msr">expand_more</span></button>
+            <button class="filter-dd disabled" id="modalities-trigger" data-menu="modalities-menu"><span class="flabel" id="modalities-label">All modalities</span> <span class="msr">expand_more</span></button>
             <div class="menu" id="modalities-menu"></div>
           </div>
           <div class="dd-wrap collapsible">
-            <button class="filter-dd" data-menu="stages-menu">All stages <span class="cnt" data-count="stages">0</span> <span class="msr">expand_more</span></button>
+            <button class="filter-dd" data-menu="stages-menu"><span class="flabel" id="stages-label">All stages</span> <span class="cnt" data-count="stages">0</span> <span class="msr">expand_more</span></button>
             <div class="menu right" id="stages-menu"></div>
           </div>
           <button class="filter-dd" id="btn-more-filters">More filters <span class="cnt js-drawer-count">0</span></button>
@@ -2967,7 +3007,7 @@
             <div class="st todo"><span class="chipx" style="background:var(--color-surface);border:1px solid var(--border-default);">Pending Eligibility</span><span class="sub">07 Nov 2025</span></div>
             <div class="st current"><span class="chipx">Disbursing</span><span class="sub">Currently</span></div>
             <div class="st todo"><span class="chipx">Fully Disbursed</span></div>
-            <div class="st phase"><span class="chipx"><span class="msr">inventory</span>Closing</span></div>
+            <div class="st phase"><span class="chipx"><span class="msr">inventory</span>Closure</span></div>
             <div class="st todo"><span class="chipx">Closed Pending AFRs</span></div>
           </div>
         </div>
@@ -3249,7 +3289,7 @@
 <!-- Full portal outage page: reachable at #/difficulties. Blocking by design: no navigation, no actions. -->
 <div class="dif-screen" id="dif-screen" role="dialog" aria-modal="true" aria-label="Portal temporarily unavailable">
   <div class="dif-top">
-    <div class="dif-brandbox"><svg width="42" height="17" viewBox="0 0 60 23" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="IDB">
+    <div class="dif-brandbox" id="dif-home" role="button" tabindex="0" aria-label="Go to Home"><svg width="60" height="23" viewBox="0 0 60 23" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="IDB">
       <g clip-path="url(#clip0_5808_43045)">
         <path d="M57.5072 10.4399C58.5916 9.70533 59.1192 8.7059 59.1192 7.3964V7.35501C59.1192 6.31644 58.7768 5.46979 58.0731 4.76612C57.2024 3.89538 55.8553 3.4348 54.1785 3.4348H47.3187V18.1757H54.3418C57.8835 18.1757 59.9154 16.6652 59.9154 14.0312V13.9913C59.9154 12.2972 59.1689 11.1879 57.5072 10.4399ZM54.3418 14.9704H50.8295V12.2754H54.2395C55.6347 12.2754 56.3422 12.7217 56.3422 13.6022V13.6429C56.3422 14.5241 55.6694 14.9697 54.3418 14.9697V14.9704ZM50.8295 9.21389V6.64081H53.7089C54.5473 6.64081 55.5467 6.85605 55.5467 7.88558V7.92622C55.5467 8.77965 54.8596 9.21314 53.5042 9.21314H50.8295V9.21389Z" fill="#3C3B3B"/>
         <path d="M38.4457 3.43555H32.647L32.6508 18.1772H38.4457C40.6523 18.1764 42.6534 17.4208 44.0826 16.0489C45.4899 14.698 46.2643 12.8361 46.2643 10.8056V10.7642C46.2643 6.51738 42.9755 3.43555 38.445 3.43555H38.4457ZM42.5292 10.8056V10.8463C42.5292 13.2643 40.8878 14.8899 38.4457 14.8899H36.2399V6.72284H38.4457C40.8878 6.72284 42.5292 8.36347 42.5292 10.8056Z" fill="#3C3B3B"/>
@@ -3399,7 +3439,7 @@
     <h2>Pinned operations</h2>
     <button class="icon-btn" id="pinmodal-close" aria-label="Close"><span class="msr">close</span></button>
   </div>
-  <p class="pm-sub">You can pin up to 10 operations across Preparation, Implementation, and Closing</p>
+  <p class="pm-sub">You can pin up to 10 operations across Preparation, Implementation, and Closure</p>
   <div class="pm-count" id="pm-count">10 of 10 pinned</div>
   <div class="pm-list" id="pm-list"></div>
 </div>
@@ -3451,7 +3491,7 @@
           <span class="cnt">0</span>
           <span class="msr">expand_more</span>
         </div>
-        <div class="f-section-body"><div class="f-search-card"><div class="combo" id="dcombo-pipeline"><div class="f-search combo-trigger"><span class="val" id="dcombo-pipeline-val">All pipeline</span><span class="msr">expand_more</span></div><div class="combo-panel"></div><div class="combo-chips"></div></div></div></div>
+        <div class="f-section-body"><div class="f-search-card"><div class="combo" id="dcombo-pipeline"><div class="f-search combo-trigger"><span class="val" id="dcombo-pipeline-val">All pipelines</span><span class="msr">expand_more</span></div><div class="combo-panel"></div><div class="combo-chips"></div></div></div></div>
       </div>
       <div class="f-section bar-collapsed-only" data-fsection="products">
         <div class="f-section-head" data-toggle="products">
@@ -3979,15 +4019,13 @@
       e.stopPropagation();
       document.querySelectorAll('#pipeline-menu .menu-item').forEach(i => i.classList.remove('selected'));
       item.classList.add('selected');
-      document.getElementById('pipeline-label').textContent = item.dataset.val;
-      applied.pipeline = item.dataset.val === 'All pipeline' ? 'all' : item.dataset.val.replace('Pipeline ', '');
+      applied.pipeline = item.dataset.val === 'All pipelines' ? 'all' : item.dataset.val.replace('Pipeline ', '');
       closeMenus();
       refresh();
     });
   });
 
   // ---------------- Product / Instrument / Modality cascade ----------------
-  const instTrigger = document.getElementById('instruments-trigger');
   const modTrigger = document.getElementById('modalities-trigger');
 
   const buildSingleMenu = (menuId, items, onPick) => {
@@ -4009,32 +4047,49 @@
 
   const setEnabled = (btn, on) => { btn.classList.toggle('disabled', !on); };
 
+  // setProduct centralizes the product/instrument cascade and its messages
+  function setProduct(code) {
+    const prev = applied.product;
+    applied.product = code;
+    if (code !== 'LON' && applied.instrument) {
+      applied.instrument = null; applied.modality = null;
+      showSnackbar('Instrument filters were cleared. The selected product does not include instruments.');
+    }
+    if (code !== 'LON') { applied.instrument = null; applied.modality = null; }
+    buildModalities();
+    return prev;
+  }
+
   document.querySelectorAll('#products-menu .menu-item').forEach(item => {
     item.addEventListener('click', e => {
       e.stopPropagation();
       const was = item.classList.contains('selected');
-      document.querySelectorAll('#products-menu .menu-item').forEach(i => i.classList.remove('selected'));
-      if (!was) item.classList.add('selected');
-      applied.product = was ? null : item.dataset.chip;
-      // cascade resets
-      applied.instrument = null; applied.modality = null;
-      buildSingleMenu('instruments-menu', applied.product === 'LON' ? OPO.loanInstruments : [], code => {
-        applied.instrument = code;
-        applied.modality = null;
-        buildModalities();
-      });
-      setEnabled(instTrigger, applied.product === 'LON');
-      buildModalities();
+      const pick = item.dataset.all ? null : (was ? null : item.dataset.chip);
+      setProduct(pick);
       closeMenus();
       refresh();
     });
   });
+  // Instruments: enabled only for products that include instruments (Loan in this prototype)
+  buildSingleMenu('instruments-menu', OPO.loanInstruments, code => {
+    applied.instrument = code;
+    applied.modality = null;
+    buildModalities();
+  });
+  const INSTRUMENTS_TIP = 'Instruments apply only to some products. Select a product that includes instruments to enable this filter.';
+  function syncInstrumentsState() {
+    const btn = document.getElementById('instruments-trigger');
+    const on = applied.product === 'LON';
+    btn.classList.toggle('disabled', !on);
+    btn.setAttribute('aria-disabled', String(!on));
+    if (!on) btn.dataset.tip = INSTRUMENTS_TIP;
+    else if (btn.dataset.tip === INSTRUMENTS_TIP) btn.removeAttribute('data-tip');
+  }
   function buildModalities() {
     buildSingleMenu('modalities-menu', applied.instrument === 'INV' ? OPO.invModalities : [], code => { applied.modality = code; });
     setEnabled(modTrigger, applied.instrument === 'INV');
   }
   buildModalities();
-  setEnabled(instTrigger, false);
 
   // ---------------- Stages (multi checkbox) ----------------
   const stagesMenu = document.getElementById('stages-menu');
@@ -4210,21 +4265,24 @@
     if (!dcombo('pipeline')) return;
     // Pipeline (single, no initials)
     buildDrawerSingle('pipeline',
-      [{ code: 'all', label: 'All pipeline', initials: false }, { code: 'A', label: 'Pipeline A', initials: false }, { code: 'B', label: 'Pipeline B', initials: false }],
-      draft.pipeline, code => { draft.pipeline = code || 'all'; }, { allLabel: 'All pipeline' });
-    dcombo('pipeline').querySelector('.val').textContent = draft.pipeline === 'all' ? 'All pipeline' : 'Pipeline ' + draft.pipeline;
+      [{ code: 'all', label: 'All pipelines', initials: false }, { code: 'A', label: 'Pipeline A', initials: false }, { code: 'B', label: 'Pipeline B', initials: false }],
+      draft.pipeline, code => { draft.pipeline = code || 'all'; }, { allLabel: 'All pipelines' });
+    dcombo('pipeline').querySelector('.val').textContent = draft.pipeline === 'all' ? 'All pipelines' : 'Pipeline ' + draft.pipeline;
     dsec('pipeline').querySelector('.cnt').textContent = draft.pipeline === 'all' ? 0 : 1;
     // Products (single, initials)
     buildDrawerSingle('products', OPO.products.map(p => ({ code: p.code, label: p.label })), draft.product,
-      code => { draft.product = code; draft.instrument = null; draft.modality = null; }, { allLabel: 'All products' });
-    // Instruments (single, initials; needs Loan)
+      code => {
+        if (code !== 'LON' && draft.instrument) showSnackbar('Instrument filters were cleared. The selected product does not include instruments.');
+        draft.product = code; draft.instrument = null; draft.modality = null;
+      }, { allLabel: 'All products' });
+    // Instruments (single, initials; only for products that include instruments)
     buildDrawerSingle('instruments', OPO.loanInstruments, draft.instrument,
       code => { draft.instrument = code; draft.modality = null; },
-      { disabled: draft.product !== 'LON', disabledPh: 'Select Loan product first', allLabel: 'All Instruments' });
+      { disabled: draft.product !== 'LON', disabledPh: 'Available for products that include instruments', allLabel: 'All instruments' });
     // Modalities (single, initials; needs INV)
     buildDrawerSingle('modalities', OPO.invModalities, draft.modality,
       code => { draft.modality = code; },
-      { disabled: draft.instrument !== 'INV', disabledPh: 'Select INV instrument first', allLabel: 'All Modalities' });
+      { disabled: draft.instrument !== 'INV', disabledPh: 'Select INV instrument first', allLabel: 'All modalities' });
     // Stages (multi with chips)
     const combo = dcombo('stages');
     const panel = combo.querySelector('.combo-panel');
@@ -4250,6 +4308,7 @@
       b.addEventListener('click', () => { draft.stages.delete(s); renderDrawerUI(); });
       holder.appendChild(b);
     });
+    sweepCnt();
   }
 
   // combo open/close (delegated so dynamic combos work too)
@@ -4278,17 +4337,9 @@
   });
 
   function syncBarUIFromApplied() {
-    document.getElementById('pipeline-label').textContent = applied.pipeline === 'all' ? 'All pipeline' : 'Pipeline ' + applied.pipeline;
-    document.querySelectorAll('#pipeline-menu .menu-item').forEach(i =>
-      i.classList.toggle('selected', (applied.pipeline === 'all' && i.dataset.val === 'All pipeline') || i.dataset.val === 'Pipeline ' + applied.pipeline));
-    document.querySelectorAll('#products-menu .menu-item').forEach(i => i.classList.toggle('selected', i.dataset.chip === applied.product));
-    buildSingleMenu('instruments-menu', applied.product === 'LON' ? OPO.loanInstruments : [], code => {
-      applied.instrument = code; applied.modality = null; buildModalities(); });
-    document.querySelectorAll('#instruments-menu .menu-item').forEach(i => i.classList.toggle('selected', i.dataset.chip === applied.instrument));
-    setEnabled(instTrigger, applied.product === 'LON');
     buildModalities();
-    document.querySelectorAll('#modalities-menu .menu-item').forEach(i => i.classList.toggle('selected', i.dataset.chip === applied.modality));
-    stagesMenu.querySelectorAll('.menu-item').forEach(i => i.classList.toggle('checked', applied.stages.has(i.dataset.chip)));
+    syncTriggerLabels();
+    syncMenuSelection();
   }
   // Drawer Clear filters clears draft and applied drawer filters
   document.getElementById('btn-clear').addEventListener('click', () => {
@@ -4304,18 +4355,56 @@
   const chipsRow = document.getElementById('active-chips');
   const clearAllBtn = document.getElementById('clear-all');
 
+  // Trigger text: "All [plural]" empty, value when single-selected, "[Dimension] (n)" for multi
+  function syncTriggerLabels() {
+    document.getElementById('pipeline-label').textContent = applied.pipeline === 'all' ? 'All pipelines' : 'Pipeline: ' + applied.pipeline;
+    const prod = applied.product ? OPO.products.find(p => p.code === applied.product) : null;
+    document.getElementById('products-label').textContent = prod ? 'Product: ' + prod.label : 'All products';
+    const ins = applied.instrument ? OPO.loanInstruments.find(i => i.code === applied.instrument) : null;
+    document.getElementById('instruments-label').textContent = ins ? 'Instrument: ' + ins.label : 'All instruments';
+    const mod = applied.modality ? OPO.invModalities.find(m => m.code === applied.modality) : null;
+    document.getElementById('modalities-label').textContent = mod ? 'Modality: ' + mod.label : 'All modalities';
+    document.getElementById('stages-label').textContent = 'All stages';
+    document.querySelectorAll('[data-count="stages"]').forEach(el => {
+      el.textContent = applied.stages.size;
+      el.classList.toggle('has', applied.stages.size > 0);
+    });
+    // tooltip with the full value only when the label is actually truncated
+    ['pipeline-label','products-label','instruments-label','modalities-label','stages-label'].forEach(id => {
+      const el = document.getElementById(id);
+      const btn = el.closest('.filter-dd');
+      if (el.offsetParent && el.scrollWidth > el.clientWidth + 1) btn.dataset.tip = el.textContent;
+      else btn.removeAttribute('data-tip');
+    });
+    syncInstrumentsState();
+  }
+  // Count badges disappear at zero
+  const sweepCnt = () => document.querySelectorAll('.filter-dd .cnt, .f-section-head .cnt').forEach(el =>
+    el.classList.toggle('zero', el.textContent.trim() === '0'));
+
+  function syncMenuSelection() {
+    document.querySelectorAll('#pipeline-menu .menu-item').forEach(i =>
+      i.classList.toggle('selected', (applied.pipeline === 'all' && i.dataset.val === 'All pipelines') || i.dataset.val === 'Pipeline ' + applied.pipeline));
+    document.querySelectorAll('#products-menu .menu-item').forEach(i =>
+      i.classList.toggle('selected', i.dataset.all ? !applied.product : i.dataset.chip === applied.product));
+    document.querySelectorAll('#instruments-menu .menu-item').forEach(i =>
+      i.classList.toggle('selected', i.dataset.chip === applied.instrument));
+    document.querySelectorAll('#modalities-menu .menu-item').forEach(i =>
+      i.classList.toggle('selected', i.dataset.chip === applied.modality));
+    stagesMenu.querySelectorAll('.menu-item').forEach(i => i.classList.toggle('checked', applied.stages.has(i.dataset.chip)));
+  }
+
   function refresh() {
     page = 1;
-    // badges
-    document.querySelectorAll('[data-count="instruments"]').forEach(el => el.textContent = applied.instrument ? 1 : 0);
-    document.querySelectorAll('[data-count="modalities"]').forEach(el => el.textContent = applied.modality ? 1 : 0);
-    document.querySelectorAll('[data-count="stages"]').forEach(el => el.textContent = applied.stages.size);
+    syncTriggerLabels();
+    syncMenuSelection();
     let drawerN = applied.depts.size + applied.countries.size + applied.sectors.size + applied.divisions.size;
     if (window.matchMedia('(max-width:1359px)').matches) {
       drawerN += (applied.pipeline !== 'all' ? 1 : 0) + (applied.product ? 1 : 0)
                + (applied.instrument ? 1 : 0) + (applied.modality ? 1 : 0) + applied.stages.size;
     }
     document.querySelectorAll('.js-drawer-count').forEach(el => el.textContent = drawerN);
+    sweepCnt();
     // chips
     chipsRow.innerHTML = '';
     const addChip = (label, onRemove) => {
@@ -4327,31 +4416,24 @@
     };
     if (applied.pipeline !== 'all') addChip('Pipeline ' + applied.pipeline, () => {
       applied.pipeline = 'all';
-      document.getElementById('pipeline-label').textContent = 'All pipeline';
-      document.querySelectorAll('#pipeline-menu .menu-item').forEach((i, idx) => i.classList.toggle('selected', idx === 0));
     });
-    if (applied.product) addChip(applied.product, () => {
-      applied.product = null; applied.instrument = null; applied.modality = null;
-      document.querySelectorAll('#products-menu .menu-item').forEach(i => i.classList.remove('selected'));
-      setEnabled(instTrigger, false); buildModalities();
+    if (applied.product) addChip('Product: ' + applied.product, () => {
+      setProduct(null);
     });
-    if (applied.instrument) addChip(applied.instrument, () => {
+    if (applied.instrument) addChip('Instrument: ' + applied.instrument, () => {
       applied.instrument = null; applied.modality = null;
-      document.querySelectorAll('#instruments-menu .menu-item').forEach(i => i.classList.remove('selected'));
       buildModalities();
     });
-    if (applied.modality) addChip(applied.modality, () => {
+    if (applied.modality) addChip('Modality: ' + applied.modality, () => {
       applied.modality = null;
-      document.querySelectorAll('#modalities-menu .menu-item').forEach(i => i.classList.remove('selected'));
     });
     applied.stages.forEach(s => addChip(s, () => {
       applied.stages.delete(s);
-      stagesMenu.querySelectorAll('.menu-item').forEach(i => { if (i.dataset.chip === s) i.classList.remove('checked'); });
     }));
-    applied.depts.forEach(d => addChip(d, () => { applied.depts.delete(d); syncDraftFromApplied(); }));
-    applied.countries.forEach(cc => addChip(cc, () => { applied.countries.delete(cc); syncDraftFromApplied(); }));
-    applied.sectors.forEach(s => addChip(s, () => { applied.sectors.delete(s); syncDraftFromApplied(); }));
-    applied.divisions.forEach(k => addChip(k.split(':')[1], () => { applied.divisions.delete(k); syncDraftFromApplied(); }));
+    applied.depts.forEach(d => addChip('Department: ' + d, () => { applied.depts.delete(d); syncDraftFromApplied(); }));
+    applied.countries.forEach(cc => addChip('Country: ' + cc, () => { applied.countries.delete(cc); syncDraftFromApplied(); }));
+    applied.sectors.forEach(s => addChip('Sector: ' + s, () => { applied.sectors.delete(s); syncDraftFromApplied(); }));
+    applied.divisions.forEach(k => addChip('Division: ' + k.split(':')[1], () => { applied.divisions.delete(k); syncDraftFromApplied(); }));
     const any = chipsRow.children.length > 0;
     if (chipsRow.children.length >= 2) {
       const ca = document.createElement('button');
@@ -4368,11 +4450,7 @@
     applied.pipeline = 'all'; applied.product = null; applied.instrument = null; applied.modality = null;
     applied.stages.clear();
     ['depts','countries','sectors','divisions'].forEach(k => { applied[k].clear(); draft[k].clear(); });
-    document.getElementById('pipeline-label').textContent = 'All pipeline';
-    document.querySelectorAll('#pipeline-menu .menu-item').forEach((i, idx) => i.classList.toggle('selected', idx === 0));
-    document.querySelectorAll('#products-menu .menu-item, #instruments-menu .menu-item, #modalities-menu .menu-item').forEach(i => i.classList.remove('selected'));
-    stagesMenu.querySelectorAll('.menu-item').forEach(i => i.classList.remove('checked'));
-    setEnabled(instTrigger, false); buildModalities();
+    buildModalities();
     renderDrawerUI();
     refresh();
   });
@@ -4425,7 +4503,7 @@
     renderHeaderContracts();
     // architectural back: label and destination follow the operation's phase hub
     document.getElementById('ws-back-lbl').textContent =
-      'Back to ' + (phase === 'implementation' ? 'Implementation' : phase === 'closing' ? 'Closing' : 'Preparation');
+      'Back to ' + (phase === 'implementation' ? 'Implementation' : phase === 'closing' ? 'Closure' : 'Preparation');
     renderAiSummary(phase, row);
     document.querySelectorAll('#ws-ai-fb .fb-btn').forEach(b => b.classList.remove('sel'));
     renderFinancial(phase, row);
@@ -4682,6 +4760,82 @@
       if (h) { e.preventDefault(); lcJump(h); }
     });
   })();
+  // B2 edge hints: adjacent phase chips + back-to-current chip, anchored to the strip edges.
+  // Phase hints use the standard outline button (color never fakes a state); the current chip
+  // is green because that is its real state, and it beats the phase hint on its side.
+  (function () {
+    const st = document.getElementById('ws-stages');
+    const wrap = document.createElement('div');
+    wrap.className = 'lc-scrollwrap';
+    st.parentNode.insertBefore(wrap, st);
+    wrap.appendChild(st);
+    wrap.insertAdjacentHTML('beforeend',
+      '<button class="lc-hint edge-l" id="lc-hint-prev" type="button"></button>' +
+      '<button class="lc-hint edge-r" id="lc-hint-next" type="button"></button>' +
+      '<button class="lc-hint" id="lc-hint-cur" type="button"></button>');
+    const prevB = document.getElementById('lc-hint-prev'), nextB = document.getElementById('lc-hint-next'),
+          curB = document.getElementById('lc-hint-cur');
+    const go = band => st.scrollBy({ left: band.getBoundingClientRect().left - st.getBoundingClientRect().left - 16, behavior: lcScrollBehavior() });
+    prevB.addEventListener('click', () => prevB._band && go(prevB._band));
+    nextB.addEventListener('click', () => nextB._band && go(nextB._band));
+    curB.addEventListener('click', () => {
+      const n = document.querySelector('#lc-track .lcn.current');
+      if (!n) return;
+      const nr = n.getBoundingClientRect(), sr = st.getBoundingClientRect();
+      st.scrollBy({ left: (nr.left + nr.width / 2) - (sr.left + sr.width / 2), behavior: lcScrollBehavior() });
+    });
+    window.lcHints = function () {
+      const track = document.getElementById('lc-track');
+      const bands = track ? [...track.querySelectorAll('.lc-band')] : [];
+      const on = track && track.style.display !== 'none' && bands.length > 1;
+      let nb = null, pb = null, curSide = null, curAcr = '';
+      if (on) {
+        const sr = st.getBoundingClientRect();
+        bands.forEach(b => {
+          const r = b.getBoundingClientRect();
+          // a band with less than ~80px in view still reads as out of view
+          if (!nb && r.left >= sr.right - 80) nb = b;
+          if (r.right <= sr.left + 80) pb = b;
+        });
+        const cn = track.querySelector('.lcn.current');
+        if (cn) {
+          const r = cn.getBoundingClientRect();
+          if (r.right <= sr.left + 8) curSide = 'left';
+          else if (r.left >= sr.right - 8) curSide = 'right';
+          if (curSide) curAcr = cn.getAttribute('data-t2h') || 'Current';
+        }
+      }
+      if (curSide === 'left') pb = null;
+      if (curSide === 'right') nb = null;
+      const set = (btn, band, dir) => {
+        if (!band) { btn.classList.remove('show'); btn._band = null; return; }
+        if (btn._band !== band) {
+          const bh = band.querySelector('.bh');
+          const label = (bh ? bh.textContent : '').replace('\u2713', '').split('\u00b7')[0].trim() || 'Phase';
+          const ico = bh && bh.querySelector('svg') ? bh.querySelector('svg').outerHTML : '';
+          const ck = band.classList.contains('complete') ? '<span class="hck">\u2713</span>' : '';
+          btn.innerHTML = dir === 'next' ? ck + ico + '<span>' + label + '</span><span class="ar">\u2192</span>'
+                                         : '<span class="ar">\u2190</span>' + ck + '<span>' + label + '</span>' + ico;
+          btn.setAttribute('aria-label', 'Go to ' + label + ' phase');
+          btn._band = band;
+        }
+        btn.classList.add('show');
+      };
+      set(nextB, nb, 'next'); set(prevB, pb, 'prev');
+      if (curSide) {
+        curB.classList.remove('edge-l', 'edge-r');
+        curB.classList.add(curSide === 'left' ? 'edge-l' : 'edge-r');
+        curB.innerHTML = curSide === 'left'
+          ? '<span class="ar">\u2190</span><span class="cdot"></span><span>Current \u00b7 ' + curAcr + '</span>'
+          : '<span class="cdot"></span><span>Current \u00b7 ' + curAcr + '</span><span class="ar">\u2192</span>';
+        curB.setAttribute('aria-label', 'Back to the current milestone, ' + curAcr);
+        curB.classList.add('show');
+      } else { curB.classList.remove('show'); }
+      // the sticky phase header clears whichever chip holds the left edge
+      const leftBtn = curSide === 'left' ? curB : (pb ? prevB : null);
+      if (track) track.style.setProperty('--bhL', leftBtn ? (leftBtn.offsetWidth + 22) + 'px' : '12px');
+    };
+  })();
 
   // ===== Overall stages lifecycle timeline (flag lcTimeline) =====
   // '@PP' resolves per operation to 'PP Approved' or 'PP Not Required' (mutually exclusive)
@@ -4694,7 +4848,7 @@
   const LC_META = {
     preparation: { label: 'Preparation', icon: 'list_alt', hint: 'Design, review and approval' },
     implementation: { label: 'Implementation', icon: 'rocket_launch', hint: 'Signature, eligibility and disbursement' },
-    closing: { label: 'Closing', icon: 'inventory', hint: 'Operational close and completion report' }
+    closing: { label: 'Closure', icon: 'inventory', hint: 'Operational close and completion report' }
   };
   const LC_OPS = {
     'BR-L1587': { phase: 'preparation', current: 'POD Approved', pp: 'PP Approved' }
@@ -4867,7 +5021,8 @@
         return '<div class="lc-subgrp ' + sState + '"><div class="lc-sub-h" role="button" tabindex="0" aria-label="Go to ' + sb.name + '">' + sb.name
           + ' <span class="scnt">' + sDone + ' of ' + sTotal + '</span></div><div class="lc-srow">' + nodes + '</div></div>';
       }).join('');
-      return '<div class="lc-band ' + phaseState + '"><div class="bh" role="button" tabindex="0" aria-label="Go to ' + ph.label + ' phase">' + lcPhaseIcon(ph.key) + ph.label
+      return '<div class="lc-band ' + phaseState + '"><div class="bh" role="button" tabindex="0" aria-label="Go to ' + ph.label + ' phase">'
+        + (phaseState === 'complete' ? '<span class="bh-ck">\u2713</span>' : '') + lcPhaseIcon(ph.key) + ph.label
         + '<span class="cnt">· ' + phaseCount + '</span></div><div class="lc-brow">' + subs + '</div></div>';
     }).join('');
     track.classList.remove('entering');
@@ -4971,6 +5126,7 @@
     st.style.setProperty('--fadeR', st.scrollLeft < max - 4 ? '48px' : '0px');
     document.getElementById('ws-st-prev').disabled = st.scrollLeft <= 4;
     document.getElementById('ws-st-next').disabled = st.scrollLeft >= max - 4;
+    if (window.lcHints) window.lcHints();
   }
   document.getElementById('ws-stages').addEventListener('scroll', lcFades);
   // drag to scroll (5px threshold keeps clicks and tooltips intact)
@@ -5205,6 +5361,15 @@
     applyRoute();
   });
 
+
+  // ===== /difficulties: the brand logo is the way back Home =====
+  (function () {
+    const b = document.getElementById('dif-home');
+    if (!b) return;
+    const go = () => { location.hash = '#/home'; };
+    b.addEventListener('click', go);
+    b.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+  })();
 
   // ===== Workspace dashboard financials (same source as Operation data) =====
   var wsConList = [], wsConIdx = 0, wsFin = null; // var: hoisted, openWorkspace may run first via deep links
@@ -6132,7 +6297,12 @@
     btn.dataset.screen = item.dataset.screen;
     const ic = item.querySelector('.nav-ic');
     if (ic) btn.appendChild(ic.cloneNode(true));
-    btn.appendChild(document.createTextNode(item.textContent.trim()));
+    // label without swallowing the Coming soon chip text; Closing surfaces as Closure here
+    const lbEl = item.querySelector('.lb');
+    let label = (lbEl ? lbEl.textContent : item.textContent).trim();
+    if (item.dataset.screen === 'closing') label = 'Closure';
+    btn.appendChild(document.createTextNode(label));
+    if (item.querySelector('.chip-soon')) btn.insertAdjacentHTML('beforeend', '<span class="chip-soon">Coming soon</span>');
     btn.addEventListener('click', () => {
       crumbMenu.classList.remove('open');
       wsScreen.classList.remove('open');
@@ -6146,7 +6316,7 @@
     if (crumbMenu.classList.contains('open')) { crumbMenu.classList.remove('open'); return; }
     const label = PHASE_LABEL[wsPhase] || '';
     crumbMenu.querySelectorAll('.crumb-item').forEach(b =>
-      b.classList.toggle('active', b.textContent.trim() === label));
+      b.classList.toggle('active', b.dataset.screen === wsPhase));
     const r = e.currentTarget.getBoundingClientRect();
     crumbMenu.style.top = (r.bottom + 8) + 'px';
     crumbMenu.style.left = r.left + 'px';
