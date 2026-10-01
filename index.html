@@ -2775,7 +2775,7 @@
             <div class="menu" id="instruments-menu"></div>
           </div>
           <div class="dd-wrap collapsible">
-            <button class="filter-dd disabled" id="modalities-trigger" data-menu="modalities-menu"><span class="flabel" id="modalities-label">All modalities</span> <span class="msr">expand_more</span></button>
+            <button class="filter-dd disabled" id="modalities-trigger" aria-disabled="true" data-menu="modalities-menu"><span class="flabel" id="modalities-label">All modalities</span> <span class="msr">expand_more</span></button>
             <div class="menu" id="modalities-menu"></div>
           </div>
           <div class="dd-wrap collapsible">
@@ -4077,13 +4077,17 @@
     buildModalities();
   });
   const INSTRUMENTS_TIP = 'Instruments apply only to some products. Select a product that includes instruments to enable this filter.';
-  function syncInstrumentsState() {
-    const btn = document.getElementById('instruments-trigger');
-    const on = applied.product === 'LON';
+  const MODALITIES_TIP = 'Modalities apply only to some instruments. Select an instrument that includes modalities to enable this filter.';
+  function syncGatedTrigger(id, on, tip) {
+    const btn = document.getElementById(id);
     btn.classList.toggle('disabled', !on);
     btn.setAttribute('aria-disabled', String(!on));
-    if (!on) btn.dataset.tip = INSTRUMENTS_TIP;
-    else if (btn.dataset.tip === INSTRUMENTS_TIP) btn.removeAttribute('data-tip');
+    if (!on) btn.dataset.tip = tip;
+    else if (btn.dataset.tip === tip) btn.removeAttribute('data-tip');
+  }
+  function syncInstrumentsState() {
+    syncGatedTrigger('instruments-trigger', applied.product === 'LON', INSTRUMENTS_TIP);
+    syncGatedTrigger('modalities-trigger', applied.instrument === 'INV', MODALITIES_TIP);
   }
   function buildModalities() {
     buildSingleMenu('modalities-menu', applied.instrument === 'INV' ? OPO.invModalities : [], code => { applied.modality = code; });
@@ -4282,7 +4286,7 @@
     // Modalities (single, initials; needs INV)
     buildDrawerSingle('modalities', OPO.invModalities, draft.modality,
       code => { draft.modality = code; },
-      { disabled: draft.instrument !== 'INV', disabledPh: 'Select INV instrument first', allLabel: 'All modalities' });
+      { disabled: draft.instrument !== 'INV', disabledPh: 'Available for instruments that include modalities', allLabel: 'All modalities' });
     // Stages (multi with chips)
     const combo = dcombo('stages');
     const panel = combo.querySelector('.combo-panel');
