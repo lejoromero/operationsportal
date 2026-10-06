@@ -282,6 +282,22 @@
   .gs-chip{display:inline-flex;align-items:center;gap:8px;background:#F2F1F1;border-radius:8px;padding:6px 12px;font-size:12.5px;font-weight:500;color:#272626;flex:0 0 auto;white-space:nowrap;}
   .gs-chip svg{width:16px;height:16px;color:#3A3939;}
   .gs-chip .msr{font-size:16px;color:#3A3939;}
+  /* recent searches: group label + rows with history icon; the X lives in a reserved
+     slot so the phase chip never hides or shifts (Alejo's rule) */
+  .gs-glab{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 2px;}
+  .gs-glab .t{font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#8A8888;}
+  .gs-glab .ca{font-size:12px;font-weight:600;color:#0E6E9E;background:none;border:none;cursor:pointer;font-family:var(--font-ui);padding:2px 0;}
+  .gs-glab .ca:hover{text-decoration:underline;}
+  .gs-row .ghist{font-size:16px;color:#8A8888;flex:0 0 auto;margin-right:-6px;}
+  .gs-row .gsp-ic{width:16px;flex:0 0 auto;margin-right:-6px;}
+  /* the X floats over the chip's right end with a soft fade behind it: the chip stays
+     visible and recent rows keep the exact geometry of result rows */
+  .gs-row.recent{position:relative;}
+  .gs-row .gs-x{position:absolute;right:0;top:0;bottom:0;width:104px;border-radius:0 8px 8px 0;visibility:hidden;display:flex;align-items:center;justify-content:flex-end;padding-right:12px;cursor:pointer;background:linear-gradient(90deg, rgba(234,243,250,0) 0%, #EAF3FA 42%);}
+  .gs-row .gs-x .msr{font-size:16px;color:#43424B;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:8px;}
+  .gs-row .gs-x:hover .msr{background:#D9E1ED;color:#3A3939;}
+  .gs-row .gs-x:focus-visible{visibility:visible;outline:2px solid #00629D;outline-offset:-2px;}
+  .gs-row.recent:hover .gs-x{visibility:visible;}
   /* scroll rule: up to 8 rows visible; from the 9th the list scrolls internally */
   .gs-drop{max-height:440px;overflow-y:auto;}
   .gs-drop::-webkit-scrollbar{width:8px;}
@@ -1227,7 +1243,7 @@
   .imp-card .pin:hover{background:rgba(35,34,34,0.08);}
   .imp-card .code{font-family:var(--font-mono);font-size:14px;font-weight:700;color:var(--link-default);cursor:pointer;flex:0 0 auto;}
   .imp-card .vsep{width:1px;align-self:stretch;background:#E4E4E4;flex:0 0 auto;}
-  .imp-card .contract{font-size:14px;font-weight:600;color:var(--link-default);cursor:pointer;flex:0 0 auto;}
+  .imp-card .contract{font-family:var(--font-mono);font-size:14px;font-weight:600;color:var(--link-default);cursor:pointer;flex:0 0 auto;}
   .imp-card .contract:hover{text-decoration:underline;}
   .imp-card .name{font-size:14px;font-weight:600;color:#272626;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}
   
@@ -1379,7 +1395,7 @@
   .ws-hero-body{padding:0 32px 40px 32px;display:flex;flex-direction:column;gap:6px;}
   .ws-code-row{display:flex;align-items:center;gap:10px;}
   .ws-code-row .code{
-    font-size:14px;font-weight:700;color:#272626;font-family:var(--font-ui);
+    font-size:14px;font-weight:700;color:#272626;font-family:var(--font-mono);
     height:24px;display:inline-flex;align-items:center;
   }
   .ws-code-row .pin{
@@ -1400,11 +1416,71 @@
   }
   .ws-conchip .lb{font-size:12px;color:#5C5A5A;}
   .ws-conchip .d{width:1px;height:14px;background:var(--border-default);}
-  .ws-conchip .cid{font-family:var(--font-chip);font-size:12px;font-weight:600;color:#272626;}
+  .ws-conchip .cid{font-family:var(--font-mono);font-size:12px;font-weight:600;color:#272626;cursor:default;padding:3px 4px;border-radius:4px;}
+  .ws-conchip .cid:hover{background:#F1FAFD;}
+  .ws-conchip .cid:focus-visible{outline:2px solid #00629D;outline-offset:1px;}
+  .ws-conchip{position:relative;}
+  .ws-conchip .none{font-size:12px;color:#8A8888;}
   .ws-conchip .more{
-    font-family:var(--font-chip);font-size:11px;font-weight:600;color:#5C5A5A;
-    background:#F2F1F1;border-radius:10px;padding:2px 8px;cursor:default;
+    font-family:var(--font-chip);font-size:11px;font-weight:600;color:#0E6E9E;
+    background:#EFF6FB;border:none;border-radius:10px;padding:3px 9px;cursor:pointer;
   }
+  .ws-conchip .more:hover{background:#DFEDF7;}
+  .ws-conchip .more:focus-visible{outline:2px solid #00629D;outline-offset:2px;}
+  .ws-conchip .ccompact{display:none;font-family:var(--font-chip);font-size:12px;font-weight:600;color:#0E6E9E;background:none;border:none;cursor:pointer;padding:0;}
+  @media (max-width:860px){
+    .ws-conchip .cid,.ws-conchip .d,.ws-conchip .more{display:none;}
+    .ws-conchip .ccompact{display:inline-flex;}
+  }
+  /* contracts drawer: read-only reference list; search beyond 10 entries (team list rule) */
+  .con-scrim{position:fixed;inset:0;background:rgba(31,30,30,.4);z-index:8000;}
+  .con-drawer{position:fixed;top:0;right:0;bottom:0;width:480px;max-width:92vw;background:var(--color-surface);z-index:8010;box-shadow:-8px 0 30px rgba(0,0,0,.18);display:flex;flex-direction:column;animation:conDrwIn .22s cubic-bezier(0.2,0,0,1);}
+  @keyframes conDrwIn{from{transform:translateX(48px);opacity:0;}to{transform:none;opacity:1;}}
+  @media (prefers-reduced-motion: reduce){.con-drawer{animation:none;}}
+  /* Figma: .Drawer-Header 480x80, bg #F3F3F3, border #E4E4E4, title Open Sans 600 18/24 */
+  .con-drawer .dh{flex:0 0 auto;height:80px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:#F3F3F3;border-bottom:1px solid #E4E4E4;}
+  .con-drawer h3{font-family:var(--font-chip);font-size:18px;line-height:24px;font-weight:600;color:#272626;}
+  .con-drawer .xbtn{border:none;background:none;cursor:pointer;color:#43424B;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+  .con-drawer .xbtn:hover{background:rgba(35,34,34,0.08);}
+  .con-drawer .xbtn .msr{font-size:22px;}
+  /* Figma: Drawer-Content wrapper, padding 32/24, 32px stack gap, whole body scrolls */
+  .con-drawer .dbody{flex:1;overflow-y:auto;padding:32px 24px;display:flex;flex-direction:column;gap:32px;scrollbar-width:thin;scrollbar-color:#535354 #F9F9FA;}
+  .con-drawer .dbody::-webkit-scrollbar{width:14px;}
+  .con-drawer .dbody::-webkit-scrollbar-track{background:#F9F9FA;box-shadow:inset 1px 0 0 #DEDEDE;}
+  .con-drawer .dbody::-webkit-scrollbar-thumb{background:#535354;border-radius:7px;border:4px solid #F9F9FA;}
+  .con-drawer .opctx{display:flex;align-items:center;gap:6px;}
+  .con-drawer .dpin{border:none;background:none;cursor:pointer;color:var(--icon-default);width:20px;height:20px;padding:2px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;}
+  .con-drawer .dpin:hover{background:rgba(35,34,34,0.08);}
+  .con-drawer .dpin .msr{font-size:16px;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;}
+  .con-drawer .dpin.pinned .msr{font-family:'Material Symbols Rounded Fill','Material Symbols Rounded';}
+  .con-drawer .dpin:focus-visible{outline:2px solid #00629D;outline-offset:1px;}
+  .con-drawer .opctx .oc{font-family:var(--font-mono);font-size:14px;font-weight:700;color:#272626;flex:0 0 auto;}
+  .con-drawer .opname{font-size:18px;font-weight:700;line-height:24px;color:#272626;margin-top:6px;}
+  .con-drawer .refnote{font-size:12px;line-height:16px;color:#5C5A5A;margin-top:4px;}
+  /* Figma: Input-Search 40px pill, border #AEAEAD, placeholder #939292 */
+  .con-drawer .srch{flex:0 0 auto;height:40px;display:flex;align-items:center;gap:8px;border:1px solid #AEAEAD;border-radius:100px;padding:0 12px;}
+  .con-drawer .srch .msr{font-size:20px;color:var(--icon-default);}
+  .con-drawer .srch input{border:none;outline:none;flex:1;min-width:0;font-family:var(--font-ui);font-size:14px;line-height:20px;color:#272626;background:none;}
+  .con-drawer .srch input::placeholder{color:#939292;}
+  .con-drawer .srch .sclr{border:none;background:none;cursor:pointer;color:#5C5A5A;padding:3px;border-radius:50%;display:none;align-items:center;justify-content:center;flex:0 0 auto;}
+  .con-drawer .srch .sclr .msr{font-size:16px;color:inherit;}
+  .con-drawer .srch .sclr:hover{background:#E9E8EA;color:#272626;}
+  .con-drawer .srch .sclr:focus-visible{outline:2px solid #00629D;outline-offset:1px;}
+  .con-drawer .srch.has .sclr{display:flex;}
+  /* Figma: table header 11/16 semibold #939292, rule #CBCACA; rows 32px, 10px gaps, no separators */
+  .con-drawer .tbl{display:flex;flex-direction:column;gap:16px;}
+  .con-drawer .thead{display:grid;grid-template-columns:80px 1fr 1fr;gap:20px;padding-bottom:8px;border-bottom:1px solid #CBCACA;font-size:11px;line-height:16px;font-weight:600;text-transform:uppercase;color:#939292;}
+  .con-drawer .rows{display:flex;flex-direction:column;gap:10px;}
+  .con-drawer .drow{display:grid;grid-template-columns:80px 1fr 1fr;gap:20px;align-items:start;min-height:32px;}
+  .con-drawer .cid2{font-family:var(--font-mono);font-size:12px;line-height:16px;font-weight:600;color:#272626;}
+  .con-drawer .cst{font-size:11px;line-height:16px;color:#5C5A5A;}
+  .con-drawer .ag{font-size:11px;line-height:16px;color:#5C5A5A;overflow-wrap:break-word;}
+  .con-drawer .noneres{padding:4px 0 16px;font-size:12px;color:#8A8888;}
+  /* Figma: .Drawer-Footer, border #C7C7C9, stroke button pill #AEAEAD text #007EB6 */
+  .con-drawer .dfoot{flex:0 0 auto;display:flex;justify-content:flex-end;padding:16px 24px;border-top:1px solid #C7C7C9;background:var(--color-surface);}
+  .con-drawer .dclose{background:#fff;border:1px solid #AEAEAD;border-radius:80px;padding:8px 16px;font-family:var(--font-ui);font-size:12px;line-height:16px;font-weight:600;color:#007EB6;cursor:pointer;}
+  .con-drawer .dclose:hover{background:#F2F8FB;}
+  .con-drawer .dclose:focus-visible{outline:2px solid #00629D;outline-offset:2px;}
   .ws-round{height:32px;background:#FCFCFC;border-top-right-radius:16px;}
 
   .ws-wrap{padding:0 32px 48px 32px;display:flex;flex-direction:column;gap:56px;}
@@ -1482,6 +1558,40 @@
   @keyframes lcCurPulse{0%{transform:scale(.55);opacity:1;}70%{transform:scale(1.1);opacity:0;}100%{transform:scale(1.1);opacity:0;}}
   .lc-hint:focus-visible{outline:2px solid #00629D;outline-offset:2px;}
   @media (prefers-reduced-motion: reduce){.lc-hint .ar{transition:none;}.lc-hint .cdot::after{animation:none;transform:scale(.8);opacity:.5;}}
+  /* ---- Alt LC navigation (design review variant, enabled per operation) ---- */
+  .ws-sec-title .ctrl{position:relative;}
+  .lc-jumpdd{height:32px;padding:0 8px 0 12px;border-radius:8px;border:1px solid var(--color-outline-variant);background:var(--color-surface);display:inline-flex;align-items:center;gap:4px;font-family:var(--font-ui);font-size:13px;color:var(--color-text-default);cursor:pointer;}
+  .lc-jumpdd:hover{background:var(--color-surface-cont-lowest);border-color:#67676A;}
+  .lc-jumpdd.open{background:#EAF4FA;border-color:#9CC8E0;color:#0E6E9E;}
+  .lc-jumpdd.open .msr{color:#0E6E9E;transform:rotate(180deg);}
+  .lc-jumpdd.open:hover{background:#DEEDF7;}
+  .lc-jumpdd .msr{transition:transform .15s ease;}
+  @media (prefers-reduced-motion: reduce){.lc-jumpdd .msr{transition:none;}}
+  mark.jhl{background:#FFE58F;color:inherit;border-radius:2px;padding:0 1px;}
+  .lc-jumpdd:focus-visible{outline:2px solid #00629D;outline-offset:1px;}
+  .lc-jumpdd .msr{font-size:18px;color:var(--icon-default);}
+  .lc-jumpdd #lc-jump-lb b{font-family:var(--font-chip);font-weight:600;font-size:12.5px;}
+  .lc-jpop{position:absolute;top:calc(100% + 8px);right:0;width:min(420px,calc(100vw - 48px));background:var(--color-surface);border:1px solid #C7C7C9;border-radius:10px;box-shadow:0 8px 28px rgba(31,30,30,.18);z-index:90;overflow:hidden;text-align:left;}
+  .lc-jpop .srch{margin:12px 14px 6px;display:flex;align-items:center;gap:8px;border:1px solid #C7C7C9;border-radius:6px;padding:7px 10px;}
+  .lc-jpop .srch .msr{font-size:18px;color:var(--icon-default);}
+  .lc-jpop .srch input{border:none;outline:none;flex:1;font-family:var(--font-ui);font-size:12.5px;color:#272626;background:none;}
+  .lc-jpop .list{max-height:320px;overflow-y:auto;padding:6px 6px 8px;}
+  .lc-jpop .jph{display:block;width:100%;text-align:left;border:none;background:none;cursor:pointer;padding:10px 10px 4px;font-family:var(--font-ui);font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#43424B;}
+  .lc-jpop .jph:hover{color:#0E6E9E;}
+  .lc-jpop .jmr{display:flex;align-items:flex-start;gap:8px;width:100%;border:none;background:none;border-radius:6px;cursor:pointer;padding:9px 10px;margin-bottom:2px;font-family:var(--font-ui);text-align:left;}
+  .lc-jpop .jmr:hover{background:#F1FAFD;}
+  .lc-jpop .jmr .jck{font-size:14px;color:#00854D;width:14px;flex:0 0 auto;margin-top:1px;}
+  .lc-jpop .jdot{width:9px;height:9px;border-radius:50%;border:2.5px solid #00854D;background:#fff;flex:0 0 auto;margin:3px 2.5px 0;}
+  .lc-jpop .jsp{width:14px;flex:0 0 auto;}
+  .lc-jpop .jbody{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;}
+  .lc-jpop .jl1{display:flex;align-items:baseline;gap:8px;min-width:0;}
+  .lc-jpop .jacr{font-family:var(--font-chip);font-size:11.5px;font-weight:600;color:#272626;width:62px;flex:0 0 auto;}
+  .lc-jpop .jnm{font-size:12px;color:#5C5A5A;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .lc-jpop .jdt{font-size:11px;color:#8A8888;padding-left:70px;}
+  .lc-jpop .jdt.est{font-style:italic;}
+  .lc-jpop .jmr.current .jnm{color:#272626;font-weight:600;}
+  .lc-jpop .jcur{font-size:10px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:#00693D;background:#E6F6EE;border-radius:999px;padding:2px 8px;flex:0 0 auto;}
+  .lc-jpop .jnone{padding:14px;font-size:12px;color:#8A8888;}
   .lct .bh .bh-ck{color:#00854D;font-size:12px;line-height:1;font-weight:700;}
   .lc-band.complete .bh .bh-ck{color:#FFFFFF;}
   .lc-band .bh .cnt{font-weight:600;color:#8A8888;text-transform:none;letter-spacing:0;}
@@ -1808,7 +1918,7 @@
   }
   .ws-mini .pin .msr{font-size:20px;}
   .ws-mini .pin:hover{background:rgba(35,34,34,0.08);}
-  .ws-mini .code{font-size:14px;font-weight:700;color:#272626;white-space:nowrap;}
+  .ws-mini .code{font-family:var(--font-mono);font-size:14px;font-weight:700;color:#272626;white-space:nowrap;}
   .ws-mini .opname{font-size:14px;font-weight:600;color:#272626;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px;min-width:0;}
   .ws-mini .phase-chip{
     display:inline-flex;align-items:center;gap:4px;height:24px;padding:0 8px;
@@ -1869,6 +1979,7 @@
   #richtip .h{font-size:11px;line-height:16px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;color:#fff;white-space:normal;overflow-wrap:break-word;text-wrap:balance;}
   #richtip .m{font-size:11px;line-height:16px;color:#AEE2C8;font-weight:600;margin-top:2px;}
   #richtip .b{font-size:13px;line-height:18px;color:#fff;font-weight:400;margin-top:5px;}
+  #richtip .h2{margin-top:18px;}
   /* ============ Help Center (fab + panel) y Report an issue ============ */
   .hc-fab{
     position:fixed;right:0;bottom:28px;z-index:7000;
@@ -2107,7 +2218,7 @@
   .od3-orgrow{display:flex;align-items:center;gap:8px;font-size:12px;line-height:16px;color:#272626;}
   .od3-orgrow .od3-tag{color:#272626;}
   .od3-contracts{display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;gap:8px 16px;}
-  .od3-contracts .contract{font-size:12px;font-weight:600;color:var(--link-default);text-decoration:underline;cursor:pointer;}
+  .od3-contracts .contract{font-family:var(--font-mono);font-size:12px;font-weight:600;color:var(--link-default);text-decoration:underline;cursor:pointer;}
   .od3-plus{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#F3F3F3;font-size:10px;font-weight:600;color:#272626;border:0;font-family:inherit;padding:0;}
   .od3-plus.clickable{cursor:pointer;}
   .od3-plus.clickable:hover{background:#E4E4E4;}
@@ -2991,6 +3102,7 @@
         <div class="ws-sec-title">
           <div class="lc-titlegrp"><h2>Life Cycle</h2><span class="lc-sum" id="lc-sum"></span></div>
           <div class="ctrl">
+            <button class="lc-jumpdd" id="lc-jump" style="display:none;" aria-label="Go to a phase or milestone" aria-haspopup="dialog" aria-expanded="false"><span id="lc-jump-lb">Go to milestone</span><span class="msr">expand_more</span></button>
             <button class="icon-btn outlined" id="ws-st-prev" aria-label="Scroll stages left"><span class="msr">chevron_left</span></button>
             <button class="icon-btn outlined" id="ws-st-next" aria-label="Scroll stages right"><span class="msr">chevron_right</span></button>
           </div>
@@ -3727,6 +3839,13 @@
     ['AR-L1372','A','2026','Disbursing','INE','CSC','AR','James Carter',['5585/OC-AR-1','5586/OC-AR-2'],'LON','INV \u2022 ESP','$75,000,000','INE \u2022 WSA','05 Jul 2030','Rural Drinking Water and Sanitation Program for Dispersed Communities and Indigenous Peoples of Northern Argentina'],
     ['PE-L1099','B','2025','Disbursing','INE','CAN','PE','Maria Ortiz',['5701/OC-PE'],'LON','INV \u2022 GOM','$182,000,000','INE \u2022 TSP','14 Nov 2029','Urban Transport Modernization Program']
   ];
+  // Demo coverage for the header contracts story: 0, 7 and 30 contracts (1, 2 and 3 already exist)
+  {
+    const byCode = c => OPO.impCards.find(r => r[0] === c);
+    byCode('VE-L1015')[8] = [];
+    byCode('CR-L2801')[8] = Array.from({ length: 7 }, (_, i) => (5410 + i) + '/OC-CR');
+    byCode('GY-L1601')[8] = Array.from({ length: 30 }, (_, i) => (5150 + i) + '/OC-GY');
+  }
   let currentPhase = 'preparation';
 
   // ---------------- Filter state ----------------
@@ -3886,7 +4005,7 @@
         <button class="pin${pinnedOps.has(code) ? ' pinned' : ''}" aria-label="Pin operation"><span class="msr">push_pin</span></button>
         <span class="code">${code}</span>
         <span class="vsep"></span>
-        ${contracts.map(k => `<span class="contract">${k}</span>`).join('')}
+        ${contracts.slice(0, 3).map(k => `<span class="contract">${k}</span>`).join('')}${contracts.length > 3 ? `<span class="contract plus" data-t2h="${contracts.length - 3} more contracts" data-t2b="Open the operation to see all ${contracts.length}">+${contracts.length - 3}</span>` : ''}
         <span class="name">${title}</span>
         <button class="btn-open">Open</button>
       </div>
@@ -4504,6 +4623,7 @@
     wsRow = row; wsPhase = phase;
     // header contracts pill renders at open (populateOpData only runs when entering Operation data)
     wsContracts = phase === 'implementation' ? (row[8] || []) : [];
+    wsConImpl = phase === 'implementation';
     renderHeaderContracts();
     // architectural back: label and destination follow the operation's phase hub
     document.getElementById('ws-back-lbl').textContent =
@@ -4640,6 +4760,7 @@
     // contracts: implementation only; preparation ops have no signed contracts yet
     document.getElementById('od-contracts-kv').style.display = isImpl ? '' : 'none';
     wsContracts = isImpl ? row[8] : [];
+    wsConImpl = isImpl;
     renderContracts();
     // borrower
     document.getElementById('od-borrower').textContent = 'Government of ' + country;
@@ -4668,20 +4789,227 @@
     holder.innerHTML = wsContracts.map(c => `<span class="contract">${c}</span>`).join('');
     renderHeaderContracts();
   }
+  // Contract meta (fictional): status and executing agency derived per ID, stable across views
+  const CON_AGENCIES = ['Ministerio de Desarrollo Social','Ministerio de Economia y Finanzas','Agencia Nacional de Infraestructura','Secretaria Nacional de Planeamiento','Instituto Nacional del Agua','Ministerio de Salud Publica','Unidad Ejecutora Central','Agencia de Desarrollo Productivo'];
+  const CON_STATUSES = ['Disbursing','Effective','Signed','Eligible for Disbursement','Approved and Funded','Approved, not yet funded','Fully Disbursed','Closed by Finance','Closed by Operations','Cancelled'];
+  const CON_OVR = { '5585/OC-AR-1': 'Disbursing', '5586/OC-AR-2': 'Signed', '5701/OC-PE': 'Disbursing' };
+  const CON_FAMILY = st => st === 'Approved, not yet funded' ? 1
+    : (st === 'Fully Disbursed' || st === 'Cancelled' || st === 'Closed by Finance' || st === 'Closed by Operations') ? 2 : 0;
+  const conMeta = id => {
+    let h = 0; for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+    return { status: CON_OVR[id] || CON_STATUSES[h % CON_STATUSES.length], agency: CON_AGENCIES[h % CON_AGENCIES.length] };
+  };
+  let wsConImpl = true;
+  let conPop = null;
+  function conPopClose(restoreFocus) {
+    if (!conPop) return;
+    conPop.scrim.remove(); conPop.el.remove(); conPop = null;
+    const m = document.getElementById('ws-con-more');
+    if (m) { m.setAttribute('aria-expanded', 'false'); if (restoreFocus) m.focus(); }
+  }
+  // accent-insensitive fold (Secretaria matches Secretaría); shared by filter and highlight
+  const conFold = t => String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  function conHl(text, fq) {
+    if (!fq) return String(text);
+    const chars = [...String(text)];
+    let folded = ''; const map = [];
+    chars.forEach((ch, i) => {
+      const f = conFold(ch) || ch.toLowerCase();
+      for (let k = 0; k < f.length; k++) map.push(i);
+      folded += f;
+    });
+    const marks = new Array(chars.length).fill(false);
+    let from = 0, idx;
+    while ((idx = folded.indexOf(fq, from)) >= 0) {
+      for (let k = idx; k < idx + fq.length; k++) marks[map[k]] = true;
+      from = idx + 1;
+    }
+    let out = '', open = false;
+    chars.forEach((ch, j) => {
+      if (marks[j] && !open) { out += '<mark class="cp-hl">'; open = true; }
+      if (!marks[j] && open) { out += '</mark>'; open = false; }
+      out += ch;
+    });
+    return open ? out + '</mark>' : out;
+  }
+  function conPopToggle(list) {
+    if (conPop) { conPopClose(true); return; }
+    const code = (wsScreen && wsScreen.dataset.code) || '';
+    const opName = (document.getElementById('ws-title') || { textContent: '' }).textContent;
+    const hasSearch = list.length > 10; // same threshold as the team list search
+    const rowsHtml = fq => {
+      const rows = list.filter(c => {
+        if (!fq) return true;
+        const m = conMeta(c);
+        return conFold(c).includes(fq) || conFold(m.status).includes(fq) || conFold(m.agency).includes(fq);
+      });
+      return rows.length
+        ? rows.map(c => {
+            const m = conMeta(c);
+            return '<div class="drow"><span class="cid2">' + conHl(c, fq) + '</span><span class="cst">' + conHl(m.status, fq) + '</span><span class="ag">' + conHl(m.agency, fq) + '</span></div>';
+          }).join('')
+        : '<div class="noneres">No contracts match your search.</div>';
+    };
+    const scrim = document.createElement('div');
+    scrim.className = 'con-scrim';
+    const el = document.createElement('div');
+    el.className = 'con-drawer';
+    el.setAttribute('role', 'dialog');
+    el.setAttribute('aria-modal', 'true');
+    el.setAttribute('aria-label', 'Contracts of ' + code);
+    const thead = '<div class="thead"><span>Contract</span><span>Status</span><span>Executing agency</span></div>';
+    el.innerHTML = '<div class="dh"><h3>Contracts (' + list.length + ')</h3><button class="xbtn" type="button" aria-label="Close"><span class="msr">close</span></button></div>'
+      + '<div class="dbody"><div class="opblock">'
+      + '<div class="opctx"><span class="oc">' + code + '</span>'
+      + '<button class="dpin' + (pinnedOps.has(code) ? ' pinned' : '') + '" type="button" aria-label="' + (pinnedOps.has(code) ? 'Unpin operation' : 'Pin operation') + '" data-t2h="' + (pinnedOps.has(code) ? 'Unpin operation' : 'Pin operation') + '" data-t2b=""><span class="msr">push_pin</span></button></div>'
+      + '<div class="opname">' + opName + '</div>'
+      + '<div class="refnote">Contract details for this operation. View only.</div></div>'
+      + (hasSearch ? '<div class="srch"><span class="msr">search</span><input type="text" placeholder="Search by contract ID, status or agency" aria-label="Search contracts"><button class="sclr" type="button" aria-label="Clear search"><span class="msr">close</span></button></div>' : '')
+      + '<div class="tbl">' + thead + '<div class="rows">' + rowsHtml('') + '</div></div></div>'
+      + '<div class="dfoot"><button class="dclose" type="button">Close</button></div>';
+    document.body.appendChild(scrim);
+    document.body.appendChild(el);
+    conPop = { el, scrim };
+    const more = document.getElementById('ws-con-more');
+    if (more) more.setAttribute('aria-expanded', 'true');
+    const inp = el.querySelector('.srch input');
+    if (inp) {
+      const srchBox = el.querySelector('.srch');
+      const sclr = el.querySelector('.sclr');
+      inp.addEventListener('input', () => {
+        srchBox.classList.toggle('has', !!inp.value);
+        el.querySelector('.rows').innerHTML = rowsHtml(conFold(inp.value.trim()));
+      });
+      sclr.addEventListener('click', () => {
+        inp.value = '';
+        srchBox.classList.remove('has');
+        el.querySelector('.rows').innerHTML = rowsHtml('');
+        inp.focus();
+      });
+      inp.addEventListener('keydown', e => {
+        if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+        e.preventDefault();
+        el.querySelector('.dbody').scrollBy({ top: e.key === 'ArrowDown' ? 48 : -48 });
+      });
+      inp.focus();
+    } else {
+      el.querySelector('.xbtn').focus();
+    }
+    el.querySelector('.xbtn').addEventListener('click', () => conPopClose(true));
+    el.querySelector('.dclose').addEventListener('click', () => conPopClose(true));
+    scrim.addEventListener('click', () => conPopClose(true));
+    // real pin: same toggle as the list cards; the only action here acts on the
+    // operation, not on the read-only contract data
+    const dp = el.querySelector('.dpin');
+    dp.addEventListener('click', () => {
+      togglePin(code);
+      const on = pinnedOps.has(code);
+      dp.classList.toggle('pinned', on);
+      dp.setAttribute('aria-label', on ? 'Unpin operation' : 'Pin operation');
+      dp.dataset.t2h = on ? 'Unpin operation' : 'Pin operation';
+    });
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && conPop) conPopClose(true);
+  });
+  // Demo guide: organized in the browser console; rerun anytime with opoDemo().
+  // Guarded: sandboxed consoles may lack group/table (seen in preview tooling).
+  window.opoDemo = function () {
+    const say = (fn, ...a) => { try { ((console && (console[fn] || console.log)) || function () {}).apply(console, a); } catch (e) {} };
+    const tbl = rows => { try { console.table(rows); } catch (e) { rows.forEach(r => say('log', JSON.stringify(r))); } };
+    const open = t => say('group', t);
+    const openC = t => { try { console.groupCollapsed(t); } catch (e) { say('log', '--- ' + t + ' ---'); } };
+    const close = () => { try { console.groupEnd(); } catch (e) {} };
+
+    open('[OPO] Demo guide');
+
+    openC('1 \u00b7 Contracts in the workspace header (Implementation)');
+    const CASES = [
+      ['VE-L1015', 'Zero contracts: quiet line in the header'],
+      ['PE-L1099', 'One contract'],
+      ['AR-L1372', 'Two contracts'],
+      ['CH-L3105', 'Three contracts: inline limit, no +N'],
+      ['CR-L2801', 'Seven contracts: +4 opens popover, no search'],
+      ['GY-L1601', 'Thirty contracts: popover with search (rule: more than 10)']
+    ];
+    const FAM = ['Active', 'Pending funds', 'Closed'];
+    tbl(CASES.map(([c, d]) => {
+      const r = OPO.impCards.find(x => x[0] === c);
+      return { Operation: c, Contracts: r[8].length, Case: d };
+    }));
+    CASES.forEach(([c]) => {
+      const r = OPO.impCards.find(x => x[0] === c);
+      if (!r[8].length) return;
+      openC(c + ' \u00b7 ' + r[8].length + ' contract' + (r[8].length > 1 ? 's' : ''));
+      tbl(r[8].map(id => {
+        const m = conMeta(id);
+        return { Contract: id, Status: m.status, Family: FAM[CON_FAMILY(m.status)], 'Executing Agency': m.agency };
+      }));
+      close();
+    });
+    close();
+
+    openC('2 \u00b7 Keyboard demos (press the key 5 times, outside any input)');
+    tbl([
+      { Keys: 'C x5', Where: 'Anywhere', Demo: 'Toggles Country strategies as Coming soon' },
+      { Keys: 'L x5', Where: 'Home', Demo: 'Shows the Home loading skeleton preview' },
+      { Keys: 'T x5', Where: 'Workspace of BR-L1587', Demo: 'Toggles the Team edge case (long team list)' },
+      { Keys: 'S x5', Where: 'Anywhere', Demo: 'Toggles global search service down; S x5 again restores' },
+      { Keys: 'Esc', Where: 'Any open menu, popover or drawer', Demo: 'Closes it' }
+    ]);
+    close();
+
+    openC('3 \u00b7 Search feedback demos (type these IDs in the global search)');
+    tbl([
+      { ID: 'BR-L9001', Scenario: 'Country strategies source down' },
+      { ID: 'AR-L9002', Scenario: 'Operations source down' },
+      { ID: 'BR-L9020', Scenario: 'Operations down, no CS matches' },
+      { ID: 'UY-L9003', Scenario: 'All sources down' }
+    ]);
+    close();
+
+    openC('4 \u00b7 Demo routes and fixtures');
+    tbl([
+      { Where: '#/difficulties', Demo: 'Full portal outage page' },
+      { Where: 'BR-L1587 \u00b7 Dashboard', Demo: 'AI summary with 10 cited sources (overflow case)' },
+      { Where: 'BO-L1930 \u00b7 Life Cycle', Demo: 'Metroline detail with current milestone at QRR' },
+      { Where: 'Any operation \u00b7 Life Cycle', Demo: 'Phase edge hints, back to Current chip, completed checks' },
+      { Where: 'Global search', Demo: 'Open 2 or 3 operations from search, then focus the empty field: recent searches appear (X removes one, Delete key too, Clear all empties; in-memory, resets on reload)' }
+    ]);
+    close();
+
+    say('log', 'All data is fictional. Contract statuses and agencies derive from each ID and stay stable across views. Rerun with opoDemo().');
+    close();
+  };
+  try { window.opoDemo(); } catch (e) { /* console demos must never break the app */ }
   function renderHeaderContracts() {
-    // header pill: first 3 IDs inline, the rest behind +N with a DS tooltip; hidden when no contracts
+    // header pill: up to 3 IDs inline (plain, status and agency live in the hover tooltip),
+    // +N opens the full inventory popover; quiet line when an Implementation op has none
     const el = document.getElementById('ws-conchip');
     if (!el) return;
-    if (!wsContracts.length) { el.style.display = 'none'; return; }
-    const MAX = 3;
-    const shown = wsContracts.slice(0, MAX);
-    const rest = wsContracts.slice(MAX);
+    conPopClose();
+    if (window.rtUnpin) window.rtUnpin();
+    if (!wsContracts.length) {
+      if (!wsConImpl) { el.style.display = 'none'; return; }
+      el.innerHTML = '<span class="lb">Contracts</span><span class="d"></span><span class="none">No contracts yet</span>';
+      el.style.display = '';
+      return;
+    }
+    // display priority: active first, then pending funds, closed last; data order within each group
+    const sorted = wsContracts.slice().sort((a, b) => CON_FAMILY(conMeta(a).status) - CON_FAMILY(conMeta(b).status));
+    const shown = sorted.slice(0, 3);
+    const restN = sorted.length - shown.length;
     el.innerHTML = '<span class="lb">Contracts</span>'
-      + shown.map(c => '<span class="d"></span><span class="cid">' + c + '</span>').join('')
-      + (rest.length
-        ? '<span class="d"></span><span class="more" data-t2h="More contracts" data-t2b="' + rest.join(' · ') + '">+' + rest.length + '</span>'
-        : '');
+      + shown.map(c => {
+          const m = conMeta(c);
+          return '<span class="d"></span><span class="cid" tabindex="0" data-t2h="Contract status" data-t2b="' + m.status + '" data-t2h2="Executing agency" data-t2b2="' + m.agency + '">' + c + '</span>';
+        }).join('')
+      + (restN ? '<span class="d"></span><button class="more" id="ws-con-more" type="button" aria-expanded="false" aria-haspopup="dialog" data-t2h="" data-t2b="View all contracts">+' + restN + '</button>' : '')
+      + '<button class="ccompact" type="button" id="ws-con-compact" data-t2h="" data-t2b="View all contracts">Contracts (' + sorted.length + ')</button>';
     el.style.display = '';
+    const more = document.getElementById('ws-con-more');
+    if (more) more.addEventListener('click', e => { e.stopPropagation(); conPopToggle(sorted); });
+    document.getElementById('ws-con-compact').addEventListener('click', e => { e.stopPropagation(); conPopToggle(sorted); });
   }
   const OD_OBJ_FULL = document.getElementById('od-objective').textContent.trim();
   const OD_OBJ_CUT = (() => { const i = OD_OBJ_FULL.indexOf(' are: (i)'); return i > 0 ? i : 320; })();
@@ -4742,7 +5070,105 @@
   // stages strip scroll
   const lcScrollBehavior = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
   // arrows page by viewport width with one node of overlap for continuity
+  // Alt navigation variant for the design review: in-canvas chevrons + jump list.
+  // Enabled per operation so both navigations can be compared live.
+  const LC_NAV_ALT = new Set(['BO-L1930']);
+  let lcAltNav = false;
   const lcPageStep = () => Math.max(240, document.getElementById('ws-stages').clientWidth - 240);
+  (function lcJumpSetup() {
+    const jb = document.getElementById('lc-jump');
+    if (!jb) return;
+    let pop = null;
+    window.lcJumpClose = restore => {
+      if (!pop) return;
+      pop.remove(); pop = null;
+      jb.setAttribute('aria-expanded', 'false');
+      jb.classList.remove('open');
+      if (restore) jb.focus();
+    };
+    const fold = t => String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const curIdx = () => {
+      const flat = [];
+      lcOp.detail.phases.forEach(ph => ph.subs.forEach(sb => sb.ms.forEach(m => flat.push(m[0]))));
+      return flat.indexOf(lcOp.detail.currentM);
+    };
+    const jhl = (t, fq) => conHl(t, fq).replace(/class="cp-hl"/g, 'class="jhl"');
+    const rowsHtml = fq => {
+      const ci = curIdx();
+      let gi = 0, html = '';
+      lcOp.detail.phases.forEach((ph, pi) => {
+        const items = [];
+        ph.subs.forEach(sb => sb.ms.forEach(m => { items.push({ i: gi++, acr: m[0], name: m[1] }); }));
+        // a phase name match keeps the whole phase; otherwise milestones filter by acronym or name
+        const phHit = fq && fold(ph.label).includes(fq);
+        const vis = phHit ? items : items.filter(it => !fq || fold(it.acr).includes(fq) || fold(it.name).includes(fq));
+        if (!vis.length) return;
+        html += '<button type="button" class="jph" data-ph="' + pi + '">' + jhl(ph.label, fq) + '</button>'
+          + vis.map(it => {
+              const stt = it.i < ci ? 'done' : it.i === ci ? 'current' : '';
+              const mark = stt === 'done' ? '<span class="msr jck">check</span>' : stt === 'current' ? '<span class="jdot"></span>' : '<span class="jsp"></span>';
+              const est = it.acr === 'APPR' && lcOp.estApproval;
+              const dt = stt === 'done' ? 'Completed \u00b7 ' + ((lcOp._dates || [])[it.i] || '')
+                : stt === 'current' ? 'In progress'
+                : est ? 'Est. ' + lcOp.estApproval : 'Date pending';
+              return '<button type="button" class="jmr ' + stt + '" data-i="' + it.i + '">' + mark
+                + '<div class="jbody"><div class="jl1"><span class="jacr">' + jhl(it.acr, fq) + '</span><span class="jnm">' + jhl(it.name, fq) + '</span>'
+                + (stt === 'current' ? '<span class="jcur">Current</span>' : '') + '</div>'
+                + '<div class="jdt' + (est ? ' est' : '') + '">' + dt + '</div></div></button>';
+            }).join('');
+      });
+      return html || '<div class="jnone">No milestones match your search.</div>';
+    };
+    const centerOn = el => {
+      const st = document.getElementById('ws-stages');
+      const er = el.getBoundingClientRect(), sr = st.getBoundingClientRect();
+      st.scrollTo({ left: Math.max(0, st.scrollLeft + (er.left - sr.left) - (st.clientWidth - er.width) / 2), behavior: lcScrollBehavior() });
+    };
+    function openJ() {
+      pop = document.createElement('div');
+      pop.className = 'lc-jpop';
+      pop.setAttribute('role', 'dialog');
+      pop.setAttribute('aria-label', 'Phases and milestones');
+      pop.innerHTML = '<div class="srch"><span class="msr">search</span><input type="text" placeholder="Search phases or milestones" aria-label="Search milestones"></div>'
+        + '<div class="list">' + rowsHtml('') + '</div>';
+      jb.parentElement.appendChild(pop);
+      jb.setAttribute('aria-expanded', 'true');
+      jb.classList.add('open');
+      const list = pop.querySelector('.list');
+      const inp = pop.querySelector('input');
+      inp.addEventListener('input', () => { list.innerHTML = rowsHtml(fold(inp.value.trim())); });
+      inp.addEventListener('keydown', e => {
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); list.scrollBy({ top: e.key === 'ArrowDown' ? 40 : -40 }); }
+      });
+      pop.addEventListener('click', e => {
+        e.stopPropagation();
+        const track = document.getElementById('lc-track');
+        const phb = e.target.closest('.jph');
+        if (phb) {
+          const band = track.querySelectorAll('.lc-band')[+phb.dataset.ph];
+          if (band) {
+            const st = document.getElementById('ws-stages');
+            const br = band.getBoundingClientRect(), sr = st.getBoundingClientRect();
+            st.scrollTo({ left: Math.max(0, st.scrollLeft + (br.left - sr.left) - 16), behavior: lcScrollBehavior() });
+          }
+          window.lcJumpClose();
+          return;
+        }
+        const mr = e.target.closest('.jmr');
+        if (mr) {
+          const node = track.querySelectorAll('.lcn')[+mr.dataset.i];
+          if (node) centerOn(node);
+          window.lcJumpClose();
+        }
+      });
+      const cr = list.querySelector('.jmr.current');
+      if (cr) list.scrollTop = Math.max(0, cr.offsetTop - 110);
+      inp.focus();
+    }
+    jb.addEventListener('click', e => { e.stopPropagation(); pop ? window.lcJumpClose(true) : openJ(); });
+    document.addEventListener('click', e => { if (pop && !e.target.closest('.lc-jpop') && !jb.contains(e.target)) window.lcJumpClose(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && pop) window.lcJumpClose(true); });
+  })();
   document.getElementById('ws-st-prev').addEventListener('click', () => document.getElementById('ws-stages').scrollBy({left: -lcPageStep(), behavior: lcScrollBehavior()}));
   document.getElementById('ws-st-next').addEventListener('click', () => document.getElementById('ws-stages').scrollBy({left: lcPageStep(), behavior: lcScrollBehavior()}));
   // phase and subphase headers jump straight to their chapter
@@ -4809,6 +5235,8 @@
           if (curSide) curAcr = cn.getAttribute('data-t2h') || 'Current';
         }
       }
+      // hybrid variant: the jump dropdown replaces phase hints; the Current chip stays
+      if (lcAltNav) { nb = null; pb = null; }
       if (curSide === 'left') pb = null;
       if (curSide === 'right') nb = null;
       const set = (btn, band, dir) => {
@@ -4977,6 +5405,7 @@
     const dates = [];
     let t = LC_TODAY.getTime() - (12 + h % 9) * 86400000;
     for (let j = curI - 1; j >= 0; j--) { dates[j] = lcFmt(new Date(t)); t -= (9 + ((h + j * 5) % 16)) * 86400000; }
+    lcOp._dates = dates; lcOp._curI = curI; // the jump list mirrors the strip's dates
     const stateOf = i => i < curI ? 'done' : i === curI ? 'current' : 'todo';
     let gi = 0;
     track.setAttribute('aria-label', 'Operation life cycle');
@@ -5119,6 +5548,11 @@
     const prev = document.getElementById('ws-st-prev'), next = document.getElementById('ws-st-next');
     prev.style.display = over ? '' : 'none';
     next.style.display = over ? '' : 'none';
+    const jb = document.getElementById('lc-jump');
+    if (jb) {
+      jb.style.display = lcAltNav ? '' : 'none';
+      if (!lcAltNav && window.lcJumpClose) window.lcJumpClose();
+    }
     st.classList.toggle('can-drag', over);
     lcFades();
   }
@@ -5182,6 +5616,7 @@
     // explicit override, the op's stage in the cards data, or the legacy current label
     const currentM = LC_DETAIL_CUR[code] || LC_STAGE2M[ex.current] || LC_STAGE2M[row[3]]
       || LC_STAGE2M[current] || (phaseKey === 'implementation' ? 'DI' : 'QRR');
+    lcAltNav = LC_NAV_ALT.has(code);
     lcOp = {
       code, phase: phaseKey, current,
       detail: { currentM, phases: LC_TEMPLATE },
@@ -6991,7 +7426,7 @@
   const richtip = document.createElement('div');
   richtip.id = 'richtip';
   richtip.setAttribute('role', 'tooltip');
-  richtip.innerHTML = '<div class="h"></div><div class="m"></div><div class="b"></div>';
+  richtip.innerHTML = '<div class="h"></div><div class="m"></div><div class="b"></div><div class="h h2"></div><div class="b b2"></div>';
   document.body.appendChild(richtip);
   let rtTimer = null, rtEl = null;
   function rtShow(el) {
@@ -7001,9 +7436,13 @@
     const m = richtip.querySelector('.m');
     m.textContent = el.dataset.t2m || '';
     m.style.display = el.dataset.t2m ? '' : 'none';
-    const b = richtip.querySelector('.b');
+    const b = richtip.querySelector('.b:not(.b2)');
     b.textContent = el.dataset.t2b || '';
     b.style.marginTop = el.dataset.t2h ? '' : '0';
+    // optional second field/value pair (e.g. contract status + executing agency)
+    const h2 = richtip.querySelector('.h2'), b2 = richtip.querySelector('.b2');
+    h2.textContent = el.dataset.t2h2 || ''; h2.style.display = el.dataset.t2h2 ? '' : 'none';
+    b2.textContent = el.dataset.t2b2 || ''; b2.style.display = el.dataset.t2b2 ? '' : 'none';
     const r = el.getBoundingClientRect();
     richtip.style.width = '';
     richtip.classList.add('show');
@@ -7028,8 +7467,16 @@
     richtip.style.left = left + 'px';
     richtip.style.top = top + 'px';
   }
-  function rtHide() { clearTimeout(rtTimer); richtip.classList.remove('show'); rtEl = null; }
+  // Persistent variant (M3): click pins the rich tooltip until Esc, outside click or a second click
+  let rtPin = null;
+  function rtHide(force) { if (rtPin && !force) return; clearTimeout(rtTimer); richtip.classList.remove('show'); rtEl = null; }
+  window.rtUnpin = () => { if (rtPin) { rtPin = null; rtHide(true); } };
+  function rtPinToggle(el) {
+    if (rtPin === el) { rtPin = null; rtHide(true); return; }
+    rtPin = el; rtEl = el; rtShow(el);
+  }
   document.addEventListener('mouseover', e => {
+    if (rtPin) return;
     const el = e.target.closest('[data-t2h]');
     if (el === rtEl) return;
     clearTimeout(rtTimer);
@@ -7038,10 +7485,19 @@
     rtTimer = setTimeout(() => rtShow(el), 200);
   });
   document.addEventListener('focusin', e => {
+    if (rtPin) return;
     const el = e.target.closest('[data-t2h]');
     if (el) { rtEl = el; rtShow(el); } else rtHide();
   });
-  document.addEventListener('scroll', rtHide, true);
+  document.addEventListener('scroll', () => { if (rtPin) rtShow(rtPin); else rtHide(); }, true);
+  // Pinning is not wired to any trigger right now (team chose hover/focus only tooltips);
+  // rtPinToggle stays available if a persistent use case returns.
+  document.addEventListener('click', e => {
+    if (rtPin && !rtPin.contains(e.target) && !richtip.contains(e.target)) { rtPin = null; rtHide(true); }
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && rtPin) { const el = rtPin; rtPin = null; rtHide(true); if (el.isConnected) el.focus(); }
+  });
 
   const FD_PRODUCT_NAME = { LON: 'Loan', INV: 'Investment', ESP: 'Specific Projects', GOM: 'Multiple Works Program', LBR: 'Loans Based on Results', PFM: 'Multi Phase Program', GRT: 'Grant', TCP: 'Technical Cooperation' };
   function productTip(text) {
@@ -7155,17 +7611,84 @@
     })));
 
     function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
-    function hi(text, q, trim) {
+    function hi(text, q) {
       const i = text.toLowerCase().indexOf(q.toLowerCase());
       if (i < 0) return esc(text);
-      // Vio: if the match sits deep in a long name, open a window around it so the
-      // highlight is not swallowed by the ellipsis
-      let pre = text.slice(0, i), lead = '';
-      if (trim && i > 26) { pre = pre.slice(i - 14); lead = '…'; }
-      return lead + esc(pre) + '<b>' + esc(text.slice(i, i + q.length)) + '</b>' + esc(text.slice(i + q.length));
+      return esc(text.slice(0, i)) + '<b>' + esc(text.slice(i, i + q.length)) + '</b>' + esc(text.slice(i + q.length));
+    }
+    // leading window ONLY when the highlight is actually clipped by the ellipsis;
+    // names that fit keep their natural start (measured after render, not guessed).
+    // Any clipped name, windowed or not, gets the rich tooltip with the full title.
+    function nmWindow() {
+      drop.querySelectorAll('.gs-row .nm').forEach(nm => {
+        const full = nm.textContent;
+        const b = nm.querySelector('b');
+        let clipped = nm.scrollWidth > nm.clientWidth + 1;
+        if (b) {
+          const nr = nm.getBoundingClientRect();
+          if (b.getBoundingClientRect().right - nr.left > nm.clientWidth - 2) {
+            const q = b.textContent;
+            const i = full.toLowerCase().indexOf(q.toLowerCase());
+            if (i >= 0) {
+              let pre = full.slice(0, i), lead = '';
+              if (i > 14) { pre = pre.slice(i - 14); lead = '…'; }
+              nm.innerHTML = lead + esc(pre) + '<b>' + esc(full.slice(i, i + q.length)) + '</b>' + esc(full.slice(i + q.length));
+              clipped = true;
+            }
+          }
+        }
+        if (clipped) { nm.setAttribute('data-t2h', ''); nm.setAttribute('data-t2b', full); }
+        else { nm.removeAttribute('data-t2h'); nm.removeAttribute('data-t2b'); }
+      });
     }
     function open() { drop.classList.add('open'); input.setAttribute('aria-expanded', 'true'); }
     function close() { drop.classList.remove('open'); input.setAttribute('aria-expanded', 'false'); gsSel = -1; gsRows = []; }
+    // Recent searches: visited operations (and country strategies), in memory for the session.
+    // Production persists per user; history is access-scoped data, flagged for the team.
+    let gsRecents = [];
+    function addRecent(item) {
+      gsRecents = gsRecents.filter(r => r.code !== item.code);
+      gsRecents.unshift(item);
+      if (gsRecents.length > 10) gsRecents.length = 10;
+    }
+    function bindRows() {
+      gsRows = [...drop.querySelectorAll('.gs-row')];
+      gsSel = -1;
+      gsRows.forEach((rw, i) => {
+        rw.addEventListener('click', () => rw.dataset.cs ? goCS() : go(rw.dataset.code));
+        rw.addEventListener('mouseenter', () => {
+          gsSel = i;
+          gsRows.forEach((r, k) => { r.classList.toggle('sel', k === i); r.setAttribute('aria-selected', k === i ? 'true' : 'false'); });
+        });
+      });
+    }
+    function removeRecent(code) {
+      gsRecents = gsRecents.filter(r => r.code !== code);
+      if (gsRecents.length) renderRecents(); else close();
+      input.focus();
+    }
+    function renderRecents() {
+      if (!gsRecents.length) return false;
+      const shown = gsRecents.slice(0, 5);
+      drop.innerHTML = '<div class="gs-glab"><span class="t">Recent</span><button class="ca" id="gs-clearall" type="button">Clear recent searches</button></div>'
+        + shown.map(r =>
+          '<button class="gs-row recent" role="option" aria-selected="false" ' + (r.cs ? 'data-cs="1"' : 'data-code="' + r.code + '"') + ' data-recent="' + r.code + '">'
+          + '<span class="msr ghist">schedule</span>'
+          + '<span class="code">' + esc(r.code) + '</span><span class="nm">' + esc(r.name) + '</span>'
+          + (r.cs ? GS_CHIP.cs : GS_CHIP[r.label])
+          + '<span class="gs-x" role="button" tabindex="0" aria-label="Remove ' + esc(r.code) + ' from recent searches"><span class="msr">close</span></span>'
+          + '</button>').join('');
+      bindRows();
+      drop.querySelector('#gs-clearall').addEventListener('click', e => { e.stopPropagation(); gsRecents = []; close(); input.focus(); });
+      drop.querySelectorAll('.gs-x').forEach(x => {
+        const code = x.closest('.gs-row').dataset.recent;
+        x.addEventListener('click', e => { e.stopPropagation(); removeRecent(code); });
+        x.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); removeRecent(code); } });
+      });
+      open();
+      nmWindow();
+      return true;
+    }
     function renderHint(msg) { drop.innerHTML = '<div class="gs-hint">' + msg + '</div>'; open(); }
     function renderLoading() {
       drop.innerHTML = '<div class="gs-skel">' + [86, 68, 78].map(w =>
@@ -7199,41 +7722,65 @@
       cs: '<span class="gs-chip"><span class="msr">flag</span>Country strategy</span>',
     };
     function renderResults(ops, cs, q) {
-      const MAX = 7, CS_MAX = 3, total = ops.length, shown = ops.slice(0, MAX);
-      let html = shown.map(o =>
-        '<button class="gs-row" role="option" aria-selected="false" data-code="' + o.code + '"><span class="code">' + hi(o.code, q) + '</span><span class="nm">' + hi(o.name, q, true) + '</span>' + GS_CHIP[o.label] + '</button>').join('');
+      const pnote = arguments[3];
+      // Google pattern: past searches that match the query stay on top, clock marked, removable
+      const ql = q.toLowerCase();
+      const recentHits = gsRecents.filter(r => r.code.toLowerCase().includes(ql) || r.name.toLowerCase().includes(ql)).slice(0, 2);
+      const recCodes = new Set(recentHits.map(r => r.code));
+      ops = ops.filter(o => !recCodes.has(o.code));
+      const MAX = 7 - recentHits.length, CS_MAX = 3, total = ops.length + recentHits.length, shown = ops.slice(0, MAX);
+      let html = recentHits.map(r =>
+        '<button class="gs-row recent" role="option" aria-selected="false" data-code="' + r.code + '" data-recent="' + r.code + '">'
+        + '<span class="msr ghist">schedule</span>'
+        + '<span class="code">' + hi(r.code, q) + '</span><span class="nm">' + hi(r.name, q, true) + '</span>'
+        + GS_CHIP[r.label]
+        + '<span class="gs-x" role="button" tabindex="0" aria-label="Remove ' + esc(r.code) + ' from recent searches"><span class="msr">close</span></span>'
+        + '</button>').join('');
+      // recents carry the clock; when both kinds mix, results get an empty slot of the
+      // same width so every row shares one grid (Google's uniform leading column)
+      const lead = recentHits.length ? '<span class="gsp-ic"></span>' : '';
+      html += shown.map(o =>
+        '<button class="gs-row" role="option" aria-selected="false" data-code="' + o.code + '">' + lead + '<span class="code">' + hi(o.code, q) + '</span><span class="nm">' + hi(o.name, q, true) + '</span>' + GS_CHIP[o.label] + '</button>').join('');
       html += cs.slice(0, CS_MAX).map(o =>
-        '<button class="gs-row cs" role="option" aria-selected="false" data-cs="1"><span class="code">' + hi(o.code, q) + '</span><span class="nm">' + hi(o.name, q, true) + '</span>' + GS_CHIP.cs + '</button>').join('');
+        '<button class="gs-row cs" role="option" aria-selected="false" data-cs="1">' + lead + '<span class="code">' + hi(o.code, q) + '</span><span class="nm">' + hi(o.name, q, true) + '</span>' + GS_CHIP.cs + '</button>').join('');
       if (total > MAX) html += '<div class="gs-foot">Showing ' + MAX + ' of ' + total + ' operations. Keep typing to narrow down.</div>';
       if (arguments[3]) html += '<div class="gs-pnote">' + GS_CLOUD
         + (arguments[3] === 'cs' ? 'Country strategies are not available right now, so results may be incomplete.'
                                  : 'Operations are not available right now, so results may be incomplete.')
         + '<button class="rt" id="gs-pretry">Retry</button></div>';
       drop.innerHTML = html;
-      gsRows = [...drop.querySelectorAll('.gs-row')];
-      gsSel = -1;
-      gsRows.forEach((rw, i) => {
-        rw.addEventListener('click', () => rw.dataset.cs ? goCS() : go(rw.dataset.code));
-        // hover and keyboard share one highlight so two rows never look selected at once
-        rw.addEventListener('mouseenter', () => {
-          gsSel = i;
-          gsRows.forEach((r, k) => { r.classList.toggle('sel', k === i); r.setAttribute('aria-selected', k === i ? 'true' : 'false'); });
-        });
+      // hover and keyboard share one highlight so two rows never look selected at once
+      bindRows();
+      drop.querySelectorAll('.gs-x').forEach(x => {
+        const code = x.closest('.gs-row').dataset.recent;
+        const rm = e => { e.stopPropagation(); gsRecents = gsRecents.filter(r => r.code !== code); renderResults(match(q, INDEX), cs, q, pnote); input.focus(); };
+        x.addEventListener('click', rm);
+        x.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); rm(e); } });
       });
       const pr = document.getElementById('gs-pretry');
       if (pr) pr.addEventListener('click', () => { gsRecovered.add(q.toLowerCase()); runSearch(q); });
       open();
+      nmWindow(); // measures real clipping, so it must run with the dropdown visible
     }
     function go(code) {
       const item = INDEX.find(o => o.code === code);
       if (!item) return;
+      addRecent({ code: item.code, name: item.name, label: item.label });
       close();
+      // launcher pattern: a successful selection completes the task, so the field clears;
+      // abandoning the search (Esc, click away) keeps the text
+      input.value = '';
+      wrap.classList.remove('has-text');
+      gsSeq++;
       input.blur();
       const row = item.phase === 'implementation' ? OPO.impCards.find(r => r[0] === code) : OPO.cards.find(r => r[0] === code);
       openWorkspace(item.phase, row);
     }
     function goCS() {
       close();
+      input.value = '';
+      wrap.classList.remove('has-text');
+      gsSeq++;
       input.blur();
       const nav = document.querySelector('.nav-item[data-screen="country-strategies"]');
       if (nav) nav.click();
@@ -7284,14 +7831,14 @@
       const q = input.value.trim();
       wrap.classList.toggle('has-text', input.value.length > 0);
       clearTimeout(gsTimer);
-      if (!q) { gsSeq++; close(); return; }
+      if (!q) { gsSeq++; if (document.activeElement === input && renderRecents()) return; close(); return; }
       if (q.length < 2) { gsSeq++; renderHint('Keep typing to search operations.'); return; }
       gsTimer = setTimeout(() => runSearch(q), 300);
     }
     input.addEventListener('input', onQuery);
     input.addEventListener('focus', () => {
       const q = input.value.trim();
-      if (!q) return;
+      if (!q) { renderRecents(); return; }
       if (q.length < 2) renderHint('Keep typing to search operations.');
       else runSearch(q);
     });
@@ -7299,12 +7846,17 @@
       input.value = '';
       wrap.classList.remove('has-text');
       gsSeq++;
-      close();
+      if (!renderRecents()) close();
       input.focus();
     });
     input.addEventListener('keydown', e => {
       if (e.key === 'Escape') { close(); input.blur(); return; }
       if (!gsRows.length) return;
+      if (e.key === 'Delete' && gsSel >= 0 && gsRows[gsSel] && gsRows[gsSel].dataset.recent) {
+        e.preventDefault();
+        removeRecent(gsRows[gsSel].dataset.recent);
+        return;
+      }
       if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
         e.preventDefault();
         gsSel = e.key === 'ArrowDown' ? (gsSel + 1) % gsRows.length : (gsSel - 1 + gsRows.length) % gsRows.length;
