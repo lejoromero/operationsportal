@@ -3564,7 +3564,7 @@
     <button class="osd-close" id="osd-close" aria-label="Close"><span class="msr">close</span></button>
   </div>
   <div class="osd-body">
-    <div class="osd-cap" id="osd-cap">Recent</div>
+    <div class="osd-cap" id="osd-cap">Recently viewed</div>
     <div id="osd-list"></div>
   </div>
   <div class="osd-foot">
@@ -4591,6 +4591,9 @@
 
   function openWorkspace(phase, row) {
     const code = row[0];
+    // Recently viewed: every workspace open counts, whatever the entry point
+    // (search, list cards, pinned, upcoming). Registered here, the single door.
+    if (window.gsNoteView) window.gsNoteView(code);
     const isImpl = phase === 'implementation';
     document.getElementById('ws-crumb-phase').firstChild.textContent = PHASE_LABEL[phase] + ' ';
     document.getElementById('ws-crumb-code').textContent = code;
@@ -4974,7 +4977,7 @@
       { Where: 'BR-L1587 \u00b7 Dashboard', Demo: 'AI summary with 10 cited sources (overflow case)' },
       { Where: 'BO-L1930 \u00b7 Life Cycle', Demo: 'Metroline detail with current milestone at QRR' },
       { Where: 'Any operation \u00b7 Life Cycle', Demo: 'Phase edge hints, back to Current chip, completed checks' },
-      { Where: 'Global search', Demo: 'Open 2 or 3 operations from search, then focus the empty field: recent searches appear (X removes one, Delete key too, Clear all empties; in-memory, resets on reload)' }
+      { Where: 'Global search', Demo: 'Open 2 or 3 operations from search, then focus the empty field: recently viewed operations appear (X removes one, Delete key too, Clear all empties; in-memory, resets on reload)' }
     ]);
     close();
 
@@ -6646,7 +6649,7 @@
   ])];
   let osdSel = -1, osdRowsCache = [];
   function osdRows(q) {
-    if (!q) return OSD_RECENT.map(pinInfo);
+    if (!q) return OSD_RECENT.slice(0, 5).map(pinInfo); // max 5, same cap as the search recents
     const qq = q.toLowerCase();
     const codes = [...new Set([...OPO.impCards.map(r => r[0]), ...OPO.cards.map(r => r[0])])];
     return codes.map(pinInfo).filter(p =>
@@ -6654,7 +6657,7 @@
   }
   function renderOsd() {
     const q = osdInput.value.trim();
-    document.getElementById('osd-cap').textContent = q ? 'Results' : 'Recent';
+    document.getElementById('osd-cap').textContent = q ? 'Results' : 'Recently viewed';
     osdRowsCache = osdRows(q);
     if (osdSel > osdRowsCache.length - 1) osdSel = osdRowsCache.length - 1;
     osdList.innerHTML = osdRowsCache.length ? osdRowsCache.map((p, i) => {
@@ -7662,6 +7665,11 @@
         });
       });
     }
+    // global hook: openWorkspace reports every view here, whatever the entry point
+    window.gsNoteView = function (code) {
+      const item = INDEX.find(o => o.code === code);
+      if (item) addRecent({ code: item.code, name: item.name, label: item.label });
+    };
     function removeRecent(code) {
       gsRecents = gsRecents.filter(r => r.code !== code);
       if (gsRecents.length) renderRecents(); else close();
@@ -7670,13 +7678,13 @@
     function renderRecents() {
       if (!gsRecents.length) return false;
       const shown = gsRecents.slice(0, 5);
-      drop.innerHTML = '<div class="gs-glab"><span class="t">Recent</span><button class="ca" id="gs-clearall" type="button">Clear recent searches</button></div>'
+      drop.innerHTML = '<div class="gs-glab"><span class="t">Recently viewed</span><button class="ca" id="gs-clearall" type="button">Clear recently viewed</button></div>'
         + shown.map(r =>
           '<button class="gs-row recent" role="option" aria-selected="false" ' + (r.cs ? 'data-cs="1"' : 'data-code="' + r.code + '"') + ' data-recent="' + r.code + '">'
           + '<span class="msr ghist">schedule</span>'
           + '<span class="code">' + esc(r.code) + '</span><span class="nm">' + esc(r.name) + '</span>'
           + (r.cs ? GS_CHIP.cs : GS_CHIP[r.label])
-          + '<span class="gs-x" role="button" tabindex="0" aria-label="Remove ' + esc(r.code) + ' from recent searches"><span class="msr">close</span></span>'
+          + '<span class="gs-x" role="button" tabindex="0" aria-label="Remove ' + esc(r.code) + ' from recently viewed"><span class="msr">close</span></span>'
           + '</button>').join('');
       bindRows();
       drop.querySelector('#gs-clearall').addEventListener('click', e => { e.stopPropagation(); gsRecents = []; close(); input.focus(); });
@@ -7734,7 +7742,7 @@
         + '<span class="msr ghist">schedule</span>'
         + '<span class="code">' + hi(r.code, q) + '</span><span class="nm">' + hi(r.name, q, true) + '</span>'
         + GS_CHIP[r.label]
-        + '<span class="gs-x" role="button" tabindex="0" aria-label="Remove ' + esc(r.code) + ' from recent searches"><span class="msr">close</span></span>'
+        + '<span class="gs-x" role="button" tabindex="0" aria-label="Remove ' + esc(r.code) + ' from recently viewed"><span class="msr">close</span></span>'
         + '</button>').join('');
       // recents carry the clock; when both kinds mix, results get an empty slot of the
       // same width so every row shares one grid (Google's uniform leading column)
@@ -7765,7 +7773,6 @@
     function go(code) {
       const item = INDEX.find(o => o.code === code);
       if (!item) return;
-      addRecent({ code: item.code, name: item.name, label: item.label });
       close();
       // launcher pattern: a successful selection completes the task, so the field clears;
       // abandoning the search (Esc, click away) keeps the text
