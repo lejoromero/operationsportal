@@ -3564,7 +3564,7 @@
     <button class="osd-close" id="osd-close" aria-label="Close"><span class="msr">close</span></button>
   </div>
   <div class="osd-body">
-    <div class="osd-cap" id="osd-cap">Recently viewed</div>
+    <div class="osd-cap" id="osd-cap">Recent</div>
     <div id="osd-list"></div>
   </div>
   <div class="osd-foot">
@@ -6657,7 +6657,7 @@
   }
   function renderOsd() {
     const q = osdInput.value.trim();
-    document.getElementById('osd-cap').textContent = q ? 'Results' : 'Recently viewed';
+    document.getElementById('osd-cap').textContent = q ? 'Results' : 'Recent';
     osdRowsCache = osdRows(q);
     if (osdSel > osdRowsCache.length - 1) osdSel = osdRowsCache.length - 1;
     osdList.innerHTML = osdRowsCache.length ? osdRowsCache.map((p, i) => {
@@ -7678,13 +7678,13 @@
     function renderRecents() {
       if (!gsRecents.length) return false;
       const shown = gsRecents.slice(0, 5);
-      drop.innerHTML = '<div class="gs-glab"><span class="t">Recently viewed</span><button class="ca" id="gs-clearall" type="button">Clear recently viewed</button></div>'
+      drop.innerHTML = '<div class="gs-glab"><span class="t">Recent</span><button class="ca" id="gs-clearall" type="button">Clear all</button></div>'
         + shown.map(r =>
           '<button class="gs-row recent" role="option" aria-selected="false" ' + (r.cs ? 'data-cs="1"' : 'data-code="' + r.code + '"') + ' data-recent="' + r.code + '">'
           + '<span class="msr ghist">schedule</span>'
           + '<span class="code">' + esc(r.code) + '</span><span class="nm">' + esc(r.name) + '</span>'
           + (r.cs ? GS_CHIP.cs : GS_CHIP[r.label])
-          + '<span class="gs-x" role="button" tabindex="0" aria-label="Remove ' + esc(r.code) + ' from recently viewed"><span class="msr">close</span></span>'
+          + '<span class="gs-x" role="button" tabindex="0" aria-label="Remove ' + esc(r.code) + ' from recent"><span class="msr">close</span></span>'
           + '</button>').join('');
       bindRows();
       drop.querySelector('#gs-clearall').addEventListener('click', e => { e.stopPropagation(); gsRecents = []; close(); input.focus(); });
@@ -7742,7 +7742,7 @@
         + '<span class="msr ghist">schedule</span>'
         + '<span class="code">' + hi(r.code, q) + '</span><span class="nm">' + hi(r.name, q, true) + '</span>'
         + GS_CHIP[r.label]
-        + '<span class="gs-x" role="button" tabindex="0" aria-label="Remove ' + esc(r.code) + ' from recently viewed"><span class="msr">close</span></span>'
+        + '<span class="gs-x" role="button" tabindex="0" aria-label="Remove ' + esc(r.code) + ' from recent"><span class="msr">close</span></span>'
         + '</button>').join('');
       // recents carry the clock; when both kinds mix, results get an empty slot of the
       // same width so every row shares one grid (Google's uniform leading column)
